@@ -1,8 +1,12 @@
 // script.js
+
+// 1. Define your base URL (NO trailing # or trailing slash)
+const API_BASE_URL = 'https://thetutorhub-website-yrai.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log('JavaScript loaded and running!');
 
-  // Example: Simple click handler
+  // Simple click handler example
   const button = document.querySelector('#my-button');
   if (button) {
     button.addEventListener('click', () => {
@@ -11,25 +15,55 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Example: Requesting an AI Quiz from your Python backend
+/**
+ * Fetch an AI Practice Quiz from your Render Python backend
+ */
 async function fetchAIPracticeQuiz() {
-  const response = await fetch('https://your-backend-url.onrender.com/api/generate-quiz', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ subject: 'Algebra II', topic: 'Factoring Polynomials' })
-  });
+  const quizContainer = document.querySelector('#quiz-container');
+  
+  if (quizContainer) {
+    quizContainer.innerText = 'Generating quiz... (Render may take ~50s on cold start)';
+  }
 
-  const data = await response.json();
-  if (data.success) {
-    document.querySelector('#quiz-container').innerHTML = data.quiz;
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/generate-quiz`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        subject: 'Algebra II', 
+        topic: 'Factoring Polynomials' 
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.success && quizContainer) {
+      quizContainer.innerHTML = data.quiz;
+    } else if (quizContainer) {
+      quizContainer.innerText = 'Failed to load quiz. Please try again.';
+    }
+  } catch (error) {
+    console.error('Error fetching quiz:', error);
+    if (quizContainer) {
+      quizContainer.innerText = 'Error connecting to server.';
+    }
   }
 }
 
-// Point this directly to your deployed Render URL
-const API_BASE_URL = 'https://thetutorhub-website-yrai.onrender.com/#';
+/**
+ * Generic API POST helper function
+ */
+async function sendDataToBackend(endpoint, payload) {
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-const response = await fetch(`${API_BASE_URL}/api/endpoint`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-});
+    return await response.json();
+  } catch (error) {
+    console.error('API Request failed:', error);
+    return { success: false, error: 'Network error' };
+  }
+}
