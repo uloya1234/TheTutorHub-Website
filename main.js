@@ -24,3 +24,12 @@ async function fetchAIPracticeQuiz() {
     document.querySelector('#quiz-container').innerHTML = data.quiz;
   }
 }
+
+// Point this directly to your deployed Render URL
+const API_BASE_URL = 'https://thetutorhub-website-yrai.onrender.com/#';
+
+const response = await fetch(`${API_BASE_URL}/api/endpoint`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+});
