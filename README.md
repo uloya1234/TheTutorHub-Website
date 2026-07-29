@@ -1,7 +1,5 @@
 # TheTutorHub-Website
-Feature-Rich & Professional (Best for an "About" or "Technology" Page) Empowering Education with Local AI Intelligence at TheTutorHub.org
-
-At TheTutorHub.org, we believe that personalized learning should be intuitive, lightning-fast, and entirely secure. That is why we have integrated an advanced, on-device local AI model directly into our web platform using cutting-edge WebGPU technology. Unlike traditional educational tools that route sensitive student data through external cloud servers, our platform leverages the raw power of the student's or tutor's own device hardware. By running the AI natively in the browser via WebGPU, we eliminate server latency, ensuring instant, real-time responses to help students work through difficult math equations, brainstorm essay outlines, or check homework concepts without a single millisecond of lag.
+Feature-Rich & Professional (Best for an "About" or "Technology" Page) Empowering Education with Local AI Intelligence at TheTutorHub.org: At TheTutorHub.org, we believe that personalized learning should be intuitive, fast, and secure. That is why we have an advanced, on-device local AI model directly into our web platform using WebGPU technology. By running the AI natively in the browser via WebGPU, we eliminate server latency, ensuring instant, real-time responses to help students work through difficult math equations, brainstorm essay outlines, or check homework concepts.
 
 1. Install packages
 Run this command to install the required dependencies.
