@@ -1,0 +1,12 @@
+{
+  "name": "thetutorhub-website",
+  "version": "1.0.0",
+  "description": "The Tutor Hub Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}
