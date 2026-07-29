@@ -133,3 +133,31 @@ File: Code
 ```
 npx skills add supabase/agent-skills
 ```
+1. Install package
+Add @supabase/server to your backend.
+Details:
+npm install @supabase/server
+On Edge Functions you can import it directly, no install needed.
+Code:
+File: Code
+```
+npm install @supabase/server
+```
+
+2. Set environment variables
+Copy these into your environment so your handler can verify users and use supabase-js.
+Details:
+.env
+SUPABASE_URL=https://birhxvtgtnirlxhgwgdg.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_DcS7Wp-yZvZ2FN5knpJmMQ_lS4HDxj-
+SUPABASE_SECRET_KEY=sb_secret_NCFQ6••••••••••••••••••••
+SUPABASE_JWKS_URL=https://birhxvtgtnirlxhgwgdg.supabase.co/auth/v1/.well-known/jwks.json
+On Edge Functions these are injected automatically. For other runtimes, copy the values above. Manage keys in API Keys settings.
+
+3. Install the Supabase Server skill (optional)
+Give AI coding tools instructions for building APIs with @supabase/server.
+Code:
+File: Code
+```
+npx skills add supabase/server
+```
