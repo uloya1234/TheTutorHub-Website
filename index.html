@@ -4,37 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tutor Hub – Premium Tutoring Platform</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    /* --- Base & Dark Mode --- */
+    /* CSS Variables – Light & Dark */
     :root {
       --bg: #ffffff;
       --text: #1f2937;
-      --card-bg: rgba(255,255,255,0.8);
+      --card-bg: rgba(255,255,255,0.75);
       --card-border: rgba(229,231,235,0.5);
       --shadow: 0 4px 20px rgba(0,0,0,0.06);
+      --sidebar-bg: #eff6ff;
+      --hover-bg: rgba(59,130,246,0.08);
+      --accent: #3b82f6;
+      --section-bg: #ffffff;
+      --navbar-bg: rgba(255,255,255,0.85);
+      --input-bg: #ffffff;
+      --input-border: #d1d5db;
+      --toggle-bg: #d1d5db;
+      --toggle-dot: #ffffff;
     }
     .dark {
-      --bg: #111827;
-      --text: #f3f4f6;
-      --card-bg: rgba(31,41,55,0.8);
-      --card-border: rgba(55,65,81,0.5);
-      --shadow: 0 4px 20px rgba(0,0,0,0.4);
+      --bg: #0f172a;
+      --text: #f1f5f9;
+      --card-bg: rgba(30,41,59,0.8);
+      --card-border: rgba(51,65,85,0.5);
+      --shadow: 0 4px 20px rgba(0,0,0,0.5);
+      --sidebar-bg: #1e293b;
+      --hover-bg: rgba(59,130,246,0.15);
+      --section-bg: #0f172a;
+      --navbar-bg: rgba(15,23,42,0.9);
+      --input-bg: #1e293b;
+      --input-border: #334155;
+      --toggle-bg: #475569;
+      --toggle-dot: #ffffff;
     }
     body {
       background: var(--bg);
       color: var(--text);
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.4s ease, color 0.4s ease;
       font-family: 'Inter', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    /* Smooth scroll */
-    html { scroll-behavior: smooth; }
+    /* All sections inherit background */
+    .section-page {
+      background: var(--section-bg);
+      transition: background 0.4s ease;
+    }
     /* Glass effect */
     .glass {
       background: var(--card-bg);
@@ -43,14 +62,13 @@
       border: 1px solid var(--card-border);
       box-shadow: var(--shadow);
     }
-    /* Navbar glass */
     .navbar-glass {
-      background: var(--card-bg);
+      background: var(--navbar-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
     }
-    /* Card hover lift */
+    /* Card lift */
     .card-lift {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -58,49 +76,220 @@
       transform: translateY(-6px);
       box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
     }
-    /* Sidebar active link */
+    /* Sidebar */
+    #dashboard-sidebar {
+      background: var(--sidebar-bg);
+      transition: background 0.4s ease;
+    }
     .sidebar-link.active {
-      background: rgba(59,130,246,0.15);
+      background: var(--hover-bg);
       color: #3b82f6;
       border-right: 3px solid #3b82f6;
     }
-    /* Hide scrollbar but keep scroll */
-    .no-scrollbar::-webkit-scrollbar { width: 0; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    /* Animations */
-    @keyframes blob {
-      0% { transform: translate(0px,0px) scale(1); }
-      33% { transform: translate(30px,-50px) scale(1.1); }
-      66% { transform: translate(-20px,20px) scale(0.9); }
-      100% { transform: translate(0px,0px) scale(1); }
+    /* Animated header link underline */
+    .nav-link {
+      position: relative;
+      padding-bottom: 4px;
     }
-    .animate-blob { animation: blob 7s infinite; }
-    .animation-delay-2000 { animation-delay: 2s; }
-    .animation-delay-4000 { animation-delay: 4s; }
-    /* Chat bubbles */
-    .bubble-me { background: #3b82f6; color: white; border-radius: 18px 18px 4px 18px; }
-    .bubble-other { background: #e5e7eb; color: #1f2937; border-radius: 18px 18px 18px 4px; }
-    .dark .bubble-other { background: #374151; color: #f3f4f6; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: #3b82f6;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    /* Custom checkbox & radio */
+    .custom-checkbox {
+      appearance: none;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid var(--input-border);
+      border-radius: 4px;
+      background: var(--input-bg);
+      transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .custom-checkbox:checked {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    .custom-checkbox:checked::after {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.7rem;
+    }
+    .custom-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+      background-position: right 0.75rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
+    }
+    /* Toggle switch */
+    .toggle-switch {
+      width: 3rem;
+      height: 1.5rem;
+      background: var(--toggle-bg);
+      border-radius: 9999px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-switch.active {
+      background: #3b82f6;
+    }
+    .toggle-switch .dot {
+      position: absolute;
+      top: 0.15rem;
+      left: 0.15rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      background: var(--toggle-dot);
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    .toggle-switch.active .dot {
+      transform: translateX(1.5rem);
+    }
+    /* Notification banner */
+    #notification-banner {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #22c55e;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      box-shadow: 0 8px 30px rgba(34,197,94,0.3);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    #notification-banner.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Mentor profile expand */
+    .mentor-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.5s ease;
+      padding: 0 1rem;
+    }
+    .mentor-detail.open {
+      max-height: 500px;
+      padding: 1rem;
+    }
+    /* Fullscreen AI */
+    .ai-fullscreen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 999;
+      background: var(--bg);
+      padding: 1rem;
+    }
+    /* Particle canvas – behind everything */
+    #particle-canvas-global {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Ensure content is above */
+    main, header, footer, #section-dashboard {
+      position: relative;
+      z-index: 1;
+    }
+    /* More colorful graphics - gradient overlays */
+    .section-gradient {
+      position: relative;
+      overflow: hidden;
+    }
+    .section-gradient::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.08) 0%, transparent 60%),
+                  radial-gradient(circle at 70% 60%, rgba(139,92,246,0.08) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .section-gradient > * {
+      position: relative;
+      z-index: 1;
+    }
+    /* Article cards 2 per row */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .articles-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    /* Chat animations */
+    .message-enter {
+      animation: slideIn 0.3s ease forwards;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
   </style>
 </head>
 <body>
 
+<!-- ========== GLOBAL PARTICLE CANVAS ========== -->
+<canvas id="particle-canvas-global"></canvas>
+
+<!-- ========== NOTIFICATION BANNER ========== -->
+<div id="notification-banner">✅ Setting applied</div>
+
 <!-- ========== NAVBAR ========== -->
 <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 navbar-glass">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-    <a href="#" onclick="navigate('landing')" class="text-2xl font-bold">
+    <a href="#" onclick="navigate('landing')" class="text-2xl font-bold flex items-center gap-2">
+      <i class="fas fa-graduation-cap text-blue-600 text-3xl"></i>
       <span class="text-blue-600">Tutor</span><span class="text-gray-800 dark:text-gray-200">Hub</span>
     </a>
     <nav class="hidden md:flex items-center space-x-6">
-      <a href="#" onclick="navigate('landing')" class="text-sm font-medium hover:text-blue-600 transition">Home</a>
-      <a href="#" onclick="navigate('connect')" class="text-sm font-medium hover:text-blue-600 transition">Connect</a>
-      <a href="#" onclick="navigate('dashboard')" id="nav-dashboard" class="text-sm font-medium hover:text-blue-600 transition hidden">Dashboard</a>
-      <a href="#" onclick="handleLogout()" id="nav-logout" class="text-sm font-medium hover:text-blue-600 transition hidden">Logout</a>
+      <a href="#" onclick="navigate('landing')" class="nav-link text-sm font-medium hover:text-blue-600 transition">Home</a>
+      <a href="#" onclick="navigate('about')" class="nav-link text-sm font-medium hover:text-blue-600 transition">About</a>
+      <a href="#" onclick="navigate('motivations')" class="nav-link text-sm font-medium hover:text-blue-600 transition">Motivations</a>
+      <a href="#" onclick="navigate('team')" class="nav-link text-sm font-medium hover:text-blue-600 transition">Meet the Team</a>
+      <a href="#" onclick="navigate('devlog')" class="nav-link text-sm font-medium hover:text-blue-600 transition">Devlog</a>
+      <a href="#" onclick="navigate('portfolio')" class="nav-link text-sm font-medium hover:text-blue-600 transition">Portfolio</a>
+      <a href="#" onclick="navigate('connect')" class="nav-link text-sm font-medium hover:text-blue-600 transition">Connect</a>
+      <a href="#" onclick="navigate('dashboard')" id="nav-dashboard" class="nav-link text-sm font-medium hover:text-blue-600 transition hidden">Dashboard</a>
+      <a href="#" onclick="handleLogout()" id="nav-logout" class="nav-link text-sm font-medium hover:text-blue-600 transition hidden">Logout</a>
     </nav>
     <div class="flex items-center space-x-4">
       <button onclick="openLogin()" id="login-btn" class="text-sm font-medium hover:text-blue-600 transition">Log in</button>
       <button onclick="openLogin()" id="signup-btn" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Sign Up Free</button>
-      <!-- Mobile menu toggle -->
       <button id="menu-btn" class="md:hidden text-gray-700 dark:text-gray-300 focus:outline-none">
         <i class="fas fa-bars text-xl"></i>
       </button>
@@ -109,6 +298,11 @@
   <!-- Mobile menu -->
   <div id="mobile-menu" class="md:hidden hidden glass mt-2 py-4 px-4 rounded-lg shadow-lg mx-4">
     <a href="#" onclick="navigate('landing')" class="block py-2 hover:text-blue-600 transition">Home</a>
+    <a href="#" onclick="navigate('about')" class="block py-2 hover:text-blue-600 transition">About</a>
+    <a href="#" onclick="navigate('motivations')" class="block py-2 hover:text-blue-600 transition">Motivations</a>
+    <a href="#" onclick="navigate('team')" class="block py-2 hover:text-blue-600 transition">Meet the Team</a>
+    <a href="#" onclick="navigate('devlog')" class="block py-2 hover:text-blue-600 transition">Devlog</a>
+    <a href="#" onclick="navigate('portfolio')" class="block py-2 hover:text-blue-600 transition">Portfolio</a>
     <a href="#" onclick="navigate('connect')" class="block py-2 hover:text-blue-600 transition">Connect</a>
     <a href="#" onclick="navigate('dashboard')" id="mobile-dashboard" class="block py-2 hover:text-blue-600 transition hidden">Dashboard</a>
     <a href="#" onclick="handleLogout()" id="mobile-logout" class="block py-2 hover:text-blue-600 transition hidden">Logout</a>
@@ -165,10 +359,9 @@
 <!-- ========== MAIN CONTENT ========== -->
 <main class="pt-16">
   <!-- LANDING PAGE -->
-  <section id="section-landing" class="min-h-screen">
-    <!-- Hero (reused from previous) -->
+  <section id="section-landing" class="min-h-screen section-page section-gradient page-transition">
+    <!-- Hero with local blobs (they are absolute within this section) -->
     <div class="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-16">
-      <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none" style="z-index:0;"></canvas>
       <div class="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
       <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
       <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
@@ -203,7 +396,7 @@
         </div>
       </div>
     </div>
-    <!-- Stats, Features, Process, Testimonials, FAQ (keep existing) -->
+    <!-- Stats, Features, Process, Testimonials, FAQ – keep as is -->
     <div class="bg-white dark:bg-gray-900 transition-colors">
       <!-- Stats -->
       <section class="py-16">
@@ -271,8 +464,96 @@
     </div>
   </section>
 
-  <!-- CONNECT SECTION -->
-  <section id="section-connect" class="min-h-screen bg-white dark:bg-gray-900 transition-colors hidden py-20">
+  <!-- ABOUT PAGE -->
+  <section id="section-about" class="min-h-screen section-page section-gradient hidden page-transition py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">About Tutor Hub</h2>
+      <div class="glass rounded-2xl p-8 space-y-4">
+        <p class="text-gray-600 dark:text-gray-300">Tutor Hub is a community-driven initiative founded in Montgomery County, Maryland. Our mission is to provide free, high-quality tutoring to students who need it most.</p>
+        <p class="text-gray-600 dark:text-gray-300">We believe that every student deserves access to personalized education, regardless of their background or financial situation. Our team of dedicated tutors volunteer their time to help students build confidence and achieve their academic goals.</p>
+        <p class="text-gray-600 dark:text-gray-300">Since our founding, we've helped over 350 students improve their grades and develop a love for learning. We're proud to be a part of the Montgomery County community.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOTIVATIONS -->
+  <section id="section-motivations" class="min-h-screen section-page section-gradient hidden page-transition py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">Our Motivations</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass rounded-2xl p-6 card-lift"><i class="fas fa-heart text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Passion for Education</h3><p class="text-gray-600 dark:text-gray-400">We're driven by a love for learning and a desire to share that with others.</p></div>
+        <div class="glass rounded-2xl p-6 card-lift"><i class="fas fa-hand-holding-heart text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Community Impact</h3><p class="text-gray-600 dark:text-gray-400">We believe in giving back and strengthening our local community.</p></div>
+        <div class="glass rounded-2xl p-6 card-lift"><i class="fas fa-lightbulb text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Empowerment</h3><p class="text-gray-600 dark:text-gray-400">We want to empower students to reach their full potential.</p></div>
+        <div class="glass rounded-2xl p-6 card-lift"><i class="fas fa-users text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Inclusivity</h3><p class="text-gray-600 dark:text-gray-400">Education should be accessible to everyone, regardless of background.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEET THE TEAM -->
+  <section id="section-team" class="min-h-screen section-page section-gradient hidden page-transition py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Meet the Team</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Umair -->
+        <div class="glass rounded-2xl p-6 text-center mentor-card cursor-pointer" onclick="toggleMentorDetail('umair')">
+          <div class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-3xl font-bold text-blue-600 dark:text-blue-400">U</div>
+          <h3 class="text-xl font-semibold dark:text-white mt-4">Umair Loya</h3>
+          <p class="text-sm text-blue-600 dark:text-blue-400">Founder & Lead Tutor</p>
+          <div class="mentor-detail" id="umair-detail">
+            <p class="text-gray-600 dark:text-gray-300 text-sm">Teaches Algebra 1, Geometry, and Pre-Calculus. Passionate about making math accessible and fun. 5+ years of teaching experience.</p>
+            <div class="mt-2 flex justify-center gap-2"><span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">Algebra 1</span><span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">Geometry</span><span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">Pre-Calc</span></div>
+          </div>
+        </div>
+        <!-- Zuhair -->
+        <div class="glass rounded-2xl p-6 text-center mentor-card cursor-pointer" onclick="toggleMentorDetail('zuhair')">
+          <div class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-3xl font-bold text-blue-600 dark:text-blue-400">Z</div>
+          <h3 class="text-xl font-semibold dark:text-white mt-4">Zuhair Loya</h3>
+          <p class="text-sm text-blue-600 dark:text-blue-400">CAD & Design Specialist</p>
+          <div class="mentor-detail" id="zuhair-detail">
+            <p class="text-gray-600 dark:text-gray-300 text-sm">Teaches CAD, 3D modeling, and design thinking. Helps students bring their ideas to life. Experienced in Fusion 360 and SolidWorks.</p>
+            <div class="mt-2 flex justify-center gap-2"><span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">CAD</span><span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">3D Modeling</span></div>
+          </div>
+        </div>
+        <!-- Charan -->
+        <div class="glass rounded-2xl p-6 text-center mentor-card cursor-pointer" onclick="toggleMentorDetail('charan')">
+          <div class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-3xl font-bold text-blue-600 dark:text-blue-400">C</div>
+          <h3 class="text-xl font-semibold dark:text-white mt-4">Charan</h3>
+          <p class="text-sm text-blue-600 dark:text-blue-400">Programming & CS Tutor</p>
+          <div class="mentor-detail" id="charan-detail">
+            <p class="text-gray-600 dark:text-gray-300 text-sm">Teaches Python, Java, and web development. Helps students build real-world projects. Full-stack developer with industry experience.</p>
+            <div class="mt-2 flex justify-center gap-2"><span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">Python</span><span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">Java</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVLOG -->
+  <section id="section-devlog" class="min-h-screen section-page section-gradient hidden page-transition py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">Devlog</h2>
+      <div class="space-y-4">
+        <div class="glass rounded-2xl p-6"><h3 class="font-semibold dark:text-white">v1.2.0 – Dashboard Overhaul</h3><p class="text-sm text-gray-500 dark:text-gray-400">March 2026</p><p class="text-gray-600 dark:text-gray-300 mt-2">Added 40+ articles, mentor profiles, AI assistant integration, and 20+ settings options.</p></div>
+        <div class="glass rounded-2xl p-6"><h3 class="font-semibold dark:text-white">v1.1.0 – Messaging & Dark Mode</h3><p class="text-sm text-gray-500 dark:text-gray-400">February 2026</p><p class="text-gray-600 dark:text-gray-300 mt-2">Implemented direct messaging, global dark mode, and enhanced animations.</p></div>
+        <div class="glass rounded-2xl p-6"><h3 class="font-semibold dark:text-white">v1.0.0 – Launch</h3><p class="text-sm text-gray-500 dark:text-gray-400">January 2026</p><p class="text-gray-600 dark:text-gray-300 mt-2">Initial release with landing page, authentication, and basic dashboard.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="section-portfolio" class="min-h-screen section-page section-gradient hidden page-transition py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Our Portfolio</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl overflow-hidden card-lift"><div class="h-48 bg-gradient-to-br from-blue-400 to-indigo-400 flex items-center justify-center text-white text-4xl"><i class="fas fa-calculator"></i></div><div class="p-4"><h3 class="font-semibold dark:text-white">Math Mastery Program</h3><p class="text-sm text-gray-500 dark:text-gray-400">2025</p></div></div>
+        <div class="glass rounded-2xl overflow-hidden card-lift"><div class="h-48 bg-gradient-to-br from-green-400 to-teal-400 flex items-center justify-center text-white text-4xl"><i class="fas fa-code"></i></div><div class="p-4"><h3 class="font-semibold dark:text-white">Coding Bootcamp</h3><p class="text-sm text-gray-500 dark:text-gray-400">2025</p></div></div>
+        <div class="glass rounded-2xl overflow-hidden card-lift"><div class="h-48 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-4xl"><i class="fas fa-pencil-ruler"></i></div><div class="p-4"><h3 class="font-semibold dark:text-white">CAD Design Workshop</h3><p class="text-sm text-gray-500 dark:text-gray-400">2025</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONNECT -->
+  <section id="section-connect" class="min-h-screen section-page section-gradient hidden page-transition py-20">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8">Connect With Us</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -296,21 +577,24 @@
   </section>
 
   <!-- DASHBOARD SECTION -->
-  <section id="section-dashboard" class="min-h-screen bg-white dark:bg-gray-900 transition-colors hidden">
+  <section id="section-dashboard" class="min-h-screen section-page hidden">
     <div class="flex flex-col md:flex-row h-full">
       <!-- Sidebar -->
-      <aside id="dashboard-sidebar" class="w-full md:w-64 bg-gray-50 dark:bg-gray-800/50 border-r border-gray-200 dark:border-gray-700 p-4 space-y-2">
+      <aside id="dashboard-sidebar" class="w-full md:w-64 p-4 space-y-2 min-h-screen border-r border-gray-200 dark:border-gray-700">
         <div class="flex items-center gap-2 mb-6">
-          <i class="fas fa-user-circle text-2xl text-blue-600"></i>
+          <i class="fas fa-graduation-cap text-2xl text-blue-600"></i>
           <span id="sidebar-username" class="font-semibold dark:text-white">User</span>
         </div>
         <nav class="space-y-1">
-          <a href="#" onclick="navigateDashboard('home')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-home w-5"></i> Home</a>
-          <a href="#" onclick="navigateDashboard('settings')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-cog w-5"></i> Settings</a>
-          <a href="#" onclick="navigateDashboard('mentors')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-users w-5"></i> My Mentors</a>
-          <a href="#" onclick="navigateDashboard('locations')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-map-pin w-5"></i> Locations</a>
-          <a href="#" onclick="navigateDashboard('articles')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-newspaper w-5"></i> Articles</a>
-          <a href="#" onclick="navigateDashboard('messages')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-envelope w-5"></i> Messages</a>
+          <a href="#" onclick="navigateDashboard('home')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-home w-5"></i> Home</a>
+          <a href="#" onclick="navigateDashboard('profile')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-user w-5"></i> Profile</a>
+          <a href="#" onclick="navigateDashboard('community')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-users w-5"></i> Community</a>
+          <a href="#" onclick="navigateDashboard('mentors')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-chalkboard-teacher w-5"></i> My Mentors</a>
+          <a href="#" onclick="navigateDashboard('articles')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-newspaper w-5"></i> Articles</a>
+          <a href="#" onclick="navigateDashboard('messages')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-envelope w-5"></i> Messages</a>
+          <a href="#" onclick="navigateDashboard('locations')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-map-pin w-5"></i> Locations</a>
+          <a href="#" onclick="navigateDashboard('ai')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-robot w-5"></i> AI Assistant</a>
+          <a href="#" onclick="navigateDashboard('settings')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-cog w-5"></i> Settings</a>
         </nav>
         <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
           <button onclick="handleLogout()" class="flex items-center gap-3 px-3 py-2 w-full text-left rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 transition"><i class="fas fa-sign-out-alt w-5"></i> Logout</button>
@@ -319,65 +603,69 @@
 
       <!-- Dashboard Content -->
       <div id="dashboard-content" class="flex-1 p-6 overflow-y-auto">
-        <!-- Home -->
-        <div id="dash-home" class="dash-page">
+        <!-- HOME -->
+        <div id="dash-home" class="dash-page page-transition">
           <h2 class="text-2xl font-bold dark:text-white mb-4">Dashboard</h2>
           <p class="text-gray-600 dark:text-gray-400">Welcome back, <span id="dash-welcome-name" class="font-semibold">User</span>!</p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <div class="glass rounded-xl p-6 text-center"><i class="fas fa-calendar-check text-3xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Upcoming Sessions</h4><p class="text-2xl font-bold text-blue-600">3</p></div>
-            <div class="glass rounded-xl p-6 text-center"><i class="fas fa-users text-3xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Active Mentors</h4><p class="text-2xl font-bold text-blue-600" id="dash-mentor-count">0</p></div>
-            <div class="glass rounded-xl p-6 text-center"><i class="fas fa-star text-3xl text-yellow-500 mb-2"></i><h4 class="font-semibold dark:text-white">Progress</h4><p class="text-2xl font-bold text-blue-600">78%</p></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <div class="glass rounded-xl p-6 text-center card-lift"><i class="fas fa-calendar-check text-3xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Upcoming Sessions</h4><p class="text-2xl font-bold text-blue-600">3</p></div>
+            <div class="glass rounded-xl p-6 text-center card-lift"><i class="fas fa-users text-3xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Active Mentors</h4><p class="text-2xl font-bold text-blue-600" id="dash-mentor-count">3</p></div>
+            <div class="glass rounded-xl p-6 text-center card-lift"><i class="fas fa-star text-3xl text-yellow-500 mb-2"></i><h4 class="font-semibold dark:text-white">Progress</h4><p class="text-2xl font-bold text-blue-600">78%</p></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div class="glass rounded-xl p-6 card-lift"><i class="fas fa-newspaper text-2xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Latest Articles</h4><p class="text-gray-600 dark:text-gray-400">Check out our new articles on Algebra and Reading Comprehension.</p><a href="#" onclick="navigateDashboard('articles')" class="text-blue-600 hover:underline text-sm">Browse all →</a></div>
+            <div class="glass rounded-xl p-6 card-lift"><i class="fas fa-users text-2xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Meet Your Mentors</h4><p class="text-gray-600 dark:text-gray-400">Umair (Algebra), Zuhair (CAD), Charan (Python) – all ready to help.</p><a href="#" onclick="navigateDashboard('mentors')" class="text-blue-600 hover:underline text-sm">View mentors →</a></div>
           </div>
         </div>
-        <!-- Settings -->
-        <div id="dash-settings" class="dash-page hidden">
-          <h2 class="text-2xl font-bold dark:text-white mb-4">Settings</h2>
-          <div class="glass rounded-xl p-6 max-w-md">
-            <div class="mb-4"><label class="block text-sm font-medium dark:text-gray-300">Display Name</label><input type="text" id="settings-name" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" /></div>
-            <div class="mb-4"><label class="block text-sm font-medium dark:text-gray-300">Email</label><input type="email" id="settings-email" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" /></div>
-            <div class="mb-4"><label class="block text-sm font-medium dark:text-gray-300">New Password (leave blank to keep)</label><input type="password" id="settings-password" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="••••••••" /></div>
-            <button onclick="updateProfile()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save Changes</button>
-            <hr class="my-6 border-gray-200 dark:border-gray-700" />
-            <div class="flex items-center justify-between"><span class="font-medium dark:text-white">Dark Mode</span><button onclick="toggleDarkMode()" class="w-12 h-6 rounded-full bg-gray-300 dark:bg-blue-600 relative transition"><span id="dark-toggle-ball" class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform dark:translate-x-6"></span></button></div>
+
+        <!-- PROFILE -->
+        <div id="dash-profile" class="dash-page hidden page-transition">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">My Profile</h2>
+          <div class="glass rounded-xl p-6 max-w-2xl">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-4xl font-bold text-blue-600 dark:text-blue-400" id="profile-avatar">U</div>
+              <div><h3 class="text-xl font-semibold dark:text-white" id="profile-name">User</h3><p class="text-gray-500 dark:text-gray-400" id="profile-email">user@example.com</p></div>
+            </div>
+            <div class="space-y-4">
+              <div><label class="block text-sm font-medium dark:text-gray-300">Display Name</label><input type="text" id="profile-display-name" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" /></div>
+              <div><label class="block text-sm font-medium dark:text-gray-300">Email</label><input type="email" id="profile-email-input" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" /></div>
+              <div><label class="block text-sm font-medium dark:text-gray-300">Bio</label><textarea id="profile-bio" rows="3" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Tell us about yourself..."></textarea></div>
+              <button onclick="updateProfileFromProfile()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Update Profile</button>
+            </div>
           </div>
         </div>
-        <!-- Mentors -->
-        <div id="dash-mentors" class="dash-page hidden">
+
+        <!-- COMMUNITY (20 random students) -->
+        <div id="dash-community" class="dash-page hidden page-transition">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Community</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Connect with fellow students and mentors.</p>
+          <div id="community-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- MENTORS -->
+        <div id="dash-mentors" class="dash-page hidden page-transition">
           <h2 class="text-2xl font-bold dark:text-white mb-4">My Mentors</h2>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">All registered users – click "Message" to start a conversation.</p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Connect with your dedicated mentors.</p>
           <div id="mentor-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
-        <!-- Locations -->
-        <div id="dash-locations" class="dash-page hidden">
-          <h2 class="text-2xl font-bold dark:text-white mb-4">Locations</h2>
-          <div class="glass rounded-xl p-6">
-            <p class="text-gray-600 dark:text-gray-400">We serve Montgomery County, MD. Our tutors are available online and at local libraries.</p>
-            <div class="mt-4 aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400"><i class="fas fa-map-marked-alt text-4xl"></i> <span class="ml-2">Interactive map coming soon</span></div>
-          </div>
-        </div>
-        <!-- Articles -->
-        <div id="dash-articles" class="dash-page hidden">
+
+        <!-- ARTICLES -->
+        <div id="dash-articles" class="dash-page hidden page-transition">
           <h2 class="text-2xl font-bold dark:text-white mb-4">Articles</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Math: Algebra Basics</h3><p class="text-sm text-gray-500 dark:text-gray-400">Learn the fundamentals of equations.</p></div>
-            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Reading: Comprehension Strategies</h3><p class="text-sm text-gray-500 dark:text-gray-400">Improve your reading skills.</p></div>
-            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Science: Chemistry 101</h3><p class="text-sm text-gray-500 dark:text-gray-400">Introduction to atoms and molecules.</p></div>
-            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Test Prep: SAT Math Tips</h3><p class="text-sm text-gray-500 dark:text-gray-400">Score higher with these strategies.</p></div>
-          </div>
+          <div class="articles-grid" id="articles-grid"></div>
         </div>
-        <!-- Messages -->
-        <div id="dash-messages" class="dash-page hidden">
+
+        <!-- MESSAGES -->
+        <div id="dash-messages" class="dash-page hidden page-transition">
           <h2 class="text-2xl font-bold dark:text-white mb-4">Messages</h2>
-          <div class="flex flex-col md:flex-row gap-4">
-            <!-- Conversation list -->
-            <div class="md:w-1/3 glass rounded-xl p-4 max-h-96 overflow-y-auto">
+          <div class="flex flex-col md:flex-row gap-4 h-[500px]">
+            <div class="md:w-1/3 glass rounded-xl p-4 overflow-y-auto border border-gray-200 dark:border-gray-700">
               <h3 class="font-semibold dark:text-white mb-2">Conversations</h3>
               <div id="conversation-list" class="space-y-2"></div>
             </div>
-            <!-- Chat view -->
-            <div class="md:w-2/3 glass rounded-xl p-4">
+            <div class="md:w-2/3 glass rounded-xl p-4 flex flex-col border border-gray-200 dark:border-gray-700">
               <div id="chat-header" class="font-semibold dark:text-white mb-2">Select a conversation</div>
-              <div id="chat-messages" class="h-64 overflow-y-auto space-y-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg"></div>
+              <div id="chat-messages" class="flex-1 overflow-y-auto space-y-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg"></div>
               <div class="mt-4 flex gap-2">
                 <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" />
                 <button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"><i class="fas fa-paper-plane"></i></button>
@@ -385,17 +673,68 @@
             </div>
           </div>
         </div>
+
+        <!-- LOCATIONS -->
+        <div id="dash-locations" class="dash-page hidden page-transition">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Locations</h2>
+          <div class="glass rounded-xl p-6">
+            <p class="text-gray-600 dark:text-gray-400">We serve Montgomery County, MD. Our tutors are available online and at local libraries.</p>
+            <div class="mt-4 aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400"><i class="fas fa-map-marked-alt text-4xl"></i> <span class="ml-2">Interactive map coming soon</span></div>
+          </div>
+        </div>
+
+        <!-- AI ASSISTANT -->
+        <div id="dash-ai" class="dash-page hidden page-transition">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold dark:text-white">AI Assistant</h2>
+            <button onclick="toggleAIFullscreen()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"><i class="fas fa-expand mr-2"></i>Fullscreen</button>
+          </div>
+          <div id="ai-container" class="glass rounded-xl p-2 h-[600px] relative">
+            <iframe id="ai-iframe" src="https://uloya1234.github.io/faq-assistant/" class="w-full h-full rounded-lg border-0" title="AI Assistant"></iframe>
+          </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div id="dash-settings" class="dash-page hidden page-transition">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Settings</h2>
+          <div class="settings-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Profile -->
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-user text-blue-600 mr-2"></i>Display Name</h4><input type="text" id="settings-name" placeholder="Your name" class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm" /></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-envelope text-blue-600 mr-2"></i>Email</h4><input type="email" id="settings-email" placeholder="Email" class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm" /></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-lock text-blue-600 mr-2"></i>Password</h4><input type="password" id="settings-password" placeholder="New Password" class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm" /></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-palette text-blue-600 mr-2"></i>Theme</h4><div class="flex items-center justify-between"><span class="text-sm dark:text-gray-300">Dark Mode</span><div class="toggle-switch" onclick="toggleDarkMode()"><div class="dot" id="dark-toggle-ball"></div></div></div></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-bell text-blue-600 mr-2"></i>Notifications</h4><div class="space-y-1"><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Email Alerts</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> SMS Alerts</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Push</label></div></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-globe text-blue-600 mr-2"></i>Language</h4><select class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm custom-select"><option>English</option><option>Spanish</option><option>French</option></select></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-clock text-blue-600 mr-2"></i>Timezone</h4><select class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm custom-select"><option>EST</option><option>CST</option><option>PST</option></select></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-font text-blue-600 mr-2"></i>Font Size</h4><input type="range" min="12" max="24" value="16" class="w-full" onchange="showNotification('Font size updated')" /></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-shield-alt text-blue-600 mr-2"></i>Privacy</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Show online status</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Allow messages from anyone</label></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-link text-blue-600 mr-2"></i>Connected Accounts</h4><button class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition">Connect Google</button><button class="px-3 py-1 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 transition ml-2">Connect Apple</button></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-shield-virus text-blue-600 mr-2"></i>Security</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> 2FA</label><button class="mt-2 px-3 py-1 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 transition">Setup 2FA</button></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-database text-blue-600 mr-2"></i>Data</h4><button class="px-3 py-1 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 transition">Export</button><button class="px-3 py-1 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition ml-2">Delete Account</button></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-cookie-bite text-blue-600 mr-2"></i>Cookies</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Essential</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Analytics</label></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-microphone text-blue-600 mr-2"></i>Voice Input</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Enable voice</label></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-video text-blue-600 mr-2"></i>Video</h4><select class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm custom-select"><option>Camera: Default</option><option>External</option></select></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-headphones text-blue-600 mr-2"></i>Audio</h4><select class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm custom-select"><option>Microphone: Default</option><option>External</option></select></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-keyboard text-blue-600 mr-2"></i>Keyboard</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Shortcuts</label></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-sync-alt text-blue-600 mr-2"></i>Sync</h4><button class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition">Sync Now</button></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-download text-blue-600 mr-2"></i>Downloads</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Auto-download</label></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-print text-blue-600 mr-2"></i>Print</h4><select class="w-full px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm custom-select"><option>Default Printer</option><option>Save as PDF</option></select></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-cloud text-blue-600 mr-2"></i>Cloud Backup</h4><button class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition">Backup Now</button></div>
+            <div class="glass rounded-xl p-4"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-undo-alt text-blue-600 mr-2"></i>Reset</h4><button class="px-3 py-1 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition">Reset All</button></div>
+          </div>
+          <button onclick="updateProfile()" class="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save All Changes</button>
+        </div>
       </div>
     </div>
   </section>
 </main>
 
-<!-- ========== FOOTER (only on landing) ========== -->
+<!-- ========== FOOTER ========== -->
 <footer id="main-footer" class="bg-gray-900 text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div><h3 class="text-2xl font-bold"><span class="text-blue-400">Tutor</span>Hub</h3><p class="mt-4 text-sm text-gray-400">Free, individualized tutoring for Montgomery County students.</p><div class="mt-6 flex space-x-4"><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a></div></div>
-      <div><h4 class="font-semibold">Quick Links</h4><ul class="mt-4 space-y-2 text-sm text-gray-400"><li><a href="#" onclick="navigate('landing')" class="hover:text-white">Home</a></li><li><a href="#" onclick="navigate('connect')" class="hover:text-white">Connect</a></li></ul></div>
+      <div><h3 class="text-2xl font-bold flex items-center gap-2"><i class="fas fa-graduation-cap text-blue-400"></i><span class="text-blue-400">Tutor</span>Hub</h3><p class="mt-4 text-sm text-gray-400">Free, individualized tutoring for Montgomery County students.</p><div class="mt-6 flex space-x-4"><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a></div></div>
+      <div><h4 class="font-semibold">Quick Links</h4><ul class="mt-4 space-y-2 text-sm text-gray-400"><li><a href="#" onclick="navigate('landing')" class="hover:text-white">Home</a></li><li><a href="#" onclick="navigate('about')" class="hover:text-white">About</a></li><li><a href="#" onclick="navigate('team')" class="hover:text-white">Team</a></li><li><a href="#" onclick="navigate('connect')" class="hover:text-white">Connect</a></li></ul></div>
       <div><h4 class="font-semibold">Support</h4><ul class="mt-4 space-y-2 text-sm text-gray-400"><li><a href="#" class="hover:text-white">Privacy Policy</a></li><li><a href="#" class="hover:text-white">Terms of Service</a></li></ul></div>
       <div><h4 class="font-semibold">Newsletter</h4><p class="mt-4 text-sm text-gray-400">Get updates on new tutors and sessions.</p><form class="mt-4 flex"><input type="email" placeholder="Your email" class="flex-1 px-3 py-2 rounded-l-md bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" /><button class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition">Subscribe</button></form></div>
     </div>
@@ -403,172 +742,133 @@
   </div>
 </footer>
 
-<!-- ========== SCRIPTS ========== -->
 <script>
-  // ---------- GSAP + ScrollTrigger (for landing page animations) ----------
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Navbar shrink
-  gsap.to("#navbar", {
-    backgroundColor: "rgba(255,255,255,0.8)",
-    backdropFilter: "blur(12px)",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-    paddingTop: "8px",
-    paddingBottom: "8px",
-    duration: 0.3,
-    scrollTrigger: {
-      trigger: "#section-landing",
-      start: "top top",
-      toggleActions: "play none none reverse"
-    }
-  });
-
-  // Hero animations
-  gsap.from("#section-landing h1", { opacity: 0, y: 50, duration: 1, delay: 0.3, ease: "power3.out" });
-  gsap.from("#section-landing p", { opacity: 0, y: 30, duration: 0.8, delay: 0.6, ease: "power3.out" });
-  gsap.from("#section-landing .inline-block", { opacity: 0, y: -20, duration: 0.6, delay: 0.2, ease: "power3.out" });
-  gsap.from("#section-landing .flex-wrap", { opacity: 0, y: 30, duration: 0.8, delay: 0.9, ease: "power3.out" });
-  gsap.from("#section-landing .flex.items-center", { opacity: 0, y: 30, duration: 0.8, delay: 1.2, ease: "power3.out" });
-  gsap.from("#section-landing .relative.w-full.max-w-md", { opacity: 0, scale: 0.9, duration: 1, delay: 0.4, ease: "power3.out" });
-
-  // Stats counter
-  const stats = document.querySelectorAll(".stat-number");
-  stats.forEach(stat => {
-    const target = parseInt(stat.dataset.target);
-    let current = 0;
-    const increment = target / 60;
-    const updateCounter = () => {
-      current += increment;
-      if (current < target) { stat.textContent = Math.ceil(current); requestAnimationFrame(updateCounter); }
-      else { stat.textContent = target + (stat.querySelector('span') ? '%' : ''); }
-    };
-    ScrollTrigger.create({
-      trigger: stat,
-      start: "top 80%",
-      onEnter: () => { if (stat.textContent === "0") updateCounter(); },
-      once: true
-    });
-  });
-
-  // Feature cards stagger
-  gsap.from(".feature-card", { opacity: 0, y: 40, duration: 0.8, stagger: 0.15, scrollTrigger: { trigger: "#section-landing .grid", start: "top 80%", toggleActions: "play none none none" } });
-  gsap.from(".process-step", { opacity: 0, y: 40, duration: 0.8, stagger: 0.15, scrollTrigger: { trigger: "#section-landing .grid", start: "top 80%", toggleActions: "play none none none" } });
-
-  // FAQ data
-  const faqData = [
-    { q: "Is tutoring really free?", a: "Yes! Tutor Hub is completely free for Montgomery County students." },
-    { q: "What subjects do you cover?", a: "We specialize in STEM subjects including math, science, and computer science." },
-    { q: "How do I get matched with a tutor?", a: "Simply sign up, tell us your needs, and we'll match you." },
-    { q: "Are tutors qualified?", a: "All our tutors are subject experts with teaching experience." },
-    { q: "Can I switch tutors if it's not a good fit?", a: "Absolutely. We'll gladly match you with a different tutor." }
-  ];
-  const faqContainer = document.getElementById('faq-container');
-  faqData.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden';
-    div.innerHTML = `
-      <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-        <span class="font-medium dark:text-white">${item.q}</span>
-        <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300"></i>
-      </button>
-      <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out"><div class="px-6 pb-4 text-gray-600 dark:text-gray-400">${item.a}</div></div>
-    `;
-    faqContainer.appendChild(div);
-    const toggle = div.querySelector('.faq-toggle');
-    const answer = div.querySelector('.faq-answer');
-    const icon = toggle.querySelector('i');
-    toggle.addEventListener('click', () => {
-      const isOpen = answer.style.maxHeight !== '0px';
-      answer.style.maxHeight = isOpen ? '0px' : answer.scrollHeight + 'px';
-      icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-    });
-  });
-
-  // Testimonials
-  const testimonials = [
-    { text: "My daughter's confidence in math has completely transformed. Her grades improved dramatically.", name: "Sarah Johnson", child: "Parent of 8th Grader", initials: "SJ" },
-    { text: "The Tutor Hub matched us with an incredible tutor. Professional, patient, and knowledgeable.", name: "Michael Chen", child: "Parent of 10th Grader", initials: "MC" },
-    { text: "Our son went from struggling in science to earning A's. The personalized tutoring made all the difference.", name: "Emily Rodriguez", child: "Parent of 7th Grader", initials: "ER" },
-    { text: "I was skeptical about free tutoring, but this is truly top-notch. My daughter loves her tutor.", name: "David Kim", child: "Parent of 9th Grader", initials: "DK" }
-  ];
-  let currentTestimonial = 0;
-  const textEl = document.getElementById('testimonial-text');
-  const nameEl = document.getElementById('testimonial-name');
-  const childEl = document.getElementById('testimonial-child');
-  const dots = document.querySelectorAll('.testimonial-dot');
-  function updateTestimonial(index) {
-    const t = testimonials[index];
-    textEl.textContent = `“${t.text}”`;
-    nameEl.textContent = t.name;
-    childEl.textContent = t.child;
-    dots.forEach((dot, i) => { dot.classList.toggle('bg-blue-600', i === index); dot.classList.toggle('bg-gray-300', i !== index); });
-  }
-  dots.forEach((dot, idx) => { dot.addEventListener('click', () => { currentTestimonial = idx; updateTestimonial(idx); }); });
-  setInterval(() => { currentTestimonial = (currentTestimonial + 1) % testimonials.length; updateTestimonial(currentTestimonial); }, 6000);
-
-  // ---------- PARTICLE BACKGROUND ----------
-  const canvas = document.getElementById('particle-canvas');
+  // ==================== GLOBAL PARTICLE BACKGROUND ====================
+  const canvas = document.getElementById('particle-canvas-global');
   const ctx = canvas.getContext('2d');
-  let width, height, particles = [];
+  let w, h, particles = [];
+  function resizeCanvas() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
   function initParticles() {
-    width = window.innerWidth; height = window.innerHeight;
-    canvas.width = width; canvas.height = height;
-    const num = Math.min(80, Math.floor(width * height / 15000));
+    const num = Math.min(80, Math.floor(w * h / 15000));
     particles = [];
     for (let i = 0; i < num; i++) {
-      particles.push({ x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, radius: Math.random()*2+1 });
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1
+      });
     }
   }
+  initParticles();
+
   function drawParticles() {
-    ctx.clearRect(0,0,width,height);
-    ctx.fillStyle = 'rgba(59,130,246,0.15)';
-    particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x,p.y,p.radius,0,2*Math.PI); ctx.fill(); });
-    for (let i=0;i<particles.length;i++) {
-      for (let j=i+1;j<particles.length;j++) {
-        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx*dx+dy*dy);
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(59,130,246,0.12)';
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
         if (dist < 150) {
-          ctx.strokeStyle = `rgba(59,130,246,${0.1*(1-dist/150)})`;
+          ctx.strokeStyle = `rgba(59,130,246,${0.08 * (1 - dist/150)})`;
           ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
         }
       }
     }
-    particles.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x<0||p.x>width) p.vx*=-1; if (p.y<0||p.y>height) p.vy*=-1; });
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > w) p.vx *= -1;
+      if (p.y < 0 || p.y > h) p.vy *= -1;
+    });
     requestAnimationFrame(drawParticles);
   }
-  window.addEventListener('resize', initParticles);
-  initParticles(); drawParticles();
+  drawParticles();
 
-  // ---------- MOBILE MENU ----------
-  document.getElementById('menu-btn').addEventListener('click', function() {
-    const menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('hidden');
-    const icon = this.querySelector('i');
-    icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
-  });
+  // ==================== NOTIFICATION BANNER ====================
+  function showNotification(msg) {
+    const banner = document.getElementById('notification-banner');
+    banner.textContent = '✅ ' + msg;
+    banner.classList.add('show');
+    setTimeout(() => banner.classList.remove('show'), 3000);
+  }
+  window.showNotification = showNotification;
 
-  // ---------- AUTH SYSTEM ----------
-  let currentUser = null;
-  let users = JSON.parse(localStorage.getItem('tutorhub_users')) || [];
-  let messages = JSON.parse(localStorage.getItem('tutorhub_messages')) || [];
+  // ==================== DARK MODE ====================
   let darkMode = localStorage.getItem('tutorhub_dark') === 'true';
-
-  // Apply dark mode
   function applyDarkMode() {
     const root = document.getElementById('html-root');
     if (darkMode) root.classList.add('dark'); else root.classList.remove('dark');
-    document.querySelector('#dark-toggle-ball')?.classList.toggle('translate-x-6', darkMode);
+    const ball = document.querySelector('#dark-toggle-ball');
+    if (ball) {
+      const parent = ball.closest('.toggle-switch');
+      if (darkMode) parent.classList.add('active'); else parent.classList.remove('active');
+    }
+    // Update toggle switch state if any
+    document.querySelectorAll('.toggle-switch').forEach(t => {
+      if (darkMode) t.classList.add('active'); else t.classList.remove('active');
+    });
   }
   applyDarkMode();
 
-  // Toggle dark mode
   window.toggleDarkMode = function() {
     darkMode = !darkMode;
     localStorage.setItem('tutorhub_dark', darkMode);
     applyDarkMode();
+    showNotification('Dark mode ' + (darkMode ? 'enabled' : 'disabled'));
   };
 
-  // Login modal state
+  // ==================== AUTH ====================
+  let currentUser = null;
+  let users = JSON.parse(localStorage.getItem('tutorhub_users')) || [];
+  let messages = JSON.parse(localStorage.getItem('tutorhub_messages')) || [];
+
+  // Pre-populate mentors
+  if (!users.find(u => u.email === 'umair@tutorhub.com')) {
+    users.push({ id: 'mentor1', name: 'Umair Loya', email: 'umair@tutorhub.com', password: 'umair123', isMentor: true, subjects: ['Algebra 1', 'Geometry', 'Pre-Calculus'], bio: 'Passionate math educator with 5+ years of experience.' });
+    users.push({ id: 'mentor2', name: 'Zuhair Loya', email: 'zuhair@tutorhub.com', password: 'zuhair123', isMentor: true, subjects: ['CAD', '3D Modeling', 'Design Thinking'], bio: 'Expert in CAD and design, helping students create.' });
+    users.push({ id: 'mentor3', name: 'Charan', email: 'charan@tutorhub.com', password: 'charan123', isMentor: true, subjects: ['Python', 'Java', 'Web Development'], bio: 'Full-stack developer and coding mentor.' });
+    localStorage.setItem('tutorhub_users', JSON.stringify(users));
+  }
+
+  // Generate 20 random students if not exist
+  const studentNames = ['Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'James', 'Sophia', 'Benjamin', 'Mia', 'Lucas', 'Charlotte', 'Henry', 'Amelia', 'Alexander', 'Harper', 'Michael', 'Evelyn', 'Daniel', 'Abigail', 'Matthew'];
+  const studentSubjects = ['Math', 'Science', 'English', 'History', 'Art', 'Music', 'PE', 'CS'];
+  if (!users.some(u => u.isStudent)) {
+    for (let i = 0; i < 20; i++) {
+      const name = studentNames[i % studentNames.length] + ' ' + (Math.floor(Math.random()*100)+1);
+      const email = name.toLowerCase().replace(' ', '') + '@student.com';
+      users.push({
+        id: 'student' + i,
+        name: name,
+        email: email,
+        password: 'student123',
+        isMentor: false,
+        isStudent: true,
+        subjects: [studentSubjects[Math.floor(Math.random() * studentSubjects.length)]]
+      });
+    }
+    localStorage.setItem('tutorhub_users', JSON.stringify(users));
+  }
+
+  // Login modal
   let isSignUp = false;
   const modal = document.getElementById('login-modal');
   const modalTitle = document.getElementById('modal-title');
@@ -581,7 +881,6 @@
   window.openLogin = function() {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    // reset to login
     isSignUp = false;
     nameField.classList.add('hidden');
     modalTitle.textContent = 'Welcome Back';
@@ -613,7 +912,6 @@
     }
   });
 
-  // Handle authentication
   window.handleAuth = function(e) {
     e.preventDefault();
     const email = document.getElementById('auth-email').value.trim();
@@ -622,11 +920,10 @@
       const name = document.getElementById('signup-name').value.trim();
       if (!name) { alert('Please enter your name.'); return; }
       if (users.find(u => u.email === email)) { alert('Email already registered.'); return; }
-      const newUser = { id: Date.now().toString(), name, email, password };
+      const newUser = { id: Date.now().toString(), name, email, password, isMentor: false, isStudent: false };
       users.push(newUser);
       localStorage.setItem('tutorhub_users', JSON.stringify(users));
       alert('Account created! Please log in.');
-      // switch to login
       isSignUp = false;
       nameField.classList.add('hidden');
       modalTitle.textContent = 'Welcome Back';
@@ -648,7 +945,6 @@
     }
   };
 
-  // Logout
   window.handleLogout = function() {
     currentUser = null;
     localStorage.removeItem('tutorhub_current');
@@ -656,7 +952,6 @@
     navigate('landing');
   };
 
-  // Update UI based on auth
   function updateUIForLoggedIn() {
     document.getElementById('login-btn').classList.add('hidden');
     document.getElementById('signup-btn').classList.add('hidden');
@@ -666,15 +961,25 @@
     document.getElementById('nav-logout').classList.remove('hidden');
     document.getElementById('mobile-dashboard').classList.remove('hidden');
     document.getElementById('mobile-logout').classList.remove('hidden');
-    // Update sidebar
     document.getElementById('sidebar-username').textContent = currentUser.name;
     document.getElementById('dash-welcome-name').textContent = currentUser.name;
-    // Load settings
     document.getElementById('settings-name').value = currentUser.name;
     document.getElementById('settings-email').value = currentUser.email;
-    // Update mentor count
-    document.getElementById('dash-mentor-count').textContent = users.length - 1;
+    // Profile
+    document.getElementById('profile-name').textContent = currentUser.name;
+    document.getElementById('profile-email').textContent = currentUser.email;
+    document.getElementById('profile-display-name').value = currentUser.name;
+    document.getElementById('profile-email-input').value = currentUser.email;
+    document.getElementById('profile-bio').value = currentUser.bio || '';
+    document.getElementById('profile-avatar').textContent = currentUser.name.charAt(0);
+    const mentorCount = users.filter(u => u.isMentor).length;
+    document.getElementById('dash-mentor-count').textContent = mentorCount;
+    renderCommunity();
+    renderMentors();
+    renderArticles();
+    renderConversations();
   }
+
   function updateUIForLoggedOut() {
     document.getElementById('login-btn').classList.remove('hidden');
     document.getElementById('signup-btn').classList.remove('hidden');
@@ -686,28 +991,38 @@
     document.getElementById('mobile-logout').classList.add('hidden');
   }
 
-  // Check session on load
   const savedId = localStorage.getItem('tutorhub_current');
   if (savedId) {
     currentUser = users.find(u => u.id === savedId);
-    if (currentUser) {
-      updateUIForLoggedIn();
-    } else {
-      localStorage.removeItem('tutorhub_current');
-    }
+    if (currentUser) updateUIForLoggedIn();
+    else localStorage.removeItem('tutorhub_current');
   }
 
-  // ---------- NAVIGATION ----------
+  // ==================== NAVIGATION ====================
   function navigate(page) {
-    // Hide all sections
-    document.getElementById('section-landing').classList.add('hidden');
-    document.getElementById('section-connect').classList.add('hidden');
-    document.getElementById('section-dashboard').classList.add('hidden');
+    const sections = ['section-landing', 'section-about', 'section-motivations', 'section-team', 'section-devlog', 'section-portfolio', 'section-connect', 'section-dashboard'];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
     document.getElementById('main-footer').classList.remove('hidden');
-    // Show target
     if (page === 'landing') {
       document.getElementById('section-landing').classList.remove('hidden');
-      // Re-trigger GSAP animations (if needed)
+    } else if (page === 'about') {
+      document.getElementById('section-about').classList.remove('hidden');
+      document.getElementById('main-footer').classList.add('hidden');
+    } else if (page === 'motivations') {
+      document.getElementById('section-motivations').classList.remove('hidden');
+      document.getElementById('main-footer').classList.add('hidden');
+    } else if (page === 'team') {
+      document.getElementById('section-team').classList.remove('hidden');
+      document.getElementById('main-footer').classList.add('hidden');
+    } else if (page === 'devlog') {
+      document.getElementById('section-devlog').classList.remove('hidden');
+      document.getElementById('main-footer').classList.add('hidden');
+    } else if (page === 'portfolio') {
+      document.getElementById('section-portfolio').classList.remove('hidden');
+      document.getElementById('main-footer').classList.add('hidden');
     } else if (page === 'connect') {
       document.getElementById('section-connect').classList.remove('hidden');
       document.getElementById('main-footer').classList.add('hidden');
@@ -715,78 +1030,117 @@
       if (!currentUser) { openLogin(); return; }
       document.getElementById('section-dashboard').classList.remove('hidden');
       document.getElementById('main-footer').classList.add('hidden');
-      // Default to dashboard home
       navigateDashboard('home');
     }
-    // Close mobile menu
     document.getElementById('mobile-menu').classList.add('hidden');
     const icon = document.querySelector('#menu-btn i');
     if (icon) { icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }
-    // Scroll to top
     window.scrollTo(0,0);
+    const targetSection = document.querySelector(`#section-${page}`);
+    if (targetSection) {
+      targetSection.classList.remove('page-transition');
+      void targetSection.offsetWidth;
+      targetSection.classList.add('page-transition');
+    }
   }
   window.navigate = navigate;
 
   // Dashboard sub-navigation
   function navigateDashboard(section) {
-    // Hide all dash pages
     document.querySelectorAll('.dash-page').forEach(el => el.classList.add('hidden'));
-    // Show selected
     const target = document.getElementById('dash-' + section);
-    if (target) target.classList.remove('hidden');
-    // Update sidebar active
+    if (target) {
+      target.classList.remove('hidden');
+      target.classList.remove('page-transition');
+      void target.offsetWidth;
+      target.classList.add('page-transition');
+    }
     document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-    // Find the matching sidebar link (based on onclick)
-    const links = document.querySelectorAll('.sidebar-link');
-    links.forEach(link => {
+    document.querySelectorAll('.sidebar-link').forEach(link => {
       if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(section)) {
         link.classList.add('active');
       }
     });
-    // Refresh mentor list if mentors section
     if (section === 'mentors') renderMentors();
     if (section === 'messages') renderConversations();
+    if (section === 'articles') renderArticles();
+    if (section === 'community') renderCommunity();
   }
   window.navigateDashboard = navigateDashboard;
 
-  // ---------- SETTINGS ----------
-  window.updateProfile = function() {
-    if (!currentUser) return;
-    const newName = document.getElementById('settings-name').value.trim();
-    const newEmail = document.getElementById('settings-email').value.trim();
-    const newPassword = document.getElementById('settings-password').value.trim();
-    if (!newName || !newEmail) { alert('Name and email cannot be empty.'); return; }
-    // Update user
-    const userIndex = users.findIndex(u => u.id === currentUser.id);
-    if (userIndex === -1) return;
-    users[userIndex].name = newName;
-    users[userIndex].email = newEmail;
-    if (newPassword) users[userIndex].password = newPassword;
-    localStorage.setItem('tutorhub_users', JSON.stringify(users));
-    currentUser = users[userIndex];
-    localStorage.setItem('tutorhub_current', currentUser.id);
-    document.getElementById('sidebar-username').textContent = currentUser.name;
-    document.getElementById('dash-welcome-name').textContent = currentUser.name;
-    alert('Profile updated!');
-  };
+  // ==================== ARTICLES ====================
+  function renderArticles() {
+    const grid = document.getElementById('articles-grid');
+    grid.innerHTML = '';
+    const topics = [
+      'Algebra: Linear Equations', 'Algebra: Factoring', 'Algebra: Quadratics', 'Algebra: Systems',
+      'Geometry: Pythagorean', 'Geometry: Area & Volume', 'Geometry: Trigonometry', 'Geometry: Circles',
+      'Pre-Calc: Functions', 'Pre-Calc: Limits', 'Pre-Calc: Derivatives', 'Pre-Calc: Integrals',
+      'Calculus: Chain Rule', 'Calculus: Optimization', 'Calculus: Related Rates', 'Calculus: Series',
+      'Statistics: Mean/Median', 'Statistics: Probability', 'Statistics: Normal Dist', 'Statistics: Hypothesis',
+      'Math: Word Problems', 'Math: Fractions', 'Math: Ratios', 'Math: Percentages',
+      'Reading: Active Reading', 'Reading: Annotation', 'Reading: Summary', 'Reading: Inferencing',
+      'Reading: Author\'s Purpose', 'Reading: Tone/Mood', 'Reading: Figurative Language', 'Reading: Poetry',
+      'Reading: Argumentative', 'Reading: Informational', 'Reading: Narrative', 'Reading: Character',
+      'Reading: Theme', 'Reading: Context Clues', 'Reading: Main Idea', 'Reading: Text Organization',
+      'Test Prep: SAT Math', 'Test Prep: ACT Reading', 'Test Prep: AP Exam', 'Study Skills: Note-Taking',
+      'Study Skills: Time Mgmt', 'Study Skills: Test Anxiety', 'Study Skills: Active Recall'
+    ];
+    topics.forEach(title => {
+      const card = document.createElement('div');
+      card.className = 'glass rounded-xl p-4 article-card card-lift';
+      const icon = title.includes('Reading') || title.includes('Test Prep') || title.includes('Study') ? 'fa-book' : 'fa-calculator';
+      card.innerHTML = `<i class="fas ${icon} text-blue-600 text-xl mb-2"></i><h4 class="font-semibold dark:text-white text-sm">${title}</h4><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Read more →</p>`;
+      grid.appendChild(card);
+    });
+  }
 
-  // ---------- MENTORS (List all users) ----------
+  // ==================== COMMUNITY (20 students) ====================
+  function renderCommunity() {
+    const container = document.getElementById('community-list');
+    container.innerHTML = '';
+    const students = users.filter(u => u.isStudent || (!u.isMentor && !u.isStudent)); // fallback
+    students.slice(0, 20).forEach(u => {
+      const card = document.createElement('div');
+      card.className = 'glass rounded-xl p-3 text-center card-lift';
+      const initial = u.name.charAt(0);
+      card.innerHTML = `
+        <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-lg font-bold text-blue-600 dark:text-blue-400">${initial}</div>
+        <h4 class="font-semibold dark:text-white text-sm mt-2">${u.name}</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400">${u.subjects ? u.subjects[0] : 'Student'}</p>
+        <button onclick="startChat('${u.id}')" class="mt-2 px-2 py-1 bg-blue-600 text-white rounded-lg text-xs hover:bg-blue-700 transition">Message</button>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  // ==================== MENTORS ====================
   function renderMentors() {
     const container = document.getElementById('mentor-list');
     container.innerHTML = '';
-    users.forEach(u => {
-      if (u.id === currentUser?.id) return;
+    const mentors = users.filter(u => u.isMentor);
+    mentors.forEach(u => {
       const card = document.createElement('div');
       card.className = 'glass rounded-xl p-4 flex items-center justify-between card-lift';
       card.innerHTML = `
-        <div><span class="font-semibold dark:text-white">${u.name}</span><p class="text-sm text-gray-500 dark:text-gray-400">${u.email}</p></div>
+        <div><span class="font-semibold dark:text-white">${u.name}</span>
+        <p class="text-sm text-gray-500 dark:text-gray-400">${u.subjects ? u.subjects.join(', ') : 'Mentor'}</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">${u.bio || ''}</p></div>
         <button onclick="startChat('${u.id}')" class="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">Message</button>
       `;
       container.appendChild(card);
     });
   }
 
-  // ---------- MESSAGING ----------
+  // Mentor detail expand (for landing page team section)
+  function toggleMentorDetail(id) {
+    const detail = document.getElementById(id + '-detail');
+    if (detail) {
+      detail.classList.toggle('open');
+    }
+  }
+
+  // ==================== MESSAGING ====================
   let activeChatWith = null;
 
   function startChat(userId) {
@@ -799,22 +1153,24 @@
   function renderConversations() {
     const list = document.getElementById('conversation-list');
     list.innerHTML = '';
-    // Get unique participants
+    if (!currentUser) return;
     const participants = new Set();
     messages.forEach(msg => {
       if (msg.from === currentUser.id) participants.add(msg.to);
       if (msg.to === currentUser.id) participants.add(msg.from);
     });
     if (participants.size === 0) {
-      list.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No conversations yet.</p>';
+      list.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-sm">No conversations yet.</p>';
       return;
     }
     participants.forEach(id => {
       const user = users.find(u => u.id === id);
       if (!user) return;
       const div = document.createElement('div');
-      div.className = 'p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition flex items-center justify-between';
-      div.innerHTML = `<span class="font-medium dark:text-white">${user.name}</span> <span class="text-xs text-gray-400">${messages.filter(m => (m.from===id && m.to===currentUser.id) || (m.from===currentUser.id && m.to===id)).length}</span>`;
+      div.className = 'p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition flex items-center justify-between border-b border-gray-100 dark:border-gray-700';
+      const lastMsg = messages.filter(m => (m.from===id && m.to===currentUser.id) || (m.from===currentUser.id && m.to===id)).pop();
+      const preview = lastMsg ? lastMsg.content.substring(0, 30) : 'Start chatting';
+      div.innerHTML = `<span class="font-medium dark:text-white">${user.name}</span><span class="text-xs text-gray-400">${preview}</span>`;
       div.onclick = () => { activeChatWith = id; renderChat(id); };
       list.appendChild(div);
     });
@@ -831,7 +1187,7 @@
     chatMessages.forEach(m => {
       const isMe = m.from === currentUser.id;
       const div = document.createElement('div');
-      div.className = `max-w-[75%] p-3 rounded-lg ${isMe ? 'bubble-me self-end ml-auto' : 'bubble-other self-start'}`;
+      div.className = `max-w-[75%] p-3 rounded-lg mb-2 message-enter ${isMe ? 'bubble-me self-end ml-auto' : 'bubble-other self-start'}`;
       div.textContent = m.content;
       container.appendChild(div);
     });
@@ -854,17 +1210,72 @@
     input.value = '';
     renderChat(activeChatWith);
     renderConversations();
+    showNotification('Message sent');
   };
 
-  // ---------- DARK MODE TOGGLE BUTTON SYNC ----------
-  // Update toggle ball on load
-  setTimeout(applyDarkMode, 100);
+  // ==================== SETTINGS ====================
+  window.updateProfile = function() {
+    if (!currentUser) return;
+    const newName = document.getElementById('settings-name').value.trim();
+    const newEmail = document.getElementById('settings-email').value.trim();
+    const newPassword = document.getElementById('settings-password').value.trim();
+    if (!newName || !newEmail) { alert('Name and email cannot be empty.'); return; }
+    const userIndex = users.findIndex(u => u.id === currentUser.id);
+    if (userIndex === -1) return;
+    users[userIndex].name = newName;
+    users[userIndex].email = newEmail;
+    if (newPassword) users[userIndex].password = newPassword;
+    localStorage.setItem('tutorhub_users', JSON.stringify(users));
+    currentUser = users[userIndex];
+    localStorage.setItem('tutorhub_current', currentUser.id);
+    updateUIForLoggedIn();
+    showNotification('Profile updated');
+  };
 
-  // ---------- NAVIGATE TO CONNECT FROM LANDING ----------
-  // Ensure connect link works
-  document.querySelectorAll('a[href="#connect"]').forEach(el => el.onclick = (e) => { e.preventDefault(); navigate('connect'); });
+  window.updateProfileFromProfile = function() {
+    const name = document.getElementById('profile-display-name').value.trim();
+    const email = document.getElementById('profile-email-input').value.trim();
+    const bio = document.getElementById('profile-bio').value.trim();
+    if (!name || !email) { alert('Name and email required.'); return; }
+    const userIndex = users.findIndex(u => u.id === currentUser.id);
+    if (userIndex === -1) return;
+    users[userIndex].name = name;
+    users[userIndex].email = email;
+    users[userIndex].bio = bio;
+    localStorage.setItem('tutorhub_users', JSON.stringify(users));
+    currentUser = users[userIndex];
+    localStorage.setItem('tutorhub_current', currentUser.id);
+    updateUIForLoggedIn();
+    showNotification('Profile updated from Profile tab');
+  };
 
-  console.log('🚀 Tutor Hub – full platform ready.');
+  // ==================== AI FULLSCREEN ====================
+  let aiFullscreen = false;
+  function toggleAIFullscreen() {
+    const container = document.getElementById('ai-container');
+    if (!aiFullscreen) {
+      container.classList.add('ai-fullscreen');
+      aiFullscreen = true;
+      document.body.style.overflow = 'hidden';
+    } else {
+      container.classList.remove('ai-fullscreen');
+      aiFullscreen = false;
+      document.body.style.overflow = '';
+    }
+  }
+
+  // ==================== MOBILE MENU ====================
+  document.getElementById('menu-btn').addEventListener('click', function() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+    const icon = this.querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
+
+  // ==================== GSAP SCROLL ANIMATIONS (Landing) ====================
+  // (Kept minimal for brevity; can add more later)
+  console.log('🚀 Tutor Hub – Full platform with all features.');
 </script>
 </body>
 </html>
