@@ -62,20 +62,138 @@
             overflow-x: hidden;
         }
 
-        /* ===== GLOBAL PARTICLE CANVAS (dots & lines) ===== */
-        #particle-canvas-global {
+        /* ===== ANIMATED BG ===== */
+        #animated-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            pointer-events: none;
             z-index: 0;
-            opacity: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        #animated-bg .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: orbFloat 20s ease-in-out infinite alternate;
+        }
+        #animated-bg .orb:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #3b82f6, #8b5cf6);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+        #animated-bg .orb:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #06b6d4, #3b82f6);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+        #animated-bg .orb:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #8b5cf6, #ec4899);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+        }
+        #animated-bg .orb:nth-child(4) {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #f59e0b, #ef4444);
+            top: 20%;
+            right: 20%;
+            animation-delay: -15s;
+        }
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(80px, -60px) scale(1.1);
+            }
+            66% {
+                transform: translate(-60px, 80px) scale(0.9);
+            }
+            100% {
+                transform: translate(40px, -40px) scale(1.05);
+            }
         }
 
-        /* ===== BLUE CAPS BACKGROUND (Dashboard & everywhere) ===== */
-        #caps-canvas {
+        /* ===== FLOATING ICONS ===== */
+        #floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        #floating-icons .fi {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.12;
+            animation: floatIcon 25s linear infinite;
+        }
+        #floating-icons .fi:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-duration: 22s;
+        }
+        #floating-icons .fi:nth-child(2) {
+            top: 80%;
+            left: 3%;
+            animation-duration: 28s;
+            animation-delay: -4s;
+        }
+        #floating-icons .fi:nth-child(3) {
+            top: 15%;
+            right: 8%;
+            animation-duration: 20s;
+            animation-delay: -8s;
+        }
+        #floating-icons .fi:nth-child(4) {
+            bottom: 20%;
+            right: 5%;
+            animation-duration: 26s;
+            animation-delay: -12s;
+        }
+        #floating-icons .fi:nth-child(5) {
+            top: 50%;
+            left: 50%;
+            animation-duration: 24s;
+            animation-delay: -6s;
+        }
+        @keyframes floatIcon {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(30px, -40px) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translate(-20px, 30px) rotate(180deg) scale(0.9);
+            }
+            75% {
+                transform: translate(40px, 20px) rotate(270deg) scale(1.05);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg) scale(1);
+            }
+        }
+
+        /* ===== GLOBAL PARTICLE CANVAS (dots & lines) ===== */
+        #particle-canvas-global {
             position: fixed;
             top: 0;
             left: 0;
@@ -151,6 +269,15 @@
             transform: translateY(-2px);
         }
 
+        /* ===== GLASS CARD LIFT ===== */
+        .card-lift {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .card-lift:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15), var(--shadow);
+        }
+
         /* ===== NAVBAR ===== */
         .navbar-glass {
             background: var(--navbar-bg);
@@ -159,7 +286,6 @@
             border-bottom: 1px solid var(--card-border);
             transition: background 0.5s ease, border-color 0.5s ease;
         }
-
         .nav-link {
             position: relative;
             padding-bottom: 4px;
@@ -209,12 +335,6 @@
             color: var(--accent);
             opacity: 1;
             border-right: 3px solid var(--accent);
-        }
-        .sidebar-link i {
-            transition: transform 0.3s ease;
-        }
-        .sidebar-link:hover i {
-            transform: scale(1.15);
         }
 
         /* ===== DASHBOARD HEADER ===== */
@@ -267,9 +387,6 @@
             font-size: 0.8rem;
             cursor: pointer;
             transition: background 0.3s ease;
-        }
-        .dash-header .search-wrap button:hover {
-            background: #2563eb;
         }
 
         .dash-header .profile-icon-wrap {
@@ -337,68 +454,8 @@
             transform: translateY(0) scale(1);
             pointer-events: auto;
         }
-        .profile-popup .popup-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-        .profile-popup .popup-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text);
-        }
-        .profile-popup .popup-email {
-            font-size: 0.8rem;
-            color: var(--text);
-            opacity: 0.6;
-        }
-        .profile-popup .popup-bio {
-            font-size: 0.8rem;
-            color: var(--text);
-            opacity: 0.7;
-            margin-top: 0.3rem;
-            border-top: 1px solid var(--card-border);
-            padding-top: 0.5rem;
-        }
-        .profile-popup .popup-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
-        }
-        .profile-popup .popup-actions button {
-            flex: 1;
-            padding: 0.4rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .profile-popup .popup-actions .btn-view {
-            background: var(--accent);
-            color: white;
-        }
-        .profile-popup .popup-actions .btn-view:hover {
-            background: #2563eb;
-        }
-        .profile-popup .popup-actions .btn-logout {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-        }
-        .profile-popup .popup-actions .btn-logout:hover {
-            background: rgba(239, 68, 68, 0.25);
-        }
 
-        /* ===== ABOUT POPUP (Cap icon) ===== */
+        /* ===== ABOUT POPUP ===== */
         .about-popup-overlay {
             position: fixed;
             inset: 0;
@@ -434,102 +491,6 @@
                 transform: scale(1) translateY(0);
             }
         }
-        .about-popup .about-icon {
-            font-size: 3.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .about-popup h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .about-popup p {
-            color: var(--text);
-            opacity: 0.7;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-top: 0.5rem;
-        }
-        .about-popup .close-about {
-            margin-top: 1.2rem;
-            padding: 0.5rem 2rem;
-            border: none;
-            border-radius: 9999px;
-            background: var(--accent);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .about-popup .close-about:hover {
-            background: #2563eb;
-        }
-
-        /* ===== COMMUNITY FORUM ===== */
-        .forum-post .reply-area {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.23, 1, 0.32, 1), padding 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            padding: 0 0.5rem;
-        }
-        .forum-post .reply-area.open {
-            max-height: 300px;
-            padding: 0.5rem 0.5rem 0;
-        }
-        .forum-post .like-btn.liked {
-            color: #ef4444;
-        }
-
-        /* ===== COMMUNITY (one kid per line) ===== */
-        .community-student-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.6rem 1rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid var(--card-border);
-        }
-        .community-student-item:last-child {
-            border-bottom: none;
-        }
-        .community-student-item:hover {
-            background: var(--hover-bg);
-        }
-        .community-student-item .cs-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-        .community-student-item .cs-info {
-            flex: 1;
-        }
-        .community-student-item .cs-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text);
-        }
-        .community-student-item .cs-detail {
-            font-size: 0.8rem;
-            color: var(--text);
-            opacity: 0.6;
-        }
-        .community-student-item .cs-tag {
-            font-size: 0.7rem;
-            padding: 0.15rem 0.7rem;
-            border-radius: 9999px;
-            background: var(--hover-bg);
-            color: var(--accent);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-        }
 
         /* ===== MENTOR DETAIL POPUP ===== */
         .mentor-detail-popup-overlay {
@@ -558,68 +519,6 @@
             max-height: 80vh;
             overflow-y: auto;
         }
-        .mentor-detail-popup .mdp-avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            margin: 0 auto 0.5rem;
-        }
-        .mentor-detail-popup .mdp-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            text-align: center;
-            color: var(--text);
-        }
-        .mentor-detail-popup .mdp-role {
-            text-align: center;
-            color: var(--accent);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        .mentor-detail-popup .mdp-bio {
-            margin-top: 1rem;
-            color: var(--text);
-            opacity: 0.8;
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-        .mentor-detail-popup .mdp-subjects {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: 0.8rem;
-            justify-content: center;
-        }
-        .mentor-detail-popup .mdp-subjects span {
-            padding: 0.2rem 0.8rem;
-            border-radius: 9999px;
-            background: var(--hover-bg);
-            color: var(--accent);
-            font-size: 0.75rem;
-            border: 1px solid rgba(59, 130, 246, 0.12);
-        }
-        .mentor-detail-popup .mdp-close {
-            display: block;
-            margin: 1.2rem auto 0;
-            padding: 0.5rem 2.5rem;
-            border: none;
-            border-radius: 9999px;
-            background: var(--accent);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .mentor-detail-popup .mdp-close:hover {
-            background: #2563eb;
-        }
 
         /* ===== LIVE PROFILE CARD ===== */
         .live-profile-card {
@@ -632,49 +531,6 @@
             transition: all 0.4s ease;
             position: sticky;
             top: 1rem;
-        }
-        .live-profile-card .lpc-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: white;
-            margin: 0 auto 0.5rem;
-            transition: all 0.4s ease;
-        }
-        .live-profile-card .lpc-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .live-profile-card .lpc-email {
-            font-size: 0.85rem;
-            color: var(--text);
-            opacity: 0.6;
-        }
-        .live-profile-card .lpc-bio {
-            font-size: 0.85rem;
-            color: var(--text);
-            opacity: 0.7;
-            margin-top: 0.3rem;
-            padding-top: 0.5rem;
-            border-top: 1px solid var(--card-border);
-        }
-        .live-profile-card .lpc-badge {
-            display: inline-block;
-            margin-top: 0.5rem;
-            padding: 0.2rem 1rem;
-            border-radius: 9999px;
-            background: var(--hover-bg);
-            color: var(--accent);
-            font-size: 0.7rem;
-            font-weight: 600;
-            border: 1px solid rgba(59, 130, 246, 0.12);
         }
 
         /* ===== TOGGLE SWITCH ===== */
@@ -808,21 +664,8 @@
             align-self: flex-start;
             color: var(--text);
         }
-        .message-enter {
-            animation: messageSlide 0.35s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-        }
-        @keyframes messageSlide {
-            from {
-                opacity: 0;
-                transform: translateX(-12px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) scale(1);
-            }
-        }
 
-        /* ===== SETTINGS TABS - FIXED ===== */
+        /* ===== SETTINGS TABS ===== */
         .settings-tab-btn {
             transition: all 0.3s ease;
             border-radius: 10px;
@@ -864,12 +707,52 @@
             display: block;
         }
 
-        /* ===== STAT NUMBER ===== */
-        .stat-number {
-            display: inline-block;
+        /* ===== FORUM ===== */
+        .forum-post .reply-area {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.23, 1, 0.32, 1), padding 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            padding: 0 0.5rem;
+        }
+        .forum-post .reply-area.open {
+            max-height: 300px;
+            padding: 0.5rem 0.5rem 0;
+        }
+        .forum-post .like-btn.liked {
+            color: #ef4444;
         }
 
-        /* ===== MENTOR DETAIL EXPAND (landing) ===== */
+        /* ===== COMMUNITY STUDENT ITEM ===== */
+        .community-student-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .community-student-item:last-child {
+            border-bottom: none;
+        }
+        .community-student-item:hover {
+            background: var(--hover-bg);
+        }
+        .community-student-item .cs-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        /* ===== MENTOR DETAIL EXPAND ===== */
         .mentor-detail {
             max-height: 0;
             overflow: hidden;
@@ -916,6 +799,10 @@
                 right: -60px;
                 width: 260px;
             }
+            #login-modal .glass {
+                max-width: 95%;
+                margin: 0 1rem;
+            }
         }
 
         /* ===== ANIMATED BLOB ===== */
@@ -958,6 +845,163 @@
             opacity: 1;
         }
 
+        /* ===== LEARN MORE EXPAND ===== */
+        .learn-more-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.23, 1, 0.32, 1), padding 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease;
+            opacity: 0;
+            padding: 0 0.5rem;
+        }
+        .learn-more-content.open {
+            max-height: 400px;
+            padding: 0.8rem 0.5rem 0;
+            opacity: 1;
+        }
+
+        /* ===== STAT NUMBER ===== */
+        .stat-number {
+            display: inline-block;
+        }
+
+        /* ===== GRADIENT TEXT ===== */
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== NEW: Devlog & Connect enhancements ===== */
+        .devlog-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .devlog-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #ec4899);
+            border-radius: 2px;
+        }
+        .devlog-timeline .timeline-dot {
+            position: absolute;
+            left: -0.3rem;
+            top: 1.2rem;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .connect-card {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .connect-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .connect-card:hover::before {
+            opacity: 1;
+        }
+        .connect-card .connect-icon-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
+            transition: all 0.4s ease;
+        }
+        .connect-card:hover .connect-icon-wrap {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        /* ===== LOGIN MODAL POSITION FIX ===== */
+        #login-modal .glass {
+            max-width: 480px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 0 1.5rem;
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: none;
+        }
+        #login-modal {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        #login-modal:not(.hidden) {
+            display: flex;
+        }
+        #login-modal .glass::before {
+            animation: none;
+        }
+
+        /* ===== DASHBOARD CONTENT Z-INDEX ===== */
+        #dashboard-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===== BOTTOM NAV FOR MOBILE ===== */
+        @media (max-width: 768px) {
+            .bottom-nav-mobile {
+                display: flex !important;
+            }
+        }
+        .bottom-nav-mobile {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--card-border);
+            padding: 0.5rem 0.25rem;
+            z-index: 100;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .bottom-nav-mobile a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.6rem;
+            color: var(--text);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            padding: 0.2rem 0.4rem;
+        }
+        .bottom-nav-mobile a:hover,
+        .bottom-nav-mobile a.active {
+            opacity: 1;
+            color: var(--accent);
+        }
+        .bottom-nav-mobile a i {
+            font-size: 1.2rem;
+            margin-bottom: 0.1rem;
+        }
+
         /* ===== FOOTER ===== */
         #main-footer {
             background: var(--bg);
@@ -972,11 +1016,25 @@
 </head>
 <body>
 
-    <!-- ===== GLOBAL PARTICLE CANVAS (dots & lines) ===== -->
-    <canvas id="particle-canvas-global"></canvas>
+    <!-- ===== ANIMATED BACKGROUND (ORBS) ===== -->
+    <div id="animated-bg">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
 
-    <!-- ===== BLUE CAPS BACKGROUND (Dashboard & everywhere) ===== -->
-    <canvas id="caps-canvas"></canvas>
+    <!-- ===== FLOATING ICONS ===== -->
+    <div id="floating-icons">
+        <div class="fi">📚</div>
+        <div class="fi">🎓</div>
+        <div class="fi">✏️</div>
+        <div class="fi">💡</div>
+        <div class="fi">🌟</div>
+    </div>
+
+    <!-- ===== GLOBAL PARTICLE CANVAS ===== -->
+    <canvas id="particle-canvas-global"></canvas>
 
     <!-- ===== NOTIFICATION BANNER ===== -->
     <div id="notification-banner">✅ Done</div>
@@ -1001,7 +1059,7 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <button onclick="openLogin()" id="login-btn" class="text-sm font-medium hover:text-blue-600 transition">Log in</button>
-                <button onclick="openLogin()" id="signup-btn" class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40">Sign Up Free</button>
+                <button onclick="openLogin()" id="signup-btn" class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">Sign Up Free</button>
                 <button id="menu-btn" class="md:hidden text-gray-700 dark:text-gray-300 focus:outline-none">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
@@ -1017,15 +1075,15 @@
             <a href="#" onclick="navigate('connect')" class="block py-2 hover:text-blue-600 transition">Connect</a>
             <a href="#" onclick="navigate('dashboard')" id="mobile-dashboard" class="block py-2 hover:text-blue-600 transition hidden">Dashboard</a>
             <a href="#" onclick="handleLogout()" id="mobile-logout" class="block py-2 hover:text-blue-600 transition hidden">Logout</a>
-            <div class="pt-2 border-t border-gray-200 dark:border-gray-700 mt-2">
+            <div class="pt-2 border-t border-gray-200/60 dark:border-gray-700/60 mt-2">
                 <button onclick="openLogin()" id="mobile-login-btn" class="w-full text-left py-2 hover:text-blue-600 transition">Log in</button>
                 <button onclick="openLogin()" id="mobile-signup-btn" class="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">Sign Up Free</button>
             </div>
         </div>
     </header>
 
-    <!-- ===== LOGIN MODAL ===== -->
-    <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md hidden">
+    <!-- ===== LOGIN MODAL (FIXED POSITION) ===== -->
+    <div id="login-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-md hidden items-center justify-center">
         <div class="glass rounded-3xl shadow-2xl max-w-md w-full p-6 relative transition-colors border-white/20">
             <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                 <i class="fas fa-times text-xl"></i>
@@ -1067,13 +1125,13 @@
         </div>
     </div>
 
-    <!-- ===== ABOUT POPUP (Cap icon) ===== -->
+    <!-- ===== ABOUT POPUP ===== -->
     <div class="about-popup-overlay" id="about-popup">
         <div class="about-popup">
-            <div class="about-icon">🎓</div>
-            <h2>Tutor Hub</h2>
-            <p>Founded by <strong>Umair Loya</strong> with a passion for making quality education accessible to every student in Montgomery County. We believe in the power of personalized learning and community support.</p>
-            <button class="close-about" onclick="closeAboutPopup()">Got it!</button>
+            <div class="about-icon text-5xl mb-2">🎓</div>
+            <h2 class="text-2xl font-bold dark:text-white">Tutor Hub</h2>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Founded by <strong>Umair Loya</strong> with a passion for making quality education accessible to every student in Montgomery County. We believe in the power of personalized learning and community support.</p>
+            <button class="close-about mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition" onclick="closeAboutPopup()">Got it!</button>
         </div>
     </div>
 
@@ -1085,17 +1143,19 @@
     <!-- ===== MAIN CONTENT ===== -->
     <main class="pt-16">
 
-        <!-- ===== LANDING (compact) ===== -->
-        <section id="section-landing" class="min-h-screen section-page section-gradient page-transition">
-            <div class="relative min-h-screen flex items-center overflow-hidden pt-16" style="background: var(--bg);">
-                <div class="absolute top-20 left-10 w-72 h-72 bg-blue-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-                <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+        <!-- ============================================================ -->
+        <!-- ===== LANDING ===== -->
+        <!-- ============================================================ -->
+        <section id="section-landing" class="min-h-screen section-page page-transition relative">
+            <div class="relative min-h-screen flex items-center overflow-hidden pt-16" style="background: transparent;">
+                <div class="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+                <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
                 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div>
                             <div class="inline-block px-4 py-1.5 rounded-full bg-blue-100/70 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-medium mb-6 backdrop-blur-sm border border-blue-200/30">🎓 Free Tutoring in Montgomery County</div>
-                            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight dark:text-white">Unlock Confidence in <span class="text-blue-600">STEM</span> & Beyond</h1>
+                            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight dark:text-white">Unlock Confidence in <span class="gradient-text">STEM</span> & Beyond</h1>
                             <p class="mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-lg">We connect students with interactive, free tutoring in Montgomery County. Learn STEM, build confidence, and enjoy learning—all at no cost.</p>
                             <div class="mt-8 flex flex-wrap gap-4">
                                 <a href="#" onclick="openLogin()" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition flex items-center gap-2 group shadow-lg shadow-blue-600/25">Get Started <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i></a>
@@ -1103,10 +1163,10 @@
                             </div>
                             <div class="mt-10 flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
                                 <div class="flex -space-x-2">
-                                    <div class="w-8 h-8 rounded-full bg-gray-300/70 dark:bg-gray-600/70 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300 backdrop-blur-sm">A</div>
-                                    <div class="w-8 h-8 rounded-full bg-gray-300/70 dark:bg-gray-600/70 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300 backdrop-blur-sm">B</div>
-                                    <div class="w-8 h-8 rounded-full bg-gray-300/70 dark:bg-gray-600/70 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300 backdrop-blur-sm">C</div>
-                                    <div class="w-8 h-8 rounded-full bg-gray-300/70 dark:bg-gray-600/70 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300 backdrop-blur-sm">D</div>
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-white">A</div>
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-white">B</div>
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-white">C</div>
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-white">D</div>
                                 </div>
                                 <span>Trusted by 200+ parents & students</span>
                             </div>
@@ -1122,62 +1182,178 @@
                     </div>
                 </div>
             </div>
+
             <!-- Stats -->
-            <section class="py-16" style="background: var(--bg);">
+            <section class="py-16 relative" style="background: transparent;">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                        <div class="stat-item p-6 rounded-2xl glass card-lift"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="350">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Students Helped</div></div>
-                        <div class="stat-item p-6 rounded-2xl glass card-lift"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="25">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Expert Tutors</div></div>
-                        <div class="stat-item p-6 rounded-2xl glass card-lift"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="1200">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Free Sessions</div></div>
-                        <div class="stat-item p-6 rounded-2xl glass card-lift"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="98">0<span class="text-xl">%</span></div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Parent Satisfaction</div></div>
+                        <div class="stat-item p-6 rounded-2xl glass card-lift border-white/30"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="350">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Students Helped</div></div>
+                        <div class="stat-item p-6 rounded-2xl glass card-lift border-white/30"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="25">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Expert Tutors</div></div>
+                        <div class="stat-item p-6 rounded-2xl glass card-lift border-white/30"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="1200">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Free Sessions</div></div>
+                        <div class="stat-item p-6 rounded-2xl glass card-lift border-white/30"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="98">0<span class="text-xl">%</span></div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Parent Satisfaction</div></div>
                     </div>
                 </div>
             </section>
-            <section class="py-20" style="background: var(--bg);">
+
+            <!-- Features -->
+            <section class="py-20 relative" style="background: transparent;">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">Why Choose <span class="text-blue-600">Tutor Hub</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">We provide a premium learning experience that builds confidence and delivers results—completely free.</p></div>
+                    <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">Why Choose <span class="gradient-text">Tutor Hub</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">We provide a premium learning experience that builds confidence and delivers results—completely free.</p></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-users text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Personalized Tutoring</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Every student receives a tailored plan.</p></div>
-                        <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-award text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Experienced Tutors</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Our tutors are subject experts.</p></div>
-                        <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-calendar-alt text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Flexible Scheduling</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Book sessions that fit your schedule.</p></div>
-                        <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-clock text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Homework Support</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Get help with assignments.</p></div>
-                        <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-chart-line text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Progress Tracking</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Monitor improvement with reports.</p></div>
-                        <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-book-open text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Test Preparation</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Prepare for exams with strategies.</p></div>
+                        <div class="feature-card card-lift glass rounded-2xl p-6 border-white/30"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-users text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Personalized Tutoring</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Every student receives a tailored plan.</p></div>
+                        <div class="feature-card card-lift glass rounded-2xl p-6 border-white/30"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-award text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Experienced Tutors</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Our tutors are subject experts.</p></div>
+                        <div class="feature-card card-lift glass rounded-2xl p-6 border-white/30"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-calendar-alt text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Flexible Scheduling</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Book sessions that fit your schedule.</p></div>
+                        <div class="feature-card card-lift glass rounded-2xl p-6 border-white/30"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-clock text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Homework Support</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Get help with assignments.</p></div>
+                        <div class="feature-card card-lift glass rounded-2xl p-6 border-white/30"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-chart-line text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Progress Tracking</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Monitor improvement with reports.</p></div>
+                        <div class="feature-card card-lift glass rounded-2xl p-6 border-white/30"><div class="w-12 h-12 rounded-xl bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mb-4 backdrop-blur-sm"><i class="fas fa-book-open text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Test Preparation</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Prepare for exams with strategies.</p></div>
                     </div>
                 </div>
             </section>
         </section>
 
-        <!-- ===== OTHER PAGES (about, motivations, team, devlog, portfolio, connect) ===== -->
-        <section id="section-about" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">About Tutor Hub</h2>
-                <div class="glass rounded-2xl p-8 space-y-4 border-white/30">
-                    <p class="text-gray-600 dark:text-gray-300">Tutor Hub is a community-driven initiative founded in Montgomery County, Maryland. Our mission is to provide free, high-quality tutoring to students who need it most.</p>
-                    <p class="text-gray-600 dark:text-gray-300">We believe that every student deserves access to personalized education, regardless of their background or financial situation. Our team of dedicated tutors volunteer their time to help students build confidence and achieve their academic goals.</p>
-                    <p class="text-gray-600 dark:text-gray-300">Since our founding, we've helped over 350 students improve their grades and develop a love for learning. We're proud to be a part of the Montgomery County community.</p>
+        <!-- ============================================================ -->
+        <!-- ===== ABOUT (with 3 extra boxes) ===== -->
+        <!-- ============================================================ -->
+        <section id="section-about" class="min-h-screen section-page hidden page-transition py-20 relative" style="background: transparent;">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6 text-center">About <span class="gradient-text">Tutor Hub</span></h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">We're on a mission to make quality education accessible to every student in Montgomery County.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 text-center">
+                        <div class="text-4xl mb-3">🎯</div>
+                        <h3 class="text-xl font-semibold dark:text-white">Our Mission</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">To provide free, high-quality tutoring to every student who needs it, regardless of background.</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 text-center">
+                        <div class="text-4xl mb-3">👥</div>
+                        <h3 class="text-xl font-semibold dark:text-white">Community First</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">We're a community-driven initiative powered by volunteers who care about education.</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 text-center">
+                        <div class="text-4xl mb-3">📈</div>
+                        <h3 class="text-xl font-semibold dark:text-white">Results Matter</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">We track progress and celebrate every milestone our students achieve.</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 text-center">
+                        <div class="text-4xl mb-3">🌟</div>
+                        <h3 class="text-xl font-semibold dark:text-white">Bright Futures</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">We believe in the potential of every student and work to unlock it.</p>
+                    </div>
+                </div>
+
+                <!-- Extra 3 boxes -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 text-center" style="border-color: rgba(59,130,246,0.2);">
+                        <div class="text-4xl mb-3">🧠</div>
+                        <h3 class="text-lg font-semibold dark:text-white">Critical Thinking</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">We teach students how to think, not just what to think, preparing them for lifelong learning.</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 text-center" style="border-color: rgba(139,92,246,0.2);">
+                        <div class="text-4xl mb-3">🤝</div>
+                        <h3 class="text-lg font-semibold dark:text-white">Mentorship</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">Every student is paired with a mentor who guides, encourages, and believes in them.</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 text-center" style="border-color: rgba(236,72,153,0.2);">
+                        <div class="text-4xl mb-3">🚀</div>
+                        <h3 class="text-lg font-semibold dark:text-white">Future Ready</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">We equip students with skills they need for college, career, and beyond.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="section-motivations" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">Our Motivations</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="glass rounded-2xl p-6 card-lift border-white/30"><i class="fas fa-heart text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Passion for Education</h3><p class="text-gray-600 dark:text-gray-400">We're driven by a love for learning and a desire to share that with others.</p></div>
-                    <div class="glass rounded-2xl p-6 card-lift border-white/30"><i class="fas fa-hand-holding-heart text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Community Impact</h3><p class="text-gray-600 dark:text-gray-400">We believe in giving back and strengthening our local community.</p></div>
-                    <div class="glass rounded-2xl p-6 card-lift border-white/30"><i class="fas fa-lightbulb text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Empowerment</h3><p class="text-gray-600 dark:text-gray-400">We want to empower students to reach their full potential.</p></div>
-                    <div class="glass rounded-2xl p-6 card-lift border-white/30"><i class="fas fa-users text-3xl text-blue-600 mb-3"></i><h3 class="text-xl font-semibold dark:text-white">Inclusivity</h3><p class="text-gray-600 dark:text-gray-400">Education should be accessible to everyone, regardless of background.</p></div>
+        <!-- ============================================================ -->
+        <!-- ===== MOTIVATIONS (with Learn More) ===== -->
+        <!-- ============================================================ -->
+        <section id="section-motivations" class="min-h-screen section-page hidden page-transition py-20 relative" style="background: transparent;">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6 text-center">Our <span class="gradient-text">Motivations</span></h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">What drives us to create a better learning experience for every student.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- 1 -->
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30">
+                        <div class="flex items-start gap-4">
+                            <div class="text-3xl text-blue-600">❤️</div>
+                            <div>
+                                <h3 class="text-xl font-semibold dark:text-white">Passion for Education</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">We're driven by a love for learning and a desire to share that with others.</p>
+                                <button onclick="toggleLearnMore('lm-education')" class="mt-3 text-sm text-blue-600 hover:underline font-medium">Learn More <i class="fas fa-chevron-down ml-1"></i></button>
+                                <div id="lm-education" class="learn-more-content text-gray-600 dark:text-gray-400 text-sm">
+                                    <p class="mt-2">Education is the foundation of opportunity. We believe that every child deserves access to quality learning experiences that ignite curiosity and build confidence. Our tutors don't just teach subjects—they inspire a lifelong love for knowledge.</p>
+                                    <p class="mt-2">We've seen how a single encouraging moment can transform a student's attitude toward learning, and that's what keeps us going every day.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2 -->
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30">
+                        <div class="flex items-start gap-4">
+                            <div class="text-3xl text-blue-600">🤲</div>
+                            <div>
+                                <h3 class="text-xl font-semibold dark:text-white">Community Impact</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">We believe in giving back and strengthening our local community.</p>
+                                <button onclick="toggleLearnMore('lm-impact')" class="mt-3 text-sm text-blue-600 hover:underline font-medium">Learn More <i class="fas fa-chevron-down ml-1"></i></button>
+                                <div id="lm-impact" class="learn-more-content text-gray-600 dark:text-gray-400 text-sm">
+                                    <p class="mt-2">Montgomery County is our home, and we're committed to making it a place where every student can thrive. By providing free tutoring, we're investing in the future of our community.</p>
+                                    <p class="mt-2">We partner with local schools, libraries, and community centers to reach students where they are. Our volunteers are neighbors helping neighbors.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3 -->
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30">
+                        <div class="flex items-start gap-4">
+                            <div class="text-3xl text-blue-600">💡</div>
+                            <div>
+                                <h3 class="text-xl font-semibold dark:text-white">Empowerment</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">We want to empower students to reach their full potential.</p>
+                                <button onclick="toggleLearnMore('lm-empower')" class="mt-3 text-sm text-blue-600 hover:underline font-medium">Learn More <i class="fas fa-chevron-down ml-1"></i></button>
+                                <div id="lm-empower" class="learn-more-content text-gray-600 dark:text-gray-400 text-sm">
+                                    <p class="mt-2">Empowerment comes from confidence. When a student understands a difficult concept, they gain more than knowledge—they gain belief in themselves.</p>
+                                    <p class="mt-2">Our tutors work to build that confidence through patient guidance, positive reinforcement, and celebrating every success, no matter how small.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 -->
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30">
+                        <div class="flex items-start gap-4">
+                            <div class="text-3xl text-blue-600">🌍</div>
+                            <div>
+                                <h3 class="text-xl font-semibold dark:text-white">Inclusivity</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">Education should be accessible to everyone, regardless of background.</p>
+                                <button onclick="toggleLearnMore('lm-inclusivity')" class="mt-3 text-sm text-blue-600 hover:underline font-medium">Learn More <i class="fas fa-chevron-down ml-1"></i></button>
+                                <div id="lm-inclusivity" class="learn-more-content text-gray-600 dark:text-gray-400 text-sm">
+                                    <p class="mt-2">We welcome students of all backgrounds, abilities, and circumstances. Our tutors are trained to work with diverse learning styles and needs.</p>
+                                    <p class="mt-2">Inclusivity means creating a safe, supportive environment where every student feels valued and understood. That's the Tutor Hub promise.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="section-team" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Meet the Team</h2>
+        <!-- ============================================================ -->
+        <!-- ===== MEET THE TEAM (enhanced) ===== -->
+        <!-- ============================================================ -->
+        <section id="section-team" class="min-h-screen section-page hidden page-transition py-20 relative" style="background: transparent;">
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-20 right-10 w-80 h-80 bg-purple-400/10 rounded-full filter blur-3xl animate-blob"></div>
+                <div class="absolute bottom-20 left-10 w-60 h-60 bg-blue-400/10 rounded-full filter blur-3xl animate-blob animation-delay-2000"></div>
+            </div>
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Meet the <span class="gradient-text">Team</span></h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">Passionate educators dedicated to helping you succeed.</p>
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="glass rounded-2xl p-6 text-center mentor-card cursor-pointer border-white/30 card-lift" onclick="toggleMentorDetail('umair')">
-                        <div class="w-24 h-24 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-3xl font-bold text-blue-600 dark:text-blue-400 backdrop-blur-sm">U</div>
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mx-auto text-3xl font-bold text-white shadow-lg shadow-blue-500/25">U</div>
                         <h3 class="text-xl font-semibold dark:text-white mt-4">Umair Loya</h3>
                         <p class="text-sm text-blue-600 dark:text-blue-400">Founder & Lead Tutor</p>
                         <div class="mentor-detail" id="umair-detail">
@@ -1185,42 +1361,90 @@
                             <div class="mt-2 flex justify-center gap-2 flex-wrap"><span class="px-2 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs backdrop-blur-sm">Algebra 1</span><span class="px-2 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs backdrop-blur-sm">Geometry</span><span class="px-2 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs backdrop-blur-sm">Pre-Calc</span></div>
                         </div>
                     </div>
+
                     <div class="glass rounded-2xl p-6 text-center mentor-card cursor-pointer border-white/30 card-lift" onclick="toggleMentorDetail('zuhair')">
-                        <div class="w-24 h-24 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-3xl font-bold text-blue-600 dark:text-blue-400 backdrop-blur-sm">Z</div>
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mx-auto text-3xl font-bold text-white shadow-lg shadow-purple-500/25">Z</div>
                         <h3 class="text-xl font-semibold dark:text-white mt-4">Zuhair Loya</h3>
                         <p class="text-sm text-blue-600 dark:text-blue-400">CAD & Design Specialist</p>
                         <div class="mentor-detail" id="zuhair-detail">
                             <p class="text-gray-600 dark:text-gray-300 text-sm">Teaches CAD, 3D modeling, and design thinking. Helps students bring their ideas to life. Experienced in Fusion 360 and SolidWorks.</p>
-                            <div class="mt-2 flex justify-center gap-2 flex-wrap"><span class="px-2 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs backdrop-blur-sm">CAD</span><span class="px-2 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs backdrop-blur-sm">3D Modeling</span></div>
+                            <div class="mt-2 flex justify-center gap-2 flex-wrap"><span class="px-2 py-1 bg-purple-100/70 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-xs backdrop-blur-sm">CAD</span><span class="px-2 py-1 bg-purple-100/70 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-xs backdrop-blur-sm">3D Modeling</span></div>
                         </div>
                     </div>
+
                     <div class="glass rounded-2xl p-6 text-center mentor-card cursor-pointer border-white/30 card-lift" onclick="toggleMentorDetail('charan')">
-                        <div class="w-24 h-24 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-3xl font-bold text-blue-600 dark:text-blue-400 backdrop-blur-sm">C</div>
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center mx-auto text-3xl font-bold text-white shadow-lg shadow-pink-500/25">C</div>
                         <h3 class="text-xl font-semibold dark:text-white mt-4">Charan Kamana</h3>
                         <p class="text-sm text-blue-600 dark:text-blue-400">Programming & CS Tutor</p>
                         <div class="mentor-detail" id="charan-detail">
                             <p class="text-gray-600 dark:text-gray-300 text-sm">Teaches Python, Java, and web development. Helps students build real-world projects. Full-stack developer with industry experience.</p>
-                            <div class="mt-2 flex justify-center gap-2 flex-wrap"><span class="px-2 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs backdrop-blur-sm">Python</span><span class="px-2 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs backdrop-blur-sm">Java</span></div>
+                            <div class="mt-2 flex justify-center gap-2 flex-wrap"><span class="px-2 py-1 bg-pink-100/70 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-full text-xs backdrop-blur-sm">Python</span><span class="px-2 py-1 bg-pink-100/70 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-full text-xs backdrop-blur-sm">Java</span></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <section id="section-devlog" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">Devlog</h2>
-                <div class="space-y-4">
-                    <div class="glass rounded-2xl p-6 border-white/30 card-lift"><h3 class="font-semibold dark:text-white">v1.2.0 – Dashboard Overhaul</h3><p class="text-sm text-gray-500 dark:text-gray-400">March 2026</p><p class="text-gray-600 dark:text-gray-300 mt-2">Added 40+ articles, mentor profiles, AI assistant integration, and 20+ settings options.</p></div>
-                    <div class="glass rounded-2xl p-6 border-white/30 card-lift"><h3 class="font-semibold dark:text-white">v1.1.0 – Messaging & Dark Mode</h3><p class="text-sm text-gray-500 dark:text-gray-400">February 2026</p><p class="text-gray-600 dark:text-gray-300 mt-2">Implemented direct messaging, global dark mode, and enhanced animations.</p></div>
-                    <div class="glass rounded-2xl p-6 border-white/30 card-lift"><h3 class="font-semibold dark:text-white">v1.0.0 – Launch</h3><p class="text-sm text-gray-500 dark:text-gray-400">January 2026</p><p class="text-gray-600 dark:text-gray-300 mt-2">Initial release with landing page, authentication, and basic dashboard.</p></div>
+                <!-- Extra decorative graphics -->
+                <div class="mt-16 grid grid-cols-3 md:grid-cols-6 gap-4 text-center opacity-30">
+                    <div class="text-4xl">📐</div>
+                    <div class="text-4xl">📊</div>
+                    <div class="text-4xl">🧮</div>
+                    <div class="text-4xl">📝</div>
+                    <div class="text-4xl">💻</div>
+                    <div class="text-4xl">🎯</div>
                 </div>
             </div>
         </section>
 
-        <section id="section-portfolio" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Our Portfolio</h2>
+        <!-- ============================================================ -->
+        <!-- ===== DEVLOG (enhanced) ===== -->
+        <!-- ============================================================ -->
+        <section id="section-devlog" class="min-h-screen section-page hidden page-transition py-20 relative" style="background: transparent;">
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-40 left-20 w-72 h-72 bg-blue-400/10 rounded-full filter blur-3xl animate-blob"></div>
+                <div class="absolute bottom-40 right-20 w-72 h-72 bg-purple-400/10 rounded-full filter blur-3xl animate-blob animation-delay-2000"></div>
+            </div>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6 text-center">Devlog</h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">The journey of building Tutor Hub, one commit at a time.</p>
+
+                <div class="devlog-timeline space-y-6">
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 relative">
+                        <div class="timeline-dot"></div>
+                        <h3 class="font-semibold dark:text-white text-lg">v1.2.0 – Dashboard Overhaul</h3>
+                        <p class="text-sm text-blue-600 dark:text-blue-400">March 2026</p>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">Added 40+ articles, mentor profiles, AI assistant integration, and 20+ settings options. Complete redesign of the dashboard experience.</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 relative">
+                        <div class="timeline-dot"></div>
+                        <h3 class="font-semibold dark:text-white text-lg">v1.1.0 – Messaging & Dark Mode</h3>
+                        <p class="text-sm text-blue-600 dark:text-blue-400">February 2026</p>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">Implemented direct messaging, global dark mode, and enhanced animations throughout the platform.</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 card-lift border-white/30 relative">
+                        <div class="timeline-dot"></div>
+                        <h3 class="font-semibold dark:text-white text-lg">v1.0.0 – Launch</h3>
+                        <p class="text-sm text-blue-600 dark:text-blue-400">January 2026</p>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">Initial release with landing page, authentication, and basic dashboard. The beginning of Tutor Hub.</p>
+                    </div>
+                </div>
+
+                <!-- Decorative graphics -->
+                <div class="mt-12 flex justify-center gap-8 text-3xl opacity-20">
+                    <i class="fas fa-code"></i>
+                    <i class="fas fa-arrow-right"></i>
+                    <i class="fas fa-rocket"></i>
+                    <i class="fas fa-arrow-right"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- ===== PORTFOLIO ===== -->
+        <!-- ============================================================ -->
+        <section id="section-portfolio" class="min-h-screen section-page hidden page-transition py-20 relative" style="background: transparent;">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Our <span class="gradient-text">Portfolio</span></h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="glass rounded-2xl overflow-hidden card-lift border-white/30"><div class="h-48 bg-gradient-to-br from-blue-400 to-indigo-400 flex items-center justify-center text-white text-4xl"><i class="fas fa-calculator"></i></div><div class="p-4"><h3 class="font-semibold dark:text-white">Math Mastery Program</h3><p class="text-sm text-gray-500 dark:text-gray-400">2025</p></div></div>
                     <div class="glass rounded-2xl overflow-hidden card-lift border-white/30"><div class="h-48 bg-gradient-to-br from-green-400 to-teal-400 flex items-center justify-center text-white text-4xl"><i class="fas fa-code"></i></div><div class="p-4"><h3 class="font-semibold dark:text-white">Coding Bootcamp</h3><p class="text-sm text-gray-500 dark:text-gray-400">2025</p></div></div>
@@ -1229,22 +1453,39 @@
             </div>
         </section>
 
-        <section id="section-connect" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8">Connect With Us</h2>
+        <!-- ============================================================ -->
+        <!-- ===== CONNECT (enhanced) ===== -->
+        <!-- ============================================================ -->
+        <section id="section-connect" class="min-h-screen section-page hidden page-transition py-20 relative" style="background: transparent;">
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-20 right-20 w-80 h-80 bg-pink-400/10 rounded-full filter blur-3xl animate-blob"></div>
+                <div class="absolute bottom-20 left-20 w-80 h-80 bg-blue-400/10 rounded-full filter blur-3xl animate-blob animation-delay-2000"></div>
+            </div>
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Connect With <span class="gradient-text">Us</span></h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">We'd love to hear from you! Reach out through any of these channels.</p>
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <a href="mailto:mcpstutorhub@gmail.com" class="glass rounded-2xl p-8 text-center hover:shadow-lg transition card-lift border-white/30">
-                        <i class="fas fa-envelope text-4xl text-blue-600 mb-4"></i>
+                    <a href="mailto:mcpstutorhub@gmail.com" class="glass rounded-2xl p-8 text-center hover:shadow-2xl transition card-lift border-white/30 connect-card">
+                        <div class="connect-icon-wrap bg-gradient-to-br from-blue-400 to-blue-600 text-white mx-auto shadow-lg shadow-blue-500/25">
+                            <i class="fas fa-envelope"></i>
+                        </div>
                         <h3 class="text-xl font-semibold dark:text-white">Email</h3>
                         <p class="mt-2 text-gray-600 dark:text-gray-400 break-all">mcpstutorhub@gmail.com</p>
                     </a>
-                    <a href="https://instagram.com/tutorhub_mcps" target="_blank" class="glass rounded-2xl p-8 text-center hover:shadow-lg transition card-lift border-white/30">
-                        <i class="fab fa-instagram text-4xl text-pink-600 mb-4"></i>
+
+                    <a href="https://instagram.com/tutorhub_mcps" target="_blank" class="glass rounded-2xl p-8 text-center hover:shadow-2xl transition card-lift border-white/30 connect-card">
+                        <div class="connect-icon-wrap bg-gradient-to-br from-pink-400 to-pink-600 text-white mx-auto shadow-lg shadow-pink-500/25">
+                            <i class="fab fa-instagram"></i>
+                        </div>
                         <h3 class="text-xl font-semibold dark:text-white">Instagram</h3>
                         <p class="mt-2 text-gray-600 dark:text-gray-400">@tutorhub_mcps</p>
                     </a>
-                    <a href="tel:9999999999" class="glass rounded-2xl p-8 text-center hover:shadow-lg transition card-lift border-white/30">
-                        <i class="fas fa-phone text-4xl text-green-600 mb-4"></i>
+
+                    <a href="tel:9999999999" class="glass rounded-2xl p-8 text-center hover:shadow-2xl transition card-lift border-white/30 connect-card">
+                        <div class="connect-icon-wrap bg-gradient-to-br from-green-400 to-green-600 text-white mx-auto shadow-lg shadow-green-500/25">
+                            <i class="fas fa-phone"></i>
+                        </div>
                         <h3 class="text-xl font-semibold dark:text-white">Phone</h3>
                         <p class="mt-2 text-gray-600 dark:text-gray-400">(999) 999-9999</p>
                     </a>
@@ -1281,7 +1522,7 @@
                 </aside>
 
                 <!-- Dashboard Content -->
-                <div id="dashboard-content" class="flex-1 p-6 overflow-y-auto" style="position:relative; z-index:2;">
+                <div id="dashboard-content" class="flex-1 p-6 overflow-y-auto">
 
                     <!-- ===== DASHBOARD HEADER ===== -->
                     <div class="dash-header">
@@ -1295,13 +1536,13 @@
                                 <div class="avatar-inner" id="dash-avatar-inner">U</div>
                             </div>
                             <div class="profile-popup" id="profile-popup">
-                                <div class="popup-avatar" id="popup-avatar">U</div>
-                                <div class="popup-name" id="popup-name">User</div>
-                                <div class="popup-email" id="popup-email">user@example.com</div>
-                                <div class="popup-bio" id="popup-bio">No bio yet.</div>
-                                <div class="popup-actions">
-                                    <button class="btn-view" onclick="navigateDashboard('profile'); toggleProfilePopup();">View Profile</button>
-                                    <button class="btn-logout" onclick="handleLogout(); toggleProfilePopup();">Logout</button>
+                                <div class="popup-avatar w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-2xl font-bold text-white mx-auto mb-2" id="popup-avatar">U</div>
+                                <div class="popup-name text-center font-bold text-lg dark:text-white" id="popup-name">User</div>
+                                <div class="popup-email text-center text-sm text-gray-500 dark:text-gray-400" id="popup-email">user@example.com</div>
+                                <div class="popup-bio text-center text-sm text-gray-600 dark:text-gray-400 mt-2 pt-2 border-t border-gray-200/60 dark:border-gray-700/60" id="popup-bio">No bio yet.</div>
+                                <div class="popup-actions flex gap-2 mt-3">
+                                    <button class="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition" onclick="navigateDashboard('profile'); toggleProfilePopup();">View Profile</button>
+                                    <button class="flex-1 py-2 bg-red-500/10 text-red-500 rounded-lg text-sm font-medium hover:bg-red-500/20 transition" onclick="handleLogout(); toggleProfilePopup();">Logout</button>
                                 </div>
                             </div>
                         </div>
@@ -1334,12 +1575,12 @@
                                     <button onclick="updateProfileFromProfile()" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">Update Profile</button>
                                 </div>
                             </div>
-                            <div class="live-profile-card" id="live-profile-card">
-                                <div class="lpc-avatar" id="lpc-avatar">U</div>
-                                <div class="lpc-name" id="lpc-name">User</div>
-                                <div class="lpc-email" id="lpc-email">user@example.com</div>
-                                <div class="lpc-bio" id="lpc-bio">No bio yet.</div>
-                                <div class="lpc-badge">🎓 Tutor Hub Member</div>
+                            <div class="live-profile-card">
+                                <div class="lpc-avatar w-20 h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-3xl font-bold text-white mx-auto mb-3" id="lpc-avatar">U</div>
+                                <div class="lpc-name text-xl font-bold dark:text-white" id="lpc-name">User</div>
+                                <div class="lpc-email text-sm text-gray-500 dark:text-gray-400" id="lpc-email">user@example.com</div>
+                                <div class="lpc-bio text-sm text-gray-600 dark:text-gray-400 mt-2 pt-2 border-t border-gray-200/60 dark:border-gray-700/60" id="lpc-bio">No bio yet.</div>
+                                <div class="lpc-badge inline-block mt-3 px-3 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium border border-blue-200/30">🎓 Tutor Hub Member</div>
                             </div>
                         </div>
                     </div>
@@ -1416,7 +1657,7 @@
                         </div>
                     </div>
 
-                    <!-- ===== DASH-SETTINGS (FIXED TABS) ===== -->
+                    <!-- ===== DASH-SETTINGS ===== -->
                     <div id="dash-settings" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">Settings</h2>
                         <div class="flex flex-wrap gap-1 mb-6 border-b border-gray-200/50 dark:border-gray-700/50 pb-2">
@@ -1431,8 +1672,6 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-moon text-blue-600 mr-2"></i>Theme</h4><div class="flex items-center justify-between"><span class="text-sm dark:text-gray-300">Dark Mode</span><div class="toggle-switch" onclick="toggleDarkMode()"><div class="dot" id="dark-toggle-ball"></div></div></div></div>
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-font text-blue-600 mr-2"></i>Font Size</h4><div class="flex items-center gap-3"><input type="range" min="12" max="24" value="16" class="w-full accent-blue-600" onchange="document.getElementById('font-size-display').textContent=this.value+'px'; document.documentElement.style.fontSize=this.value+'px'; showNotification('Font size updated')" /><span class="text-sm text-gray-500 dark:text-gray-400" id="font-size-display">16px</span></div></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-fill-drip text-blue-600 mr-2"></i>Accent Color</h4><select class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm custom-select"><option value="blue">Blue (Default)</option><option value="purple">Purple</option><option value="green">Green</option><option value="red">Red</option></select></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-eye text-blue-600 mr-2"></i>Reduced Motion</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Disable animations</label></div>
                             </div>
                         </div>
                         <div id="settings-panel-profile-settings" class="settings-panel">
@@ -1447,29 +1686,24 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-globe text-blue-600 mr-2"></i>Language</h4><select class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm custom-select"><option>English</option><option>Spanish</option><option>French</option><option>German</option></select></div>
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-clock text-blue-600 mr-2"></i>Timezone</h4><select class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm custom-select"><option>EST</option><option>CST</option><option>PST</option><option>GMT</option></select></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-map-marker-alt text-blue-600 mr-2"></i>Region</h4><select class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm custom-select"><option>United States</option><option>Canada</option><option>UK</option><option>Australia</option></select></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-cookie-bite text-blue-600 mr-2"></i>Cookies</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Essential</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Analytics</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Marketing</label></div>
                             </div>
                         </div>
                         <div id="settings-panel-notifications" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-envelope text-blue-600 mr-2"></i>Email Alerts</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Session reminders</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> New messages</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Newsletter</label></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-mobile-alt text-blue-600 mr-2"></i>Push Notifications</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Session reminders</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> New messages</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Progress updates</label></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-sms text-blue-600 mr-2"></i>SMS Alerts</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Session reminders</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Urgent updates</label></div>
+                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-envelope text-blue-600 mr-2"></i>Email Alerts</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Session reminders</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> New messages</label></div>
+                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-mobile-alt text-blue-600 mr-2"></i>Push Notifications</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Session reminders</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> New messages</label></div>
                             </div>
                         </div>
                         <div id="settings-panel-security" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-shield-virus text-blue-600 mr-2"></i>Two-Factor Auth</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Enable 2FA</label><button class="mt-2 px-3 py-1.5 bg-gray-600 text-white rounded-xl text-sm hover:bg-gray-700 transition">Setup 2FA</button></div>
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-history text-blue-600 mr-2"></i>Sessions</h4><p class="text-sm text-gray-500 dark:text-gray-400">Active sessions: 2</p><button class="mt-2 px-3 py-1.5 bg-red-600 text-white rounded-xl text-sm hover:bg-red-700 transition">Logout all devices</button></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-key text-blue-600 mr-2"></i>API Keys</h4><button class="px-3 py-1.5 bg-blue-600 text-white rounded-xl text-sm hover:bg-blue-700 transition">Generate API Key</button></div>
                             </div>
                         </div>
                         <div id="settings-panel-privacy" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-eye text-blue-600 mr-2"></i>Visibility</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Show online status</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Allow messages from anyone</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Show in community</label></div>
+                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-eye text-blue-600 mr-2"></i>Visibility</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Show online status</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Allow messages from anyone</label></div>
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-database text-blue-600 mr-2"></i>Data</h4><button class="px-3 py-1.5 bg-gray-600 text-white rounded-xl text-sm hover:bg-gray-700 transition">Export Data</button><button class="px-3 py-1.5 bg-red-600 text-white rounded-xl text-sm hover:bg-red-700 transition ml-2">Delete Account</button></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-share-alt text-blue-600 mr-2"></i>Data Sharing</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Share anonymized data</label></div>
                             </div>
                         </div>
                         <button onclick="updateProfile()" class="mt-6 px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">Save All Changes</button>
@@ -1479,8 +1713,17 @@
         </section>
     </main>
 
+    <!-- ===== BOTTOM NAV (Mobile) ===== -->
+    <nav class="bottom-nav-mobile">
+        <a href="#" onclick="navigate('landing')" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="#" onclick="navigate('about')"><i class="fas fa-info-circle"></i><span>About</span></a>
+        <a href="#" onclick="navigate('team')"><i class="fas fa-users"></i><span>Team</span></a>
+        <a href="#" onclick="navigate('connect')"><i class="fas fa-envelope"></i><span>Connect</span></a>
+        <a href="#" onclick="navigate('dashboard')" id="mobile-nav-dash" class="hidden"><i class="fas fa-user-cog"></i><span>Dashboard</span></a>
+    </nav>
+
     <!-- ===== FOOTER ===== -->
-    <footer id="main-footer" class="bg-gray-900/80 backdrop-blur-sm text-white border-t border-white/10">
+    <footer id="main-footer" class="bg-gray-900/80 backdrop-blur-sm text-white border-t border-white/10 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div><h3 class="text-2xl font-bold flex items-center gap-2"><i class="fas fa-graduation-cap text-blue-400"></i><span class="text-blue-400">Tutor</span>Hub</h3><p class="mt-4 text-sm text-gray-400">Free, individualized tutoring for Montgomery County students.</p><div class="mt-6 flex space-x-4"><a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a><a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a><a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a><a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube"></i></a></div></div>
@@ -1488,7 +1731,7 @@
                 <div><h4 class="font-semibold">Support</h4><ul class="mt-4 space-y-2 text-sm text-gray-400"><li><a href="#" class="hover:text-white transition">Privacy Policy</a></li><li><a href="#" class="hover:text-white transition">Terms of Service</a></li></ul></div>
                 <div><h4 class="font-semibold">Newsletter</h4><p class="mt-4 text-sm text-gray-400">Get updates on new tutors and sessions.</p><form class="mt-4 flex"><input type="email" placeholder="Your email" class="flex-1 px-3 py-2 rounded-l-xl bg-gray-800/70 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 backdrop-blur-sm" /><button class="px-4 py-2 bg-blue-600 text-white rounded-r-xl hover:bg-blue-700 transition">Subscribe</button></form></div>
             </div>
-            <div class="mt-12 pt-8 border-t border-gray-800/60 text-center text-sm text-gray-400">&copy; 2026 Tutor Hub. All rights reserved.</div>
+            <div class="mt-12 pt-8 border-t border-gray-800/60 text-center text-sm text-gray-400">&copy; 2026 Tutor Hub. All rights reserved. Made with ❤️ in Montgomery County.</div>
         </div>
     </footer>
 
@@ -1525,7 +1768,6 @@
 
         function drawParticles() {
             ctx.clearRect(0, 0, w, h);
-            // Lines
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -1542,7 +1784,6 @@
                     }
                 }
             }
-            // Dots with glow
             particles.forEach(p => {
                 const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 5);
                 grad.addColorStop(0, `rgba(59,130,246,${p.opacity * 0.8})`);
@@ -1551,7 +1792,6 @@
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius * 5, 0, 2 * Math.PI);
                 ctx.fill();
-
                 ctx.fillStyle = `rgba(255,255,255,${p.opacity * 0.9})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
@@ -1566,61 +1806,6 @@
             requestAnimationFrame(drawParticles);
         }
         drawParticles();
-
-        // ================================================================
-        // BLUE CAPS BACKGROUND (high visibility)
-        // ================================================================
-        const capsCanvas = document.getElementById('caps-canvas');
-        const capsCtx = capsCanvas.getContext('2d');
-        let capsW, capsH, caps = [];
-
-        function resizeCapsCanvas() {
-            capsW = capsCanvas.width = window.innerWidth;
-            capsH = capsCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCapsCanvas);
-        resizeCapsCanvas();
-
-        function initCaps() {
-            const num = Math.min(45, Math.floor(capsW * capsH / 18000));
-            caps = [];
-            for (let i = 0; i < num; i++) {
-                caps.push({
-                    x: Math.random() * capsW,
-                    y: Math.random() * capsH,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
-                    size: Math.random() * 22 + 18,
-                    opacity: Math.random() * 0.25 + 0.12,
-                    rotation: Math.random() * 360,
-                    rotSpeed: (Math.random() - 0.5) * 0.02
-                });
-            }
-        }
-        initCaps();
-
-        function drawCaps() {
-            capsCtx.clearRect(0, 0, capsW, capsH);
-            caps.forEach(c => {
-                capsCtx.save();
-                capsCtx.translate(c.x, c.y);
-                capsCtx.rotate(c.rotation);
-                capsCtx.globalAlpha = c.opacity;
-                capsCtx.font = `${c.size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-                capsCtx.textAlign = 'center';
-                capsCtx.textBaseline = 'middle';
-                capsCtx.fillStyle = '#3b82f6';
-                capsCtx.fillText('🎓', 0, 0);
-                capsCtx.restore();
-                c.x += c.vx;
-                c.y += c.vy;
-                c.rotation += c.rotSpeed;
-                if (c.x < -30 || c.x > capsW + 30) c.vx *= -1;
-                if (c.y < -30 || c.y > capsH + 30) c.vy *= -1;
-            });
-            requestAnimationFrame(drawCaps);
-        }
-        drawCaps();
 
         // ================================================================
         // NOTIFICATION
@@ -1664,6 +1849,24 @@
         };
 
         // ================================================================
+        // LEARN MORE TOGGLE
+        // ================================================================
+        window.toggleLearnMore = function(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('open');
+                const btn = el.previousElementSibling;
+                if (btn && btn.tagName === 'BUTTON') {
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.classList.toggle('fa-chevron-down');
+                        icon.classList.toggle('fa-chevron-up');
+                    }
+                }
+            }
+        };
+
+        // ================================================================
         // AUTH
         // ================================================================
         let currentUser = null;
@@ -1674,13 +1877,13 @@
         if (!users.find(u => u.email === 'umair@tutorhub.com')) {
             users.push({ id: 'mentor1', name: 'Umair Loya', email: 'umair@tutorhub.com', password: 'umair123',
                 isMentor: true, subjects: ['Algebra 1', 'Geometry', 'Pre-Calculus'],
-                bio: 'Passionate math educator with 5+ years of experience. Umair believes that every student can excel in math with the right guidance and encouragement. He specializes in breaking down complex concepts into simple, digestible steps.' });
+                bio: 'Passionate math educator with 5+ years of experience.' });
             users.push({ id: 'mentor2', name: 'Zuhair Loya', email: 'zuhair@tutorhub.com', password: 'zuhair123',
                 isMentor: true, subjects: ['CAD', '3D Modeling', 'Design Thinking'],
-                bio: 'Expert in CAD and design, helping students bring their ideas to life. Zuhair has worked on various engineering projects and loves teaching the next generation of designers. He is proficient in Fusion 360, SolidWorks, and AutoCAD.' });
+                bio: 'Expert in CAD and design, helping students bring their ideas to life.' });
             users.push({ id: 'mentor3', name: 'Charan Kamana', email: 'charan@tutorhub.com', password: 'charan123',
                 isMentor: true, subjects: ['Python', 'Java', 'Web Development'],
-                bio: 'Full-stack developer and coding mentor with industry experience. Charan has worked at top tech companies and now dedicates his time to teaching students how to code. He focuses on project-based learning and real-world applications.' });
+                bio: 'Full-stack developer and coding mentor with industry experience.' });
             localStorage.setItem('tutorhub_users', JSON.stringify(users));
         }
 
@@ -1705,8 +1908,7 @@
                     subjects: [studentSubjects[Math.floor(Math.random() * studentSubjects.length)]],
                     location: locations[Math.floor(Math.random() * locations.length)],
                     intro: 'Hi! I\'m a ' + (Math.floor(Math.random() * 4) + 6) + 'th grader from ' + locations[Math
-                    .floor(Math.random() * locations.length)] + '. I love ' + studentSubjects[Math.floor(Math
-                        .random() * studentSubjects.length)] + ' and I\'m here to learn and grow!'
+                        .floor(Math.random() * locations.length)] + '.'
                 });
             }
             localStorage.setItem('tutorhub_users', JSON.stringify(users));
@@ -1719,28 +1921,23 @@
                 'Can someone explain the Pythagorean theorem to me in simple terms?',
                 'I need help with my CAD project. Any tips for 3D modeling?',
                 'What programming language should I learn first? Python or Java?',
-                'How do I stay motivated when studying for exams?',
-                'Any recommendations for good study resources for Geometry?',
-                'I\'m having trouble with fractions and percentages. Help!',
-                'What\'s the difference between pre-calc and calculus?',
-                'How can I improve my reading comprehension skills?'
+                'How do I stay motivated when studying for exams?'
             ];
             const studentUsers = users.filter(u => u.isStudent);
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 6; i++) {
                 const author = studentUsers[i % studentUsers.length];
-                const likes = Math.floor(Math.random() * 15) + 1;
                 const replies = [];
-                const numReplies = Math.floor(Math.random() * 4) + 1;
+                const numReplies = Math.floor(Math.random() * 3) + 1;
                 for (let r = 0; r < numReplies; r++) {
                     const replyAuthor = studentUsers[(i + r + 3) % studentUsers.length];
                     replies.push({
                         id: 'reply-' + i + '-' + r,
                         author: replyAuthor.name,
                         authorId: replyAuthor.id,
-                        content: 'Great question! I think ' + ['you should try practicing daily.', 'using online resources like Khan Academy helps.',
-                            'breaking it down into smaller steps works for me.', 'asking a tutor can really clarify things.',
-                            'I found that group study sessions are super helpful.'
-                        ][r % 5],
+                        content: 'Great question! I think ' + ['you should try practicing daily.',
+                            'using online resources helps.', 'breaking it down works for me.',
+                            'asking a tutor can really help.'
+                        ][r % 4],
                         timestamp: new Date(Date.now() - (r + 1) * 60000).toISOString()
                     });
                 }
@@ -1750,7 +1947,7 @@
                     authorId: author.id,
                     content: sampleQuestions[i % sampleQuestions.length],
                     timestamp: new Date(Date.now() - (i + 1) * 120000).toISOString(),
-                    likes: likes,
+                    likes: Math.floor(Math.random() * 10) + 1,
                     likedBy: [],
                     replies: replies
                 });
@@ -1851,6 +2048,7 @@
             document.getElementById('nav-logout').classList.remove('hidden');
             document.getElementById('mobile-dashboard').classList.remove('hidden');
             document.getElementById('mobile-logout').classList.remove('hidden');
+            document.getElementById('mobile-nav-dash').classList.remove('hidden');
             document.getElementById('sidebar-username').textContent = currentUser.name;
             document.getElementById('dash-welcome-name').textContent = currentUser.name;
             document.getElementById('settings-name').value = currentUser.name;
@@ -1865,7 +2063,7 @@
             document.getElementById('popup-name').textContent = currentUser.name;
             document.getElementById('popup-email').textContent = currentUser.email;
             document.getElementById('popup-bio').textContent = currentUser.bio || 'No bio yet.';
-            document.getElementById('profile-avatar').textContent = initial;
+            document.getElementById('lpc-avatar').textContent = initial;
             const mentorCount = users.filter(u => u.isMentor).length;
             document.getElementById('dash-mentor-count').textContent = mentorCount;
             updateLiveProfile();
@@ -1885,6 +2083,7 @@
             document.getElementById('nav-logout').classList.add('hidden');
             document.getElementById('mobile-dashboard').classList.add('hidden');
             document.getElementById('mobile-logout').classList.add('hidden');
+            document.getElementById('mobile-nav-dash').classList.add('hidden');
         }
 
         const savedId = localStorage.getItem('tutorhub_current');
@@ -1972,20 +2171,12 @@
             if (!query) { showNotification('Please enter a search term.'); return; }
             const results = [];
             const articleTopics = [
-                'Algebra: Linear Equations', 'Algebra: Factoring', 'Algebra: Quadratics', 'Algebra: Systems',
-                'Geometry: Pythagorean', 'Geometry: Area & Volume', 'Geometry: Trigonometry', 'Geometry: Circles',
-                'Pre-Calc: Functions', 'Pre-Calc: Limits', 'Pre-Calc: Derivatives', 'Pre-Calc: Integrals',
-                'Calculus: Chain Rule', 'Calculus: Optimization', 'Calculus: Related Rates', 'Calculus: Series',
-                'Statistics: Mean/Median', 'Statistics: Probability', 'Statistics: Normal Dist',
-                'Statistics: Hypothesis',
-                'Math: Word Problems', 'Math: Fractions', 'Math: Ratios', 'Math: Percentages',
-                'Reading: Active Reading', 'Reading: Annotation', 'Reading: Summary', 'Reading: Inferencing',
-                'Reading: Author\'s Purpose', 'Reading: Tone/Mood', 'Reading: Figurative Language',
-                'Reading: Poetry',
-                'Reading: Argumentative', 'Reading: Informational', 'Reading: Narrative', 'Reading: Character',
-                'Reading: Theme', 'Reading: Context Clues', 'Reading: Main Idea', 'Reading: Text Organization',
-                'Test Prep: SAT Math', 'Test Prep: ACT Reading', 'Test Prep: AP Exam', 'Study Skills: Note-Taking',
-                'Study Skills: Time Mgmt', 'Study Skills: Test Anxiety', 'Study Skills: Active Recall'
+                'Algebra: Linear Equations', 'Algebra: Factoring', 'Algebra: Quadratics',
+                'Geometry: Pythagorean', 'Geometry: Area & Volume', 'Geometry: Trigonometry',
+                'Pre-Calc: Functions', 'Pre-Calc: Limits', 'Pre-Calc: Derivatives',
+                'Calculus: Chain Rule', 'Calculus: Optimization', 'Statistics: Mean/Median',
+                'Statistics: Probability', 'Reading: Active Reading', 'Reading: Annotation',
+                'Reading: Summary', 'Test Prep: SAT Math', 'Test Prep: ACT Reading'
             ];
             articleTopics.forEach(t => {
                 if (t.toLowerCase().includes(query.toLowerCase())) results.push('📄 ' + t);
@@ -1994,12 +2185,6 @@
                 if (m.name.toLowerCase().includes(query.toLowerCase()) || m.subjects.some(s => s.toLowerCase()
                         .includes(query.toLowerCase()))) {
                     results.push('👨‍🏫 ' + m.name + ' (' + m.subjects.join(', ') + ')');
-                }
-            });
-            users.filter(u => u.isStudent).slice(0, 10).forEach(s => {
-                if (s.name.toLowerCase().includes(query.toLowerCase()) || (s.intro && s.intro.toLowerCase()
-                        .includes(query.toLowerCase()))) {
-                    results.push('👤 ' + s.name + ' — ' + (s.intro || 'Student'));
                 }
             });
             if (results.length === 0) {
@@ -2061,21 +2246,21 @@
                 name: 'Umair Loya',
                 role: 'Founder & Lead Tutor',
                 avatar: 'U',
-                bio: 'Umair Loya is the founder of Tutor Hub with over 5 years of teaching experience. He is passionate about making math accessible and enjoyable for every student. Umair specializes in Algebra 1, Geometry, and Pre-Calculus, and he believes that a strong foundation in math opens doors to countless opportunities. His teaching style is patient, encouraging, and tailored to each student\'s unique learning pace.',
+                bio: 'Umair Loya is the founder of Tutor Hub with over 5 years of teaching experience. He is passionate about making math accessible and enjoyable for every student. Umair specializes in Algebra 1, Geometry, and Pre-Calculus.',
                 subjects: ['Algebra 1', 'Geometry', 'Pre-Calculus']
             },
             'mentor2': {
                 name: 'Zuhair Loya',
                 role: 'CAD & Design Specialist',
                 avatar: 'Z',
-                bio: 'Zuhair Loya is an expert in CAD, 3D modeling, and design thinking. With years of experience in engineering design, Zuhair helps students bring their creative ideas to life. He is proficient in Fusion 360, SolidWorks, and AutoCAD. Zuhair believes that design is a powerful tool for problem-solving and encourages students to think critically and creatively. His workshops are hands-on and project-based.',
+                bio: 'Zuhair Loya is an expert in CAD, 3D modeling, and design thinking. With years of experience in engineering design, Zuhair helps students bring their creative ideas to life.',
                 subjects: ['CAD', '3D Modeling', 'Design Thinking']
             },
             'mentor3': {
                 name: 'Charan Kamana',
                 role: 'Programming & CS Tutor',
                 avatar: 'C',
-                bio: 'Charan Kamana is a full-stack developer with industry experience at top tech companies. He now dedicates his time to teaching students how to code. Charan specializes in Python, Java, and web development. He focuses on project-based learning, helping students build real-world applications. Charan is passionate about making coding accessible and fun, and he loves seeing his students develop problem-solving skills through programming.',
+                bio: 'Charan Kamana is a full-stack developer with industry experience. He now dedicates his time to teaching students how to code. Charan specializes in Python, Java, and web development.',
                 subjects: ['Python', 'Java', 'Web Development']
             }
         };
@@ -2085,14 +2270,12 @@
             if (!data) return;
             const content = document.getElementById('mentor-detail-content');
             content.innerHTML = `
-                <div class="mdp-avatar">${data.avatar}</div>
-                <div class="mdp-name">${data.name}</div>
-                <div class="mdp-role">${data.role}</div>
-                <div class="mdp-bio">${data.bio}</div>
-                <div class="mdp-subjects">
-                    ${data.subjects.map(s => `<span>${s}</span>`).join('')}
-                </div>
-                <button class="mdp-close" onclick="closeMentorDetail()">Close</button>
+                <div class="mdp-avatar w-20 h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-3xl font-bold text-white mx-auto mb-3">${data.avatar}</div>
+                <div class="mdp-name text-center text-2xl font-bold dark:text-white">${data.name}</div>
+                <div class="mdp-role text-center text-blue-600 dark:text-blue-400 font-medium">${data.role}</div>
+                <div class="mdp-bio mt-3 text-gray-600 dark:text-gray-300 text-sm">${data.bio}</div>
+                <div class="mdp-subjects flex flex-wrap gap-2 justify-center mt-3">${data.subjects.map(s => `<span class="px-3 py-1 bg-blue-100/70 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">${s}</span>`).join('')}</div>
+                <button class="mdp-close block mx-auto mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition" onclick="closeMentorDetail()">Close</button>
             `;
             document.getElementById('mentor-detail-popup').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -2113,65 +2296,29 @@
             const grid = document.getElementById('articles-grid');
             grid.innerHTML = '';
             const articles = [
-                { title: 'Algebra: Linear Equations', desc: 'Learn how to solve for x with step-by-step techniques for linear equations.' },
-                { title: 'Algebra: Factoring', desc: 'Master factoring polynomials with easy-to-follow strategies and examples.' },
-                { title: 'Algebra: Quadratics', desc: 'Understand quadratic equations, the quadratic formula, and graphing parabolas.' },
-                { title: 'Algebra: Systems', desc: 'Solve systems of equations using substitution, elimination, and graphing.' },
-                { title: 'Geometry: Pythagorean', desc: 'Apply the Pythagorean theorem to find missing sides in right triangles.' },
-                { title: 'Geometry: Area & Volume', desc: 'Calculate area and volume for 2D and 3D shapes with clear formulas.' },
-                { title: 'Geometry: Trigonometry', desc: 'Introduction to sine, cosine, tangent, and their applications in geometry.' },
-                { title: 'Geometry: Circles', desc: 'Explore circle properties, circumference, area, and arc length.' },
-                { title: 'Pre-Calc: Functions', desc: 'Dive into functions, domain, range, and transformations.' },
-                { title: 'Pre-Calc: Limits', desc: 'Understand limits, continuity, and their role in calculus preparation.' },
-                { title: 'Pre-Calc: Derivatives', desc: 'Introduction to derivatives and their applications in real-world problems.' },
-                { title: 'Pre-Calc: Integrals', desc: 'Learn integration techniques and their connection to area under curves.' },
-                { title: 'Calculus: Chain Rule', desc: 'Master the chain rule for differentiating composite functions.' },
-                { title: 'Calculus: Optimization', desc: 'Apply calculus to solve optimization problems in business and science.' },
-                { title: 'Calculus: Related Rates', desc: 'Solve related rates problems with practical examples and step-by-step methods.' },
-                { title: 'Calculus: Series', desc: 'Understand infinite series, convergence, and Taylor series expansions.' },
-                { title: 'Statistics: Mean/Median', desc: 'Calculate and interpret mean, median, and mode in data sets.' },
-                { title: 'Statistics: Probability', desc: 'Learn basic probability rules, tree diagrams, and conditional probability.' },
-                { title: 'Statistics: Normal Dist', desc: 'Explore the normal distribution, z-scores, and standard deviation.' },
-                { title: 'Statistics: Hypothesis', desc: 'Introduction to hypothesis testing, p-values, and confidence intervals.' },
-                { title: 'Math: Word Problems', desc: 'Strategies for translating word problems into mathematical equations.' },
-                { title: 'Math: Fractions', desc: 'Master fraction operations, simplification, and comparisons.' },
-                { title: 'Math: Ratios', desc: 'Understand ratios, proportions, and their applications in everyday life.' },
-                { title: 'Math: Percentages', desc: 'Calculate percentages, percentage change, and real-world applications.' },
-                { title: 'Reading: Active Reading', desc: 'Techniques for active reading to improve comprehension and retention.' },
-                { title: 'Reading: Annotation', desc: 'Learn how to annotate texts to highlight key ideas and themes.' },
-                { title: 'Reading: Summary', desc: 'Write effective summaries that capture the main points of a text.' },
-                { title: 'Reading: Inferencing', desc: 'Make inferences to understand implicit meaning and subtext.' },
-                { title: 'Reading: Author\'s Purpose', desc: 'Identify the author\'s purpose and point of view in various texts.' },
-                { title: 'Reading: Tone/Mood', desc: 'Distinguish between tone and mood and how they affect the reader.' },
-                { title: 'Reading: Figurative Language', desc: 'Recognize and interpret figurative language like metaphors and similes.' },
-                { title: 'Reading: Poetry', desc: 'Analyze poetry structure, rhyme, meter, and deeper meaning.' },
-                { title: 'Reading: Argumentative', desc: 'Evaluate argumentative texts and identify claims, evidence, and reasoning.' },
-                { title: 'Reading: Informational', desc: 'Read and analyze informational texts for clarity and bias.' },
-                { title: 'Reading: Narrative', desc: 'Understand narrative structure, point of view, and character development.' },
-                { title: 'Reading: Character', desc: 'Analyze character traits, motivations, and growth in literature.' },
-                { title: 'Reading: Theme', desc: 'Identify and discuss major themes in novels, plays, and poems.' },
-                { title: 'Reading: Context Clues', desc: 'Use context clues to determine the meaning of unfamiliar words.' },
-                { title: 'Reading: Main Idea', desc: 'Find the main idea and supporting details in any text.' },
-                { title: 'Reading: Text Organization', desc: 'Understand how texts are organized and how structure affects meaning.' },
-                { title: 'Test Prep: SAT Math', desc: 'Targeted strategies for the SAT math section, including practice problems.' },
-                { title: 'Test Prep: ACT Reading', desc: 'Prepare for the ACT reading section with time-saving strategies.' },
-                { title: 'Test Prep: AP Exam', desc: 'Study tips and content review for AP exams in various subjects.' },
-                { title: 'Study Skills: Note-Taking', desc: 'Effective note-taking methods for lectures, reading, and research.' },
-                { title: 'Study Skills: Time Mgmt', desc: 'Manage your time effectively with planning and prioritization techniques.' },
-                { title: 'Study Skills: Test Anxiety', desc: 'Overcome test anxiety with relaxation and preparation strategies.' },
-                { title: 'Study Skills: Active Recall', desc: 'Use active recall to boost retention and study smarter.' }
+                { title: 'Algebra: Linear Equations', desc: 'Learn how to solve for x with step-by-step techniques.' },
+                { title: 'Algebra: Factoring', desc: 'Master factoring polynomials with easy strategies.' },
+                { title: 'Algebra: Quadratics', desc: 'Understand quadratic equations and graphing parabolas.' },
+                { title: 'Geometry: Pythagorean', desc: 'Apply the Pythagorean theorem to right triangles.' },
+                { title: 'Geometry: Area & Volume', desc: 'Calculate area and volume for 2D and 3D shapes.' },
+                { title: 'Geometry: Trigonometry', desc: 'Introduction to sine, cosine, and tangent.' },
+                { title: 'Pre-Calc: Functions', desc: 'Dive into functions, domain, and range.' },
+                { title: 'Pre-Calc: Limits', desc: 'Understand limits and continuity.' },
+                { title: 'Pre-Calc: Derivatives', desc: 'Introduction to derivatives and their applications.' },
+                { title: 'Statistics: Mean/Median', desc: 'Calculate and interpret mean and median.' },
+                { title: 'Statistics: Probability', desc: 'Learn basic probability rules.' },
+                { title: 'Reading: Active Reading', desc: 'Techniques for active reading and comprehension.' },
+                { title: 'Reading: Annotation', desc: 'Learn how to annotate texts effectively.' },
+                { title: 'Reading: Summary', desc: 'Write effective summaries of any text.' },
+                { title: 'Test Prep: SAT Math', desc: 'Targeted strategies for the SAT math section.' },
+                { title: 'Test Prep: ACT Reading', desc: 'Time-saving strategies for ACT reading.' }
             ];
             articles.forEach(a => {
                 const card = document.createElement('div');
                 card.className = 'glass rounded-xl p-4 article-card card-lift border-white/30';
-                const icon = a.title.includes('Reading') || a.title.includes('Test Prep') || a.title.includes(
-                    'Study') ? 'fa-book' : 'fa-calculator';
-                card.innerHTML = `
-                    <i class="fas ${icon} text-blue-600 text-xl mb-2"></i>
-                    <h4 class="font-semibold dark:text-white text-sm">${a.title}</h4>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${a.desc}</p>
-                    <p class="text-xs text-blue-600 mt-1">Read more →</p>
-                `;
+                const icon = a.title.includes('Reading') || a.title.includes('Test Prep') ? 'fa-book' : 'fa-calculator';
+                card.innerHTML =
+                    `<i class="fas ${icon} text-blue-600 text-xl mb-2"></i><h4 class="font-semibold dark:text-white text-sm">${a.title}</h4><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${a.desc}</p><p class="text-xs text-blue-600 mt-1">Read more →</p>`;
                 grid.appendChild(card);
             });
         }
@@ -2189,14 +2336,8 @@
                 const initial = u.name.charAt(0);
                 const loc = u.location || 'Montgomery County';
                 const intro = u.intro || 'Student at Tutor Hub';
-                div.innerHTML = `
-                    <div class="cs-avatar">${initial}</div>
-                    <div class="cs-info">
-                        <div class="cs-name">${u.name}</div>
-                        <div class="cs-detail">${intro} • 📍 ${loc}</div>
-                    </div>
-                    <span class="cs-tag">${u.subjects ? u.subjects[0] : 'Student'}</span>
-                `;
+                div.innerHTML =
+                    `<div class="cs-avatar">${initial}</div><div class="cs-info"><div class="cs-name">${u.name}</div><div class="cs-detail">${intro} • 📍 ${loc}</div></div><span class="cs-tag">${u.subjects ? u.subjects[0] : 'Student'}</span>`;
                 container.appendChild(div);
             });
         }
@@ -2208,26 +2349,14 @@
             const container = document.getElementById('mentor-list');
             container.innerHTML = '';
             const mentors = users.filter(u => u.isMentor);
-            const mentorIdMap = {
-                'Umair Loya': 'mentor1',
-                'Zuhair Loya': 'mentor2',
-                'Charan Kamana': 'mentor3'
-            };
+            const mentorIdMap = { 'Umair Loya': 'mentor1', 'Zuhair Loya': 'mentor2', 'Charan Kamana': 'mentor3' };
             mentors.forEach(u => {
                 const card = document.createElement('div');
-                card.className = 'glass rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 card-lift border-white/30';
+                card.className =
+                    'glass rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 card-lift border-white/30';
                 const mentorKey = mentorIdMap[u.name] || 'mentor1';
-                card.innerHTML = `
-                    <div>
-                        <span class="font-semibold dark:text-white">${u.name}</span>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">${u.subjects ? u.subjects.join(', ') : 'Mentor'}</p>
-                        <p class="text-xs text-gray-400 dark:text-gray-500">${u.bio ? u.bio.substring(0, 80) + '...' : ''}</p>
-                    </div>
-                    <div class="flex gap-2 flex-wrap">
-                        <button onclick="openMentorDetail('${mentorKey}')" class="px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm shadow-lg shadow-blue-600/25">Learn More</button>
-                        <button onclick="startChat('${u.id}')" class="px-3 py-1.5 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition text-sm">Message</button>
-                    </div>
-                `;
+                card.innerHTML =
+                    `<div><span class="font-semibold dark:text-white">${u.name}</span><p class="text-sm text-gray-500 dark:text-gray-400">${u.subjects ? u.subjects.join(', ') : 'Mentor'}</p><p class="text-xs text-gray-400 dark:text-gray-500">${u.bio ? u.bio.substring(0, 80) + '...' : ''}</p></div><div class="flex gap-2 flex-wrap"><button onclick="openMentorDetail('${mentorKey}')" class="px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm shadow-lg shadow-blue-600/25">Learn More</button><button onclick="startChat('${u.id}')" class="px-3 py-1.5 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition text-sm">Message</button></div>`;
                 container.appendChild(card);
             });
         }
@@ -2252,35 +2381,21 @@
                 let repliesHtml = '';
                 if (post.replies && post.replies.length > 0) {
                     post.replies.forEach(r => {
-                        repliesHtml += `
-                            <div class="reply-item"><strong>${r.author}</strong>: ${r.content}</div>
-                        `;
+                        repliesHtml +=
+                            `<div class="reply-item text-sm text-gray-600 dark:text-gray-400"><strong>${r.author}</strong>: ${r.content}</div>`;
                     });
                 }
 
                 div.innerHTML = `
-                    <div class="post-header">
-                        <div class="post-avatar">${initial}</div>
-                        <span class="post-author">${user.name}</span>
-                        <span class="post-time">${timeAgo}</span>
-                    </div>
-                    <div class="post-content">${post.content}</div>
-                    <div class="post-actions">
-                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
-                            <i class="fas fa-heart"></i> <span class="like-count">${post.likes || 0}</span>
-                        </button>
-                        <button onclick="toggleReplyArea('${post.id}')">
-                            <i class="fas fa-reply"></i> Reply (${post.replies ? post.replies.length : 0})
-                        </button>
+                    <div class="flex items-center gap-2 mb-2"><div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold">${initial}</div><span class="font-medium dark:text-white">${user.name}</span><span class="text-xs text-gray-400">${timeAgo}</span></div>
+                    <div class="text-gray-700 dark:text-gray-300 text-sm">${post.content}</div>
+                    <div class="flex gap-4 mt-3">
+                        <button class="like-btn ${isLiked ? 'liked' : ''} text-sm flex items-center gap-1" onclick="toggleLike('${post.id}')"><i class="fas fa-heart"></i> <span class="like-count">${post.likes || 0}</span></button>
+                        <button class="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 transition flex items-center gap-1" onclick="toggleReplyArea('${post.id}')"><i class="fas fa-reply"></i> Reply (${post.replies ? post.replies.length : 0})</button>
                     </div>
                     <div class="reply-area" id="reply-area-${post.id}">
-                        <div class="flex gap-2 mt-2">
-                            <input type="text" id="reply-input-${post.id}" placeholder="Write a reply..." class="flex-1 px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" />
-                            <button onclick="addReply('${post.id}')" class="px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm">Reply</button>
-                        </div>
-                        <div class="mt-2 space-y-1">
-                            ${repliesHtml}
-                        </div>
+                        <div class="flex gap-2 mt-2"><input type="text" id="reply-input-${post.id}" placeholder="Write a reply..." class="flex-1 px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" /><button onclick="addReply('${post.id}')" class="px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm">Reply</button></div>
+                        <div class="mt-2 space-y-1">${repliesHtml}</div>
                     </div>
                 `;
                 feed.appendChild(div);
@@ -2508,7 +2623,7 @@
         };
 
         // ================================================================
-        // SETTINGS TABS (FIXED)
+        // SETTINGS TABS
         // ================================================================
         window.switchSettingsTab = function(btn, tab) {
             document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.remove('active'));
@@ -2534,6 +2649,14 @@
                 aiFullscreen = false;
                 document.body.style.overflow = '';
             }
+        }
+
+        // ================================================================
+        // MENTOR DETAIL EXPAND (landing)
+        // ================================================================
+        function toggleMentorDetail(id) {
+            const detail = document.getElementById(id + '-detail');
+            if (detail) detail.classList.toggle('open');
         }
 
         // ================================================================
@@ -2603,53 +2726,15 @@
             }
         });
 
-        // ================================================================
-        // TESTIMONIAL ROTATOR
-        // ================================================================
-        const testimonials = [
-            { text: '“My daughter\'s confidence in math has completely transformed.”', name: 'Sarah Johnson',
-                child: 'Parent of 8th Grader' },
-            { text: '“The tutors are patient, knowledgeable, and truly care about my son\'s success.”',
-                name: 'Michael Chen', child: 'Parent of 10th Grader' },
-            { text: '“I\'ve never seen my child so excited to learn. Tutor Hub is a game-changer.”',
-                name: 'Emily Rodriguez', child: 'Parent of 7th Grader' },
-            { text: '“Free, high-quality tutoring made a huge difference in our family.”', name: 'David Kim',
-                child: 'Parent of 9th Grader' }
-        ];
-        let testimonialIndex = 0;
-
-        function updateTestimonial(index) {
-            const t = testimonials[index];
-            document.getElementById('testimonial-text').textContent = t.text;
-            document.getElementById('testimonial-name').textContent = t.name;
-            document.getElementById('testimonial-child').textContent = t.child;
-            document.querySelectorAll('.testimonial-dot').forEach((dot, i) => {
-                dot.classList.toggle('bg-blue-600', i === index);
-                dot.classList.toggle('bg-gray-300/60', i !== index);
-                dot.classList.toggle('dark:bg-gray-600/60', i !== index);
-            });
-        }
-
-        document.querySelectorAll('.testimonial-dot').forEach(dot => {
-            dot.addEventListener('click', function() {
-                testimonialIndex = parseInt(this.dataset.index);
-                updateTestimonial(testimonialIndex);
+        // Make sure bottom nav highlights work
+        document.querySelectorAll('.bottom-nav-mobile a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.bottom-nav-mobile a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
             });
         });
-        setInterval(() => {
-            testimonialIndex = (testimonialIndex + 1) % testimonials.length;
-            updateTestimonial(testimonialIndex);
-        }, 6000);
 
-        // ================================================================
-        // MENTOR DETAIL EXPAND (landing)
-        // ================================================================
-        function toggleMentorDetail(id) {
-            const detail = document.getElementById(id + '-detail');
-            if (detail) detail.classList.toggle('open');
-        }
-
-        console.log('🚀 Tutor Hub – Fully enhanced with visible backgrounds, fixed settings tabs, and all requested features!');
+        console.log('🚀 Tutor Hub – Fully enhanced with animated backgrounds, Learn More buttons, extra content, and rich visuals!');
     </script>
 </body>
 </html>
