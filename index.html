@@ -1,421 +1,414 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutor Hub – Free Personalized Tutoring in MoCo</title>
+  <title>Tutor Hub – Premium Tutoring Platform</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <!-- Font Awesome (icons) -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    /* Custom animations & glassmorphism */
-    @keyframes blob {
-      0% { transform: translate(0px, 0px) scale(1); }
-      33% { transform: translate(30px, -50px) scale(1.1); }
-      66% { transform: translate(-20px, 20px) scale(0.9); }
-      100% { transform: translate(0px, 0px) scale(1); }
+    /* --- Base & Dark Mode --- */
+    :root {
+      --bg: #ffffff;
+      --text: #1f2937;
+      --card-bg: rgba(255,255,255,0.8);
+      --card-border: rgba(229,231,235,0.5);
+      --shadow: 0 4px 20px rgba(0,0,0,0.06);
     }
-    .animate-blob {
-      animation: blob 7s infinite;
+    .dark {
+      --bg: #111827;
+      --text: #f3f4f6;
+      --card-bg: rgba(31,41,55,0.8);
+      --card-border: rgba(55,65,81,0.5);
+      --shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
-    .animation-delay-2000 {
-      animation-delay: 2s;
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+      font-family: 'Inter', system-ui, sans-serif;
     }
-    .animation-delay-4000 {
-      animation-delay: 4s;
-    }
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+    /* Glass effect */
     .glass {
-      background: rgba(255, 255, 255, 0.7);
+      background: var(--card-bg);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
     }
-    .glass-dark {
-      background: rgba(255, 255, 255, 0.85);
+    /* Navbar glass */
+    .navbar-glass {
+      background: var(--card-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-bottom: 1px solid var(--card-border);
     }
-    /* smooth scroll */
-    html {
-      scroll-behavior: smooth;
-    }
-    /* hide scrollbar while keeping scroll */
-    body::-webkit-scrollbar {
-      width: 8px;
-    }
-    body::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    body::-webkit-scrollbar-thumb {
-      background: #3b82f6;
-      border-radius: 8px;
-    }
-    /* card hover lift */
-    .card-hover {
+    /* Card hover lift */
+    .card-lift {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .card-hover:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+    .card-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
     }
-    /* testimonial carousel fade */
-    .testimonial-text {
-      transition: opacity 0.5s ease;
+    /* Sidebar active link */
+    .sidebar-link.active {
+      background: rgba(59,130,246,0.15);
+      color: #3b82f6;
+      border-right: 3px solid #3b82f6;
     }
+    /* Hide scrollbar but keep scroll */
+    .no-scrollbar::-webkit-scrollbar { width: 0; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* Animations */
+    @keyframes blob {
+      0% { transform: translate(0px,0px) scale(1); }
+      33% { transform: translate(30px,-50px) scale(1.1); }
+      66% { transform: translate(-20px,20px) scale(0.9); }
+      100% { transform: translate(0px,0px) scale(1); }
+    }
+    .animate-blob { animation: blob 7s infinite; }
+    .animation-delay-2000 { animation-delay: 2s; }
+    .animation-delay-4000 { animation-delay: 4s; }
+    /* Chat bubbles */
+    .bubble-me { background: #3b82f6; color: white; border-radius: 18px 18px 4px 18px; }
+    .bubble-other { background: #e5e7eb; color: #1f2937; border-radius: 18px 18px 18px 4px; }
+    .dark .bubble-other { background: #374151; color: #f3f4f6; }
   </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4">
+<!-- ========== NAVBAR ========== -->
+<header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 navbar-glass">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-    <a href="#" class="text-2xl font-bold">
-      <span class="text-blue-600">Tutor</span><span class="text-gray-800">Hub</span>
+    <a href="#" onclick="navigate('landing')" class="text-2xl font-bold">
+      <span class="text-blue-600">Tutor</span><span class="text-gray-800 dark:text-gray-200">Hub</span>
     </a>
-    <!-- Desktop nav -->
-    <nav class="hidden md:flex items-center space-x-8">
-      <a href="#hero" class="text-sm font-medium text-gray-700 hover:text-blue-600">Home</a>
-      <a href="#features" class="text-sm font-medium text-gray-700 hover:text-blue-600">Features</a>
-      <a href="#testimonials" class="text-sm font-medium text-gray-700 hover:text-blue-600">Testimonials</a>
-      <a href="#faq" class="text-sm font-medium text-gray-700 hover:text-blue-600">FAQ</a>
-      <a href="#" class="text-sm font-medium text-gray-700 hover:text-blue-600">Contact</a>
+    <nav class="hidden md:flex items-center space-x-6">
+      <a href="#" onclick="navigate('landing')" class="text-sm font-medium hover:text-blue-600 transition">Home</a>
+      <a href="#" onclick="navigate('connect')" class="text-sm font-medium hover:text-blue-600 transition">Connect</a>
+      <a href="#" onclick="navigate('dashboard')" id="nav-dashboard" class="text-sm font-medium hover:text-blue-600 transition hidden">Dashboard</a>
+      <a href="#" onclick="handleLogout()" id="nav-logout" class="text-sm font-medium hover:text-blue-600 transition hidden">Logout</a>
     </nav>
-    <div class="hidden md:flex items-center space-x-4">
-      <button onclick="openLogin()" class="text-sm font-medium text-gray-700 hover:text-blue-600">Log in</button>
-      <button onclick="openLogin()" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Sign Up Free</button>
+    <div class="flex items-center space-x-4">
+      <button onclick="openLogin()" id="login-btn" class="text-sm font-medium hover:text-blue-600 transition">Log in</button>
+      <button onclick="openLogin()" id="signup-btn" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Sign Up Free</button>
+      <!-- Mobile menu toggle -->
+      <button id="menu-btn" class="md:hidden text-gray-700 dark:text-gray-300 focus:outline-none">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
     </div>
-    <!-- Mobile menu button -->
-    <button id="menu-btn" class="md:hidden text-gray-700 focus:outline-none">
-      <i class="fas fa-bars text-xl"></i>
-    </button>
   </div>
-  <!-- Mobile menu (hidden by default) -->
-  <div id="mobile-menu" class="md:hidden hidden glass-dark mt-2 py-4 px-4 rounded-lg shadow-lg mx-4">
-    <a href="#hero" class="block py-2 text-gray-700 hover:text-blue-600">Home</a>
-    <a href="#features" class="block py-2 text-gray-700 hover:text-blue-600">Features</a>
-    <a href="#testimonials" class="block py-2 text-gray-700 hover:text-blue-600">Testimonials</a>
-    <a href="#faq" class="block py-2 text-gray-700 hover:text-blue-600">FAQ</a>
-    <a href="#" class="block py-2 text-gray-700 hover:text-blue-600">Contact</a>
-    <div class="pt-2 flex flex-col space-y-2">
-      <button onclick="openLogin()" class="w-full text-left py-2 text-gray-700 hover:text-blue-600">Log in</button>
-      <button onclick="openLogin()" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Sign Up Free</button>
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden hidden glass mt-2 py-4 px-4 rounded-lg shadow-lg mx-4">
+    <a href="#" onclick="navigate('landing')" class="block py-2 hover:text-blue-600 transition">Home</a>
+    <a href="#" onclick="navigate('connect')" class="block py-2 hover:text-blue-600 transition">Connect</a>
+    <a href="#" onclick="navigate('dashboard')" id="mobile-dashboard" class="block py-2 hover:text-blue-600 transition hidden">Dashboard</a>
+    <a href="#" onclick="handleLogout()" id="mobile-logout" class="block py-2 hover:text-blue-600 transition hidden">Logout</a>
+    <div class="pt-2 border-t border-gray-200 dark:border-gray-700 mt-2">
+      <button onclick="openLogin()" id="mobile-login-btn" class="w-full text-left py-2 hover:text-blue-600 transition">Log in</button>
+      <button onclick="openLogin()" id="mobile-signup-btn" class="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Sign Up Free</button>
     </div>
   </div>
 </header>
 
-<!-- ===== LOGIN MODAL (hidden by default) ===== -->
+<!-- ========== LOGIN MODAL ========== -->
 <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
-    <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative transition-colors">
+    <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
       <i class="fas fa-times"></i>
     </button>
-    <h2 class="text-2xl font-bold mb-2" id="modal-title">Welcome Back</h2>
-    <p class="text-gray-500 text-sm mb-6" id="modal-sub">Sign in to access your dashboard.</p>
-    <form id="login-form">
+    <h2 class="text-2xl font-bold mb-2 dark:text-white" id="modal-title">Welcome Back</h2>
+    <p class="text-gray-500 dark:text-gray-400 text-sm mb-6" id="modal-sub">Sign in to access your dashboard.</p>
+    <form id="login-form" onsubmit="handleAuth(event)">
       <div id="name-field" class="hidden mb-4">
-        <label class="block text-sm font-medium text-gray-700">Full Name</label>
-        <input type="text" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="John Doe" />
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+        <input type="text" id="signup-name" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="John Doe" />
       </div>
       <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="you@example.com" />
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+        <input type="email" id="auth-email" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="you@example.com" required />
       </div>
       <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="••••••••" />
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+        <input type="password" id="auth-password" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="••••••••" required minlength="6" />
       </div>
       <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition" id="modal-btn">Sign In</button>
     </form>
     <div class="my-4 flex items-center">
-      <hr class="flex-1 border-gray-300" />
+      <hr class="flex-1 border-gray-300 dark:border-gray-600" />
       <span class="px-2 text-xs text-gray-400">or continue with</span>
-      <hr class="flex-1 border-gray-300" />
+      <hr class="flex-1 border-gray-300 dark:border-gray-600" />
     </div>
     <div class="flex gap-3">
-      <button class="flex-1 py-2 border border-gray-300 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 transition">
+      <button class="flex-1 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
         <i class="fab fa-google text-red-500"></i> Google
       </button>
-      <button class="flex-1 py-2 border border-gray-300 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 transition">
-        <i class="fab fa-apple text-gray-800"></i> Apple
+      <button class="flex-1 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+        <i class="fab fa-apple text-gray-800 dark:text-gray-200"></i> Apple
       </button>
     </div>
-    <p class="text-center text-sm text-gray-500 mt-4">
+    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
       <span id="toggle-text">Don't have an account?</span>
-      <button id="toggle-btn" class="text-blue-600 hover:underline">Sign Up</button>
+      <button type="button" id="toggle-btn" class="text-blue-600 hover:underline">Sign Up</button>
     </p>
   </div>
 </div>
 
-<!-- ===== HERO ===== -->
-<section id="hero" class="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-16">
-  <!-- Particle canvas -->
-  <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none" style="z-index:0;"></canvas>
-  <!-- Floating blobs -->
-  <div class="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-  <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-  
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <!-- Left content -->
-      <div>
-        <div class="inline-block px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 text-sm font-medium mb-6">
-          🎓 Free Tutoring in Montgomery County
-        </div>
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
-          Unlock Confidence in <span class="text-blue-600">STEM</span> & Beyond
-        </h1>
-        <p class="mt-6 text-lg text-gray-600 max-w-lg">
-          We connect students with interactive, free tutoring in Montgomery County. Learn STEM, build confidence, and enjoy learning—all at no cost.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-4">
-          <a href="#" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2 group">
-            Get Started <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
-          </a>
-          <a href="#" class="px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition flex items-center gap-2">
-            <i class="fas fa-play-circle"></i> See How It Works
-          </a>
-        </div>
-        <div class="mt-10 flex items-center gap-6 text-sm text-gray-500">
-          <div class="flex -space-x-2">
-            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-white flex items-center justify-center text-xs font-medium text-gray-600">A</div>
-            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-white flex items-center justify-center text-xs font-medium text-gray-600">B</div>
-            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-white flex items-center justify-center text-xs font-medium text-gray-600">C</div>
-            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-white flex items-center justify-center text-xs font-medium text-gray-600">D</div>
+<!-- ========== MAIN CONTENT ========== -->
+<main class="pt-16">
+  <!-- LANDING PAGE -->
+  <section id="section-landing" class="min-h-screen">
+    <!-- Hero (reused from previous) -->
+    <div class="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-16">
+      <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none" style="z-index:0;"></canvas>
+      <div class="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="inline-block px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-medium mb-6">🎓 Free Tutoring in Montgomery County</div>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight dark:text-white">Unlock Confidence in <span class="text-blue-600">STEM</span> & Beyond</h1>
+            <p class="mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-lg">We connect students with interactive, free tutoring in Montgomery County. Learn STEM, build confidence, and enjoy learning—all at no cost.</p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="#" onclick="openLogin()" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2 group">Get Started <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i></a>
+              <a href="#" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center gap-2"><i class="fas fa-play-circle"></i> See How It Works</a>
+            </div>
+            <div class="mt-10 flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
+              <div class="flex -space-x-2">
+                <div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">A</div>
+                <div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">B</div>
+                <div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">C</div>
+                <div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">D</div>
+              </div>
+              <span>Trusted by 200+ parents & students</span>
+            </div>
           </div>
-          <span>Trusted by 200+ parents & students</span>
-        </div>
-      </div>
-      <!-- Right illustration -->
-      <div class="relative flex justify-center lg:justify-end">
-        <div class="relative w-full max-w-md aspect-square">
-          <div class="absolute inset-0 bg-gradient-to-tr from-blue-200/40 to-indigo-200/30 rounded-3xl rotate-3"></div>
-          <div class="absolute inset-0 bg-white rounded-3xl shadow-2xl p-6 -rotate-3">
-            <div class="h-full w-full bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center text-8xl">
-              📚
+          <div class="relative flex justify-center lg:justify-end">
+            <div class="relative w-full max-w-md aspect-square">
+              <div class="absolute inset-0 bg-gradient-to-tr from-blue-200/40 to-indigo-200/30 rounded-3xl rotate-3"></div>
+              <div class="absolute inset-0 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 -rotate-3">
+                <div class="h-full w-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-2xl flex items-center justify-center text-8xl">📚</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+    <!-- Stats, Features, Process, Testimonials, FAQ (keep existing) -->
+    <div class="bg-white dark:bg-gray-900 transition-colors">
+      <!-- Stats -->
+      <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="stat-item p-6 rounded-2xl glass"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="350">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Students Helped</div></div>
+            <div class="stat-item p-6 rounded-2xl glass"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="25">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Expert Tutors</div></div>
+            <div class="stat-item p-6 rounded-2xl glass"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="1200">0</div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Free Sessions</div></div>
+            <div class="stat-item p-6 rounded-2xl glass"><div class="text-4xl font-bold text-blue-600 stat-number" data-target="98">0<span class="text-xl">%</span></div><div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Parent Satisfaction</div></div>
+          </div>
+        </div>
+      </section>
+      <!-- Features -->
+      <section class="py-20 bg-gray-50 dark:bg-gray-800/50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">Why Choose <span class="text-blue-600">Tutor Hub</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">We provide a premium learning experience that builds confidence and delivers results—completely free.</p></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"><i class="fas fa-users text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Personalized Tutoring</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Every student receives a tailored plan.</p></div>
+            <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"><i class="fas fa-award text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Experienced Tutors</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Our tutors are subject experts.</p></div>
+            <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"><i class="fas fa-calendar-alt text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Flexible Scheduling</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Book sessions that fit your schedule.</p></div>
+            <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"><i class="fas fa-clock text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Homework Support</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Get help with assignments.</p></div>
+            <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"><i class="fas fa-chart-line text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Progress Tracking</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Monitor improvement with reports.</p></div>
+            <div class="feature-card card-lift glass rounded-2xl p-6"><div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"><i class="fas fa-book-open text-blue-600 dark:text-blue-400 text-xl"></i></div><h3 class="text-xl font-semibold dark:text-white">Test Preparation</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Prepare for exams with strategies.</p></div>
+          </div>
+        </div>
+      </section>
+      <!-- Process -->
+      <section class="py-20 bg-white dark:bg-gray-900 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">How It <span class="text-blue-600">Works</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Getting started is simple.</p></div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-clipboard-check text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Assessment</h3><p class="mt-2 text-gray-600 dark:text-gray-400">We evaluate your strengths.</p></div>
+            <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-user-plus text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Match with a Tutor</h3><p class="mt-2 text-gray-600 dark:text-gray-400">We find the perfect tutor.</p></div>
+            <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-book text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Start Learning</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Engage in interactive sessions.</p></div>
+            <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-chart-simple text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Track Progress</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Watch your grades improve.</p></div>
+          </div>
+        </div>
+      </section>
+      <!-- Testimonials -->
+      <section class="py-20 bg-gray-50 dark:bg-gray-800/50 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">What Parents Say</h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Real stories from families.</p></div>
+          <div class="relative glass rounded-2xl shadow-xl p-8 md:p-12">
+            <div class="testimonial-slide">
+              <div class="flex items-center gap-1 text-yellow-400 text-lg mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+              <blockquote id="testimonial-text" class="text-xl md:text-2xl font-medium dark:text-white">“My daughter's confidence in math has completely transformed.”</blockquote>
+              <div class="mt-6 flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold">SJ</div><div><div class="font-semibold dark:text-white" id="testimonial-name">Sarah Johnson</div><div class="text-sm text-gray-500 dark:text-gray-400" id="testimonial-child">Parent of 8th Grader</div></div></div>
+            </div>
+            <div class="flex justify-center gap-2 mt-8">
+              <button class="testimonial-dot w-3 h-3 rounded-full bg-blue-600" data-index="0"></button>
+              <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600" data-index="1"></button>
+              <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600" data-index="2"></button>
+              <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600" data-index="3"></button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- FAQ -->
+      <section class="py-20 bg-white dark:bg-gray-900 transition-colors">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">Frequently Asked <span class="text-blue-600">Questions</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Everything you need to know.</p></div>
+          <div class="space-y-4" id="faq-container"></div>
+        </div>
+      </section>
+    </div>
+  </section>
 
-<!-- ===== STATS ===== -->
-<section id="stats" class="py-16 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <div class="stat-item p-6 rounded-2xl bg-gray-50/80 border border-gray-100">
-        <div class="text-4xl font-bold text-blue-600 stat-number" data-target="350">0</div>
-        <div class="mt-2 text-sm text-gray-600">Students Helped</div>
-      </div>
-      <div class="stat-item p-6 rounded-2xl bg-gray-50/80 border border-gray-100">
-        <div class="text-4xl font-bold text-blue-600 stat-number" data-target="25">0</div>
-        <div class="mt-2 text-sm text-gray-600">Expert Tutors</div>
-      </div>
-      <div class="stat-item p-6 rounded-2xl bg-gray-50/80 border border-gray-100">
-        <div class="text-4xl font-bold text-blue-600 stat-number" data-target="1200">0</div>
-        <div class="mt-2 text-sm text-gray-600">Free Sessions</div>
-      </div>
-      <div class="stat-item p-6 rounded-2xl bg-gray-50/80 border border-gray-100">
-        <div class="text-4xl font-bold text-blue-600 stat-number" data-target="98">0<span class="text-xl">%</span></div>
-        <div class="mt-2 text-sm text-gray-600">Parent Satisfaction</div>
+  <!-- CONNECT SECTION -->
+  <section id="section-connect" class="min-h-screen bg-white dark:bg-gray-900 transition-colors hidden py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8">Connect With Us</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="mailto:mcpstutorhub@gmail.com" class="glass rounded-2xl p-8 text-center hover:shadow-lg transition card-lift">
+          <i class="fas fa-envelope text-4xl text-blue-600 mb-4"></i>
+          <h3 class="text-xl font-semibold dark:text-white">Email</h3>
+          <p class="mt-2 text-gray-600 dark:text-gray-400 break-all">mcpstutorhub@gmail.com</p>
+        </a>
+        <a href="https://instagram.com/tutorhub_mcps" target="_blank" class="glass rounded-2xl p-8 text-center hover:shadow-lg transition card-lift">
+          <i class="fab fa-instagram text-4xl text-pink-600 mb-4"></i>
+          <h3 class="text-xl font-semibold dark:text-white">Instagram</h3>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">@tutorhub_mcps</p>
+        </a>
+        <a href="tel:9999999999" class="glass rounded-2xl p-8 text-center hover:shadow-lg transition card-lift">
+          <i class="fas fa-phone text-4xl text-green-600 mb-4"></i>
+          <h3 class="text-xl font-semibold dark:text-white">Phone</h3>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">(999) 999-9999</p>
+        </a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== FEATURES ===== -->
-<section id="features" class="py-20 bg-gray-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold">Why Choose <span class="text-blue-600">Tutor Hub</span></h2>
-      <p class="mt-4 text-lg text-gray-600">We provide a premium learning experience that builds confidence and delivers results—completely free.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Feature cards -->
-      <div class="feature-card card-hover bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-          <i class="fas fa-users text-blue-600 text-xl"></i>
+  <!-- DASHBOARD SECTION -->
+  <section id="section-dashboard" class="min-h-screen bg-white dark:bg-gray-900 transition-colors hidden">
+    <div class="flex flex-col md:flex-row h-full">
+      <!-- Sidebar -->
+      <aside id="dashboard-sidebar" class="w-full md:w-64 bg-gray-50 dark:bg-gray-800/50 border-r border-gray-200 dark:border-gray-700 p-4 space-y-2">
+        <div class="flex items-center gap-2 mb-6">
+          <i class="fas fa-user-circle text-2xl text-blue-600"></i>
+          <span id="sidebar-username" class="font-semibold dark:text-white">User</span>
         </div>
-        <h3 class="text-xl font-semibold">Personalized Tutoring</h3>
-        <p class="mt-2 text-gray-600">Every student receives a tailored plan that matches their learning style and pace.</p>
-      </div>
-      <div class="feature-card card-hover bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-          <i class="fas fa-award text-blue-600 text-xl"></i>
+        <nav class="space-y-1">
+          <a href="#" onclick="navigateDashboard('home')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-home w-5"></i> Home</a>
+          <a href="#" onclick="navigateDashboard('settings')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-cog w-5"></i> Settings</a>
+          <a href="#" onclick="navigateDashboard('mentors')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-users w-5"></i> My Mentors</a>
+          <a href="#" onclick="navigateDashboard('locations')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-map-pin w-5"></i> Locations</a>
+          <a href="#" onclick="navigateDashboard('articles')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-newspaper w-5"></i> Articles</a>
+          <a href="#" onclick="navigateDashboard('messages')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><i class="fas fa-envelope w-5"></i> Messages</a>
+        </nav>
+        <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+          <button onclick="handleLogout()" class="flex items-center gap-3 px-3 py-2 w-full text-left rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 transition"><i class="fas fa-sign-out-alt w-5"></i> Logout</button>
         </div>
-        <h3 class="text-xl font-semibold">Experienced Tutors</h3>
-        <p class="mt-2 text-gray-600">Our tutors are subject experts and passionate about teaching.</p>
-      </div>
-      <div class="feature-card card-hover bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-          <i class="fas fa-calendar-alt text-blue-600 text-xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold">Flexible Scheduling</h3>
-        <p class="mt-2 text-gray-600">Book sessions that fit your busy schedule, online or in-person.</p>
-      </div>
-      <div class="feature-card card-hover bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-          <i class="fas fa-clock text-blue-600 text-xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold">Homework Support</h3>
-        <p class="mt-2 text-gray-600">Get help with assignments and projects from dedicated tutors.</p>
-      </div>
-      <div class="feature-card card-hover bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-          <i class="fas fa-chart-line text-blue-600 text-xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold">Progress Tracking</h3>
-        <p class="mt-2 text-gray-600">Monitor improvement with detailed reports and regular feedback.</p>
-      </div>
-      <div class="feature-card card-hover bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-          <i class="fas fa-book-open text-blue-600 text-xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold">Test Preparation</h3>
-        <p class="mt-2 text-gray-600">Prepare for exams with targeted strategies and practice tests.</p>
-      </div>
-    </div>
-  </div>
-</section>
+      </aside>
 
-<!-- ===== PROCESS ===== -->
-<section id="process" class="py-20 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold">How It <span class="text-blue-600">Works</span></h2>
-      <p class="mt-4 text-lg text-gray-600">Getting started with Tutor Hub is simple and straightforward.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div class="process-step text-center">
-        <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-clipboard-check text-blue-600"></i></div>
-        <h3 class="text-xl font-semibold">Assessment</h3>
-        <p class="mt-2 text-gray-600">We evaluate your strengths and areas for improvement.</p>
-      </div>
-      <div class="process-step text-center">
-        <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-user-plus text-blue-600"></i></div>
-        <h3 class="text-xl font-semibold">Match with a Tutor</h3>
-        <p class="mt-2 text-gray-600">We connect you with the perfect tutor for your needs.</p>
-      </div>
-      <div class="process-step text-center">
-        <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-book text-blue-600"></i></div>
-        <h3 class="text-xl font-semibold">Start Learning</h3>
-        <p class="mt-2 text-gray-600">Engage in interactive sessions tailored to you.</p>
-      </div>
-      <div class="process-step text-center">
-        <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-chart-simple text-blue-600"></i></div>
-        <h3 class="text-xl font-semibold">Track Progress</h3>
-        <p class="mt-2 text-gray-600">Watch your confidence and grades rise over time.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== TESTIMONIALS ===== -->
-<section id="testimonials" class="py-20 bg-gray-50">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold">What Parents Say</h2>
-      <p class="mt-4 text-lg text-gray-600">Real stories from families who have seen the difference.</p>
-    </div>
-    <div class="relative bg-white rounded-2xl shadow-xl p-8 md:p-12">
-      <div class="testimonial-slide">
-        <div class="flex items-center gap-1 text-yellow-400 text-lg mb-4">
-          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <!-- Dashboard Content -->
+      <div id="dashboard-content" class="flex-1 p-6 overflow-y-auto">
+        <!-- Home -->
+        <div id="dash-home" class="dash-page">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Dashboard</h2>
+          <p class="text-gray-600 dark:text-gray-400">Welcome back, <span id="dash-welcome-name" class="font-semibold">User</span>!</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div class="glass rounded-xl p-6 text-center"><i class="fas fa-calendar-check text-3xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Upcoming Sessions</h4><p class="text-2xl font-bold text-blue-600">3</p></div>
+            <div class="glass rounded-xl p-6 text-center"><i class="fas fa-users text-3xl text-blue-600 mb-2"></i><h4 class="font-semibold dark:text-white">Active Mentors</h4><p class="text-2xl font-bold text-blue-600" id="dash-mentor-count">0</p></div>
+            <div class="glass rounded-xl p-6 text-center"><i class="fas fa-star text-3xl text-yellow-500 mb-2"></i><h4 class="font-semibold dark:text-white">Progress</h4><p class="text-2xl font-bold text-blue-600">78%</p></div>
+          </div>
         </div>
-        <blockquote id="testimonial-text" class="text-xl md:text-2xl font-medium text-gray-900">
-          “My daughter's confidence in math has completely transformed. Her grades improved dramatically, and she actually enjoys learning again.”
-        </blockquote>
-        <div class="mt-6 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">SJ</div>
-          <div>
-            <div class="font-semibold" id="testimonial-name">Sarah Johnson</div>
-            <div class="text-sm text-gray-500" id="testimonial-child">Parent of 8th Grader</div>
+        <!-- Settings -->
+        <div id="dash-settings" class="dash-page hidden">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Settings</h2>
+          <div class="glass rounded-xl p-6 max-w-md">
+            <div class="mb-4"><label class="block text-sm font-medium dark:text-gray-300">Display Name</label><input type="text" id="settings-name" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" /></div>
+            <div class="mb-4"><label class="block text-sm font-medium dark:text-gray-300">Email</label><input type="email" id="settings-email" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" /></div>
+            <div class="mb-4"><label class="block text-sm font-medium dark:text-gray-300">New Password (leave blank to keep)</label><input type="password" id="settings-password" class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="••••••••" /></div>
+            <button onclick="updateProfile()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save Changes</button>
+            <hr class="my-6 border-gray-200 dark:border-gray-700" />
+            <div class="flex items-center justify-between"><span class="font-medium dark:text-white">Dark Mode</span><button onclick="toggleDarkMode()" class="w-12 h-6 rounded-full bg-gray-300 dark:bg-blue-600 relative transition"><span id="dark-toggle-ball" class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform dark:translate-x-6"></span></button></div>
+          </div>
+        </div>
+        <!-- Mentors -->
+        <div id="dash-mentors" class="dash-page hidden">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">My Mentors</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">All registered users – click "Message" to start a conversation.</p>
+          <div id="mentor-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+        <!-- Locations -->
+        <div id="dash-locations" class="dash-page hidden">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Locations</h2>
+          <div class="glass rounded-xl p-6">
+            <p class="text-gray-600 dark:text-gray-400">We serve Montgomery County, MD. Our tutors are available online and at local libraries.</p>
+            <div class="mt-4 aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400"><i class="fas fa-map-marked-alt text-4xl"></i> <span class="ml-2">Interactive map coming soon</span></div>
+          </div>
+        </div>
+        <!-- Articles -->
+        <div id="dash-articles" class="dash-page hidden">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Articles</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Math: Algebra Basics</h3><p class="text-sm text-gray-500 dark:text-gray-400">Learn the fundamentals of equations.</p></div>
+            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Reading: Comprehension Strategies</h3><p class="text-sm text-gray-500 dark:text-gray-400">Improve your reading skills.</p></div>
+            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Science: Chemistry 101</h3><p class="text-sm text-gray-500 dark:text-gray-400">Introduction to atoms and molecules.</p></div>
+            <div class="glass rounded-xl p-4 card-lift"><h3 class="font-semibold dark:text-white">Test Prep: SAT Math Tips</h3><p class="text-sm text-gray-500 dark:text-gray-400">Score higher with these strategies.</p></div>
+          </div>
+        </div>
+        <!-- Messages -->
+        <div id="dash-messages" class="dash-page hidden">
+          <h2 class="text-2xl font-bold dark:text-white mb-4">Messages</h2>
+          <div class="flex flex-col md:flex-row gap-4">
+            <!-- Conversation list -->
+            <div class="md:w-1/3 glass rounded-xl p-4 max-h-96 overflow-y-auto">
+              <h3 class="font-semibold dark:text-white mb-2">Conversations</h3>
+              <div id="conversation-list" class="space-y-2"></div>
+            </div>
+            <!-- Chat view -->
+            <div class="md:w-2/3 glass rounded-xl p-4">
+              <div id="chat-header" class="font-semibold dark:text-white mb-2">Select a conversation</div>
+              <div id="chat-messages" class="h-64 overflow-y-auto space-y-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg"></div>
+              <div class="mt-4 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                <button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"><i class="fas fa-paper-plane"></i></button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <!-- Navigation dots -->
-      <div class="flex justify-center gap-2 mt-8">
-        <button class="testimonial-dot w-3 h-3 rounded-full bg-blue-600" data-index="0"></button>
-        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-index="1"></button>
-        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-index="2"></button>
-        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-index="3"></button>
-      </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
-<!-- ===== FAQ ===== -->
-<section id="faq" class="py-20 bg-white">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold">Frequently Asked <span class="text-blue-600">Questions</span></h2>
-      <p class="mt-4 text-lg text-gray-600">Everything you need to know about Tutor Hub.</p>
-    </div>
-    <div class="space-y-4" id="faq-container">
-      <!-- FAQ items will be populated by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer class="bg-gray-900 text-white">
+<!-- ========== FOOTER (only on landing) ========== -->
+<footer id="main-footer" class="bg-gray-900 text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div>
-        <h3 class="text-2xl font-bold"><span class="text-blue-400">Tutor</span>Hub</h3>
-        <p class="mt-4 text-sm text-gray-400">Free, individualized tutoring for Montgomery County students. Building confidence, one session at a time.</p>
-        <div class="mt-6 flex space-x-4">
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-      <div>
-        <h4 class="font-semibold">Quick Links</h4>
-        <ul class="mt-4 space-y-2 text-sm text-gray-400">
-          <li><a href="#" class="hover:text-white">Home</a></li>
-          <li><a href="#features" class="hover:text-white">Features</a></li>
-          <li><a href="#testimonials" class="hover:text-white">Testimonials</a></li>
-          <li><a href="#faq" class="hover:text-white">FAQ</a></li>
-          <li><a href="#" class="hover:text-white">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold">Support</h4>
-        <ul class="mt-4 space-y-2 text-sm text-gray-400">
-          <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-          <li><a href="#" class="hover:text-white">Terms of Service</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold">Newsletter</h4>
-        <p class="mt-4 text-sm text-gray-400">Get updates on new tutors and sessions.</p>
-        <form class="mt-4 flex">
-          <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 rounded-l-md bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <button class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition">Subscribe</button>
-        </form>
-      </div>
+      <div><h3 class="text-2xl font-bold"><span class="text-blue-400">Tutor</span>Hub</h3><p class="mt-4 text-sm text-gray-400">Free, individualized tutoring for Montgomery County students.</p><div class="mt-6 flex space-x-4"><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a><a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a></div></div>
+      <div><h4 class="font-semibold">Quick Links</h4><ul class="mt-4 space-y-2 text-sm text-gray-400"><li><a href="#" onclick="navigate('landing')" class="hover:text-white">Home</a></li><li><a href="#" onclick="navigate('connect')" class="hover:text-white">Connect</a></li></ul></div>
+      <div><h4 class="font-semibold">Support</h4><ul class="mt-4 space-y-2 text-sm text-gray-400"><li><a href="#" class="hover:text-white">Privacy Policy</a></li><li><a href="#" class="hover:text-white">Terms of Service</a></li></ul></div>
+      <div><h4 class="font-semibold">Newsletter</h4><p class="mt-4 text-sm text-gray-400">Get updates on new tutors and sessions.</p><form class="mt-4 flex"><input type="email" placeholder="Your email" class="flex-1 px-3 py-2 rounded-l-md bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" /><button class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition">Subscribe</button></form></div>
     </div>
-    <div class="mt-12 pt-8 border-t border-gray-800 text-center text-sm text-gray-400">
-      &copy; 2026 Tutor Hub. All rights reserved.
-    </div>
+    <div class="mt-12 pt-8 border-t border-gray-800 text-center text-sm text-gray-400">&copy; 2026 Tutor Hub. All rights reserved.</div>
   </div>
 </footer>
 
-<!-- ===== SCRIPTS ===== -->
+<!-- ========== SCRIPTS ========== -->
 <script>
-  // ---------- GSAP + ScrollTrigger ----------
+  // ---------- GSAP + ScrollTrigger (for landing page animations) ----------
   gsap.registerPlugin(ScrollTrigger);
 
-  // Navbar shrink on scroll
+  // Navbar shrink
   gsap.to("#navbar", {
     backgroundColor: "rgba(255,255,255,0.8)",
     backdropFilter: "blur(12px)",
@@ -424,57 +417,21 @@
     paddingBottom: "8px",
     duration: 0.3,
     scrollTrigger: {
-      trigger: "#hero",
+      trigger: "#section-landing",
       start: "top top",
       toggleActions: "play none none reverse"
     }
   });
 
-  // Hero text reveal
-  gsap.from("#hero h1", {
-    opacity: 0,
-    y: 50,
-    duration: 1,
-    delay: 0.3,
-    ease: "power3.out"
-  });
-  gsap.from("#hero p", {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    delay: 0.6,
-    ease: "power3.out"
-  });
-  gsap.from("#hero .inline-block", {
-    opacity: 0,
-    y: -20,
-    duration: 0.6,
-    delay: 0.2,
-    ease: "power3.out"
-  });
-  gsap.from("#hero .flex-wrap", {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    delay: 0.9,
-    ease: "power3.out"
-  });
-  gsap.from("#hero .flex.items-center", {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    delay: 1.2,
-    ease: "power3.out"
-  });
-  gsap.from("#hero .relative.w-full.max-w-md", {
-    opacity: 0,
-    scale: 0.9,
-    duration: 1,
-    delay: 0.4,
-    ease: "power3.out"
-  });
+  // Hero animations
+  gsap.from("#section-landing h1", { opacity: 0, y: 50, duration: 1, delay: 0.3, ease: "power3.out" });
+  gsap.from("#section-landing p", { opacity: 0, y: 30, duration: 0.8, delay: 0.6, ease: "power3.out" });
+  gsap.from("#section-landing .inline-block", { opacity: 0, y: -20, duration: 0.6, delay: 0.2, ease: "power3.out" });
+  gsap.from("#section-landing .flex-wrap", { opacity: 0, y: 30, duration: 0.8, delay: 0.9, ease: "power3.out" });
+  gsap.from("#section-landing .flex.items-center", { opacity: 0, y: 30, duration: 0.8, delay: 1.2, ease: "power3.out" });
+  gsap.from("#section-landing .relative.w-full.max-w-md", { opacity: 0, scale: 0.9, duration: 1, delay: 0.4, ease: "power3.out" });
 
-  // Stats animation - counter
+  // Stats counter
   const stats = document.querySelectorAll(".stat-number");
   stats.forEach(stat => {
     const target = parseInt(stat.dataset.target);
@@ -482,229 +439,41 @@
     const increment = target / 60;
     const updateCounter = () => {
       current += increment;
-      if (current < target) {
-        stat.textContent = Math.ceil(current);
-        requestAnimationFrame(updateCounter);
-      } else {
-        stat.textContent = target + (stat.querySelector('span') ? '%' : '');
-      }
+      if (current < target) { stat.textContent = Math.ceil(current); requestAnimationFrame(updateCounter); }
+      else { stat.textContent = target + (stat.querySelector('span') ? '%' : ''); }
     };
-    // Trigger on scroll
     ScrollTrigger.create({
       trigger: stat,
       start: "top 80%",
-      onEnter: () => {
-        if (stat.textContent === "0") updateCounter();
-      },
+      onEnter: () => { if (stat.textContent === "0") updateCounter(); },
       once: true
     });
   });
 
   // Feature cards stagger
-  gsap.from(".feature-card", {
-    opacity: 0,
-    y: 40,
-    duration: 0.8,
-    stagger: 0.15,
-    scrollTrigger: {
-      trigger: "#features .grid",
-      start: "top 80%",
-      toggleActions: "play none none none"
-    }
-  });
+  gsap.from(".feature-card", { opacity: 0, y: 40, duration: 0.8, stagger: 0.15, scrollTrigger: { trigger: "#section-landing .grid", start: "top 80%", toggleActions: "play none none none" } });
+  gsap.from(".process-step", { opacity: 0, y: 40, duration: 0.8, stagger: 0.15, scrollTrigger: { trigger: "#section-landing .grid", start: "top 80%", toggleActions: "play none none none" } });
 
-  // Process steps stagger
-  gsap.from(".process-step", {
-    opacity: 0,
-    y: 40,
-    duration: 0.8,
-    stagger: 0.15,
-    scrollTrigger: {
-      trigger: "#process .grid",
-      start: "top 80%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  // FAQ items animation
-  gsap.from("#faq-container > div", {
-    opacity: 0,
-    y: 20,
-    duration: 0.6,
-    stagger: 0.1,
-    scrollTrigger: {
-      trigger: "#faq-container",
-      start: "top 85%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  // ---------- PARTICLE BACKGROUND (Canvas) ----------
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-  let particles = [];
-
-  function initParticles() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    const numParticles = Math.min(80, Math.floor(width * height / 15000));
-    particles = [];
-    for (let i = 0; i < numParticles; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        radius: Math.random() * 2 + 1
-      });
-    }
-  }
-
-  function drawParticles() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
-    particles.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
-      ctx.fill();
-    });
-
-    // lines
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 150) {
-          ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 * (1 - dist/150)})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    particles.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-    });
-
-    requestAnimationFrame(drawParticles);
-  }
-
-  window.addEventListener('resize', () => {
-    initParticles();
-  });
-
-  initParticles();
-  drawParticles();
-
-  // ---------- TESTIMONIALS CAROUSEL ----------
-  const testimonials = [
-    {
-      text: "My daughter's confidence in math has completely transformed. Her grades improved dramatically, and she actually enjoys learning again.",
-      name: "Sarah Johnson",
-      child: "Parent of 8th Grader",
-      initials: "SJ"
-    },
-    {
-      text: "The Tutor Hub matched us with an incredible tutor. Professional, patient, and knowledgeable. We couldn't be happier.",
-      name: "Michael Chen",
-      child: "Parent of 10th Grader",
-      initials: "MC"
-    },
-    {
-      text: "Our son went from struggling in science to earning A's. The personalized tutoring made all the difference.",
-      name: "Emily Rodriguez",
-      child: "Parent of 7th Grader",
-      initials: "ER"
-    },
-    {
-      text: "I was skeptical about free tutoring, but this is truly top-notch. My daughter loves her tutor and her grades have soared.",
-      name: "David Kim",
-      child: "Parent of 9th Grader",
-      initials: "DK"
-    }
-  ];
-
-  let currentTestimonial = 0;
-  const textEl = document.getElementById('testimonial-text');
-  const nameEl = document.getElementById('testimonial-name');
-  const childEl = document.getElementById('testimonial-child');
-  const dots = document.querySelectorAll('.testimonial-dot');
-
-  function updateTestimonial(index) {
-    const t = testimonials[index];
-    textEl.textContent = `“${t.text}”`;
-    nameEl.textContent = t.name;
-    childEl.textContent = t.child;
-    // update dots
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('bg-blue-600', i === index);
-      dot.classList.toggle('bg-gray-300', i !== index);
-    });
-  }
-
-  dots.forEach((dot, idx) => {
-    dot.addEventListener('click', () => {
-      currentTestimonial = idx;
-      updateTestimonial(idx);
-    });
-  });
-
-  // Auto-play
-  setInterval(() => {
-    currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-    updateTestimonial(currentTestimonial);
-  }, 6000);
-
-  // ---------- FAQ DATA ----------
+  // FAQ data
   const faqData = [
-    {
-      q: "Is tutoring really free?",
-      a: "Yes! Tutor Hub is completely free for Montgomery County students. We believe every student deserves access to quality education."
-    },
-    {
-      q: "What subjects do you cover?",
-      a: "We specialize in STEM subjects including math, science, and computer science, but we also offer support in English, history, and test prep."
-    },
-    {
-      q: "How do I get matched with a tutor?",
-      a: "Simply sign up, tell us your needs, and we'll match you with a qualified tutor who fits your learning style and schedule."
-    },
-    {
-      q: "Are tutors qualified?",
-      a: "All our tutors are subject experts with experience in teaching. Many are current educators or advanced degree holders."
-    },
-    {
-      q: "Can I switch tutors if it's not a good fit?",
-      a: "Absolutely. We want you to have the best experience, so we'll gladly match you with a different tutor at no extra cost."
-    }
+    { q: "Is tutoring really free?", a: "Yes! Tutor Hub is completely free for Montgomery County students." },
+    { q: "What subjects do you cover?", a: "We specialize in STEM subjects including math, science, and computer science." },
+    { q: "How do I get matched with a tutor?", a: "Simply sign up, tell us your needs, and we'll match you." },
+    { q: "Are tutors qualified?", a: "All our tutors are subject experts with teaching experience." },
+    { q: "Can I switch tutors if it's not a good fit?", a: "Absolutely. We'll gladly match you with a different tutor." }
   ];
-
   const faqContainer = document.getElementById('faq-container');
-  faqData.forEach((item, index) => {
+  faqData.forEach(item => {
     const div = document.createElement('div');
-    div.className = 'border border-gray-200 rounded-xl overflow-hidden';
+    div.className = 'border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden';
     div.innerHTML = `
-      <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition">
-        <span class="font-medium text-gray-900">${item.q}</span>
+      <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+        <span class="font-medium dark:text-white">${item.q}</span>
         <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300"></i>
       </button>
-      <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-        <div class="px-6 pb-4 text-gray-600">${item.a}</div>
-      </div>
+      <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out"><div class="px-6 pb-4 text-gray-600 dark:text-gray-400">${item.a}</div></div>
     `;
     faqContainer.appendChild(div);
-
     const toggle = div.querySelector('.faq-toggle');
     const answer = div.querySelector('.faq-answer');
     const icon = toggle.querySelector('i');
@@ -715,17 +484,92 @@
     });
   });
 
+  // Testimonials
+  const testimonials = [
+    { text: "My daughter's confidence in math has completely transformed. Her grades improved dramatically.", name: "Sarah Johnson", child: "Parent of 8th Grader", initials: "SJ" },
+    { text: "The Tutor Hub matched us with an incredible tutor. Professional, patient, and knowledgeable.", name: "Michael Chen", child: "Parent of 10th Grader", initials: "MC" },
+    { text: "Our son went from struggling in science to earning A's. The personalized tutoring made all the difference.", name: "Emily Rodriguez", child: "Parent of 7th Grader", initials: "ER" },
+    { text: "I was skeptical about free tutoring, but this is truly top-notch. My daughter loves her tutor.", name: "David Kim", child: "Parent of 9th Grader", initials: "DK" }
+  ];
+  let currentTestimonial = 0;
+  const textEl = document.getElementById('testimonial-text');
+  const nameEl = document.getElementById('testimonial-name');
+  const childEl = document.getElementById('testimonial-child');
+  const dots = document.querySelectorAll('.testimonial-dot');
+  function updateTestimonial(index) {
+    const t = testimonials[index];
+    textEl.textContent = `“${t.text}”`;
+    nameEl.textContent = t.name;
+    childEl.textContent = t.child;
+    dots.forEach((dot, i) => { dot.classList.toggle('bg-blue-600', i === index); dot.classList.toggle('bg-gray-300', i !== index); });
+  }
+  dots.forEach((dot, idx) => { dot.addEventListener('click', () => { currentTestimonial = idx; updateTestimonial(idx); }); });
+  setInterval(() => { currentTestimonial = (currentTestimonial + 1) % testimonials.length; updateTestimonial(currentTestimonial); }, 6000);
+
+  // ---------- PARTICLE BACKGROUND ----------
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height, particles = [];
+  function initParticles() {
+    width = window.innerWidth; height = window.innerHeight;
+    canvas.width = width; canvas.height = height;
+    const num = Math.min(80, Math.floor(width * height / 15000));
+    particles = [];
+    for (let i = 0; i < num; i++) {
+      particles.push({ x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, radius: Math.random()*2+1 });
+    }
+  }
+  function drawParticles() {
+    ctx.clearRect(0,0,width,height);
+    ctx.fillStyle = 'rgba(59,130,246,0.15)';
+    particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x,p.y,p.radius,0,2*Math.PI); ctx.fill(); });
+    for (let i=0;i<particles.length;i++) {
+      for (let j=i+1;j<particles.length;j++) {
+        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist < 150) {
+          ctx.strokeStyle = `rgba(59,130,246,${0.1*(1-dist/150)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.stroke();
+        }
+      }
+    }
+    particles.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x<0||p.x>width) p.vx*=-1; if (p.y<0||p.y>height) p.vy*=-1; });
+    requestAnimationFrame(drawParticles);
+  }
+  window.addEventListener('resize', initParticles);
+  initParticles(); drawParticles();
+
   // ---------- MOBILE MENU ----------
-  const menuBtn = document.getElementById('menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  menuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    const icon = menuBtn.querySelector('i');
-    icon.classList.toggle('fa-bars');
-    icon.classList.toggle('fa-times');
+  document.getElementById('menu-btn').addEventListener('click', function() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+    const icon = this.querySelector('i');
+    icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
   });
 
-  // ---------- LOGIN MODAL ----------
+  // ---------- AUTH SYSTEM ----------
+  let currentUser = null;
+  let users = JSON.parse(localStorage.getItem('tutorhub_users')) || [];
+  let messages = JSON.parse(localStorage.getItem('tutorhub_messages')) || [];
+  let darkMode = localStorage.getItem('tutorhub_dark') === 'true';
+
+  // Apply dark mode
+  function applyDarkMode() {
+    const root = document.getElementById('html-root');
+    if (darkMode) root.classList.add('dark'); else root.classList.remove('dark');
+    document.querySelector('#dark-toggle-ball')?.classList.toggle('translate-x-6', darkMode);
+  }
+  applyDarkMode();
+
+  // Toggle dark mode
+  window.toggleDarkMode = function() {
+    darkMode = !darkMode;
+    localStorage.setItem('tutorhub_dark', darkMode);
+    applyDarkMode();
+  };
+
+  // Login modal state
+  let isSignUp = false;
   const modal = document.getElementById('login-modal');
   const modalTitle = document.getElementById('modal-title');
   const modalSub = document.getElementById('modal-sub');
@@ -733,20 +577,23 @@
   const toggleBtn = document.getElementById('toggle-btn');
   const toggleText = document.getElementById('toggle-text');
   const nameField = document.getElementById('name-field');
-  let isSignUp = false;
 
-  function openLogin() {
+  window.openLogin = function() {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-  }
-  window.openLogin = openLogin;
-
-  function closeLogin() {
+    // reset to login
+    isSignUp = false;
+    nameField.classList.add('hidden');
+    modalTitle.textContent = 'Welcome Back';
+    modalSub.textContent = 'Sign in to access your dashboard.';
+    modalBtn.textContent = 'Sign In';
+    toggleText.textContent = "Don't have an account?";
+    toggleBtn.textContent = 'Sign Up';
+  };
+  window.closeLogin = function() {
     modal.classList.add('hidden');
     document.body.style.overflow = '';
-  }
-  window.closeLogin = closeLogin;
-
+  };
   toggleBtn.addEventListener('click', () => {
     isSignUp = !isSignUp;
     if (isSignUp) {
@@ -766,28 +613,258 @@
     }
   });
 
-  // Close modal on overlay click
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeLogin();
-  });
+  // Handle authentication
+  window.handleAuth = function(e) {
+    e.preventDefault();
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value.trim();
+    if (isSignUp) {
+      const name = document.getElementById('signup-name').value.trim();
+      if (!name) { alert('Please enter your name.'); return; }
+      if (users.find(u => u.email === email)) { alert('Email already registered.'); return; }
+      const newUser = { id: Date.now().toString(), name, email, password };
+      users.push(newUser);
+      localStorage.setItem('tutorhub_users', JSON.stringify(users));
+      alert('Account created! Please log in.');
+      // switch to login
+      isSignUp = false;
+      nameField.classList.add('hidden');
+      modalTitle.textContent = 'Welcome Back';
+      modalSub.textContent = 'Sign in to access your dashboard.';
+      modalBtn.textContent = 'Sign In';
+      toggleText.textContent = "Don't have an account?";
+      toggleBtn.textContent = 'Sign Up';
+      document.getElementById('auth-email').value = email;
+      document.getElementById('auth-password').value = '';
+      return;
+    } else {
+      const user = users.find(u => u.email === email && u.password === password);
+      if (!user) { alert('Invalid email or password.'); return; }
+      currentUser = user;
+      localStorage.setItem('tutorhub_current', user.id);
+      closeLogin();
+      updateUIForLoggedIn();
+      navigate('dashboard');
+    }
+  };
 
-  // Close with Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeLogin();
-  });
+  // Logout
+  window.handleLogout = function() {
+    currentUser = null;
+    localStorage.removeItem('tutorhub_current');
+    updateUIForLoggedOut();
+    navigate('landing');
+  };
 
-  // ---------- SMOOTH SCROLL FOR ANCHOR LINKS ----------
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+  // Update UI based on auth
+  function updateUIForLoggedIn() {
+    document.getElementById('login-btn').classList.add('hidden');
+    document.getElementById('signup-btn').classList.add('hidden');
+    document.getElementById('mobile-login-btn').classList.add('hidden');
+    document.getElementById('mobile-signup-btn').classList.add('hidden');
+    document.getElementById('nav-dashboard').classList.remove('hidden');
+    document.getElementById('nav-logout').classList.remove('hidden');
+    document.getElementById('mobile-dashboard').classList.remove('hidden');
+    document.getElementById('mobile-logout').classList.remove('hidden');
+    // Update sidebar
+    document.getElementById('sidebar-username').textContent = currentUser.name;
+    document.getElementById('dash-welcome-name').textContent = currentUser.name;
+    // Load settings
+    document.getElementById('settings-name').value = currentUser.name;
+    document.getElementById('settings-email').value = currentUser.email;
+    // Update mentor count
+    document.getElementById('dash-mentor-count').textContent = users.length - 1;
+  }
+  function updateUIForLoggedOut() {
+    document.getElementById('login-btn').classList.remove('hidden');
+    document.getElementById('signup-btn').classList.remove('hidden');
+    document.getElementById('mobile-login-btn').classList.remove('hidden');
+    document.getElementById('mobile-signup-btn').classList.remove('hidden');
+    document.getElementById('nav-dashboard').classList.add('hidden');
+    document.getElementById('nav-logout').classList.add('hidden');
+    document.getElementById('mobile-dashboard').classList.add('hidden');
+    document.getElementById('mobile-logout').classList.add('hidden');
+  }
+
+  // Check session on load
+  const savedId = localStorage.getItem('tutorhub_current');
+  if (savedId) {
+    currentUser = users.find(u => u.id === savedId);
+    if (currentUser) {
+      updateUIForLoggedIn();
+    } else {
+      localStorage.removeItem('tutorhub_current');
+    }
+  }
+
+  // ---------- NAVIGATION ----------
+  function navigate(page) {
+    // Hide all sections
+    document.getElementById('section-landing').classList.add('hidden');
+    document.getElementById('section-connect').classList.add('hidden');
+    document.getElementById('section-dashboard').classList.add('hidden');
+    document.getElementById('main-footer').classList.remove('hidden');
+    // Show target
+    if (page === 'landing') {
+      document.getElementById('section-landing').classList.remove('hidden');
+      // Re-trigger GSAP animations (if needed)
+    } else if (page === 'connect') {
+      document.getElementById('section-connect').classList.remove('hidden');
+      document.getElementById('main-footer').classList.add('hidden');
+    } else if (page === 'dashboard') {
+      if (!currentUser) { openLogin(); return; }
+      document.getElementById('section-dashboard').classList.remove('hidden');
+      document.getElementById('main-footer').classList.add('hidden');
+      // Default to dashboard home
+      navigateDashboard('home');
+    }
+    // Close mobile menu
+    document.getElementById('mobile-menu').classList.add('hidden');
+    const icon = document.querySelector('#menu-btn i');
+    if (icon) { icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }
+    // Scroll to top
+    window.scrollTo(0,0);
+  }
+  window.navigate = navigate;
+
+  // Dashboard sub-navigation
+  function navigateDashboard(section) {
+    // Hide all dash pages
+    document.querySelectorAll('.dash-page').forEach(el => el.classList.add('hidden'));
+    // Show selected
+    const target = document.getElementById('dash-' + section);
+    if (target) target.classList.remove('hidden');
+    // Update sidebar active
+    document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+    // Find the matching sidebar link (based on onclick)
+    const links = document.querySelectorAll('.sidebar-link');
+    links.forEach(link => {
+      if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(section)) {
+        link.classList.add('active');
       }
     });
-  });
+    // Refresh mentor list if mentors section
+    if (section === 'mentors') renderMentors();
+    if (section === 'messages') renderConversations();
+  }
+  window.navigateDashboard = navigateDashboard;
 
-  console.log('🚀 Tutor Hub – premium landing page loaded.');
+  // ---------- SETTINGS ----------
+  window.updateProfile = function() {
+    if (!currentUser) return;
+    const newName = document.getElementById('settings-name').value.trim();
+    const newEmail = document.getElementById('settings-email').value.trim();
+    const newPassword = document.getElementById('settings-password').value.trim();
+    if (!newName || !newEmail) { alert('Name and email cannot be empty.'); return; }
+    // Update user
+    const userIndex = users.findIndex(u => u.id === currentUser.id);
+    if (userIndex === -1) return;
+    users[userIndex].name = newName;
+    users[userIndex].email = newEmail;
+    if (newPassword) users[userIndex].password = newPassword;
+    localStorage.setItem('tutorhub_users', JSON.stringify(users));
+    currentUser = users[userIndex];
+    localStorage.setItem('tutorhub_current', currentUser.id);
+    document.getElementById('sidebar-username').textContent = currentUser.name;
+    document.getElementById('dash-welcome-name').textContent = currentUser.name;
+    alert('Profile updated!');
+  };
+
+  // ---------- MENTORS (List all users) ----------
+  function renderMentors() {
+    const container = document.getElementById('mentor-list');
+    container.innerHTML = '';
+    users.forEach(u => {
+      if (u.id === currentUser?.id) return;
+      const card = document.createElement('div');
+      card.className = 'glass rounded-xl p-4 flex items-center justify-between card-lift';
+      card.innerHTML = `
+        <div><span class="font-semibold dark:text-white">${u.name}</span><p class="text-sm text-gray-500 dark:text-gray-400">${u.email}</p></div>
+        <button onclick="startChat('${u.id}')" class="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">Message</button>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  // ---------- MESSAGING ----------
+  let activeChatWith = null;
+
+  function startChat(userId) {
+    activeChatWith = userId;
+    navigateDashboard('messages');
+    renderConversations();
+    renderChat(userId);
+  }
+
+  function renderConversations() {
+    const list = document.getElementById('conversation-list');
+    list.innerHTML = '';
+    // Get unique participants
+    const participants = new Set();
+    messages.forEach(msg => {
+      if (msg.from === currentUser.id) participants.add(msg.to);
+      if (msg.to === currentUser.id) participants.add(msg.from);
+    });
+    if (participants.size === 0) {
+      list.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No conversations yet.</p>';
+      return;
+    }
+    participants.forEach(id => {
+      const user = users.find(u => u.id === id);
+      if (!user) return;
+      const div = document.createElement('div');
+      div.className = 'p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition flex items-center justify-between';
+      div.innerHTML = `<span class="font-medium dark:text-white">${user.name}</span> <span class="text-xs text-gray-400">${messages.filter(m => (m.from===id && m.to===currentUser.id) || (m.from===currentUser.id && m.to===id)).length}</span>`;
+      div.onclick = () => { activeChatWith = id; renderChat(id); };
+      list.appendChild(div);
+    });
+  }
+
+  function renderChat(userId) {
+    const user = users.find(u => u.id === userId);
+    if (!user) return;
+    document.getElementById('chat-header').textContent = `Chat with ${user.name}`;
+    const container = document.getElementById('chat-messages');
+    container.innerHTML = '';
+    const chatMessages = messages.filter(m => (m.from === currentUser.id && m.to === userId) || (m.from === userId && m.to === currentUser.id));
+    chatMessages.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+    chatMessages.forEach(m => {
+      const isMe = m.from === currentUser.id;
+      const div = document.createElement('div');
+      div.className = `max-w-[75%] p-3 rounded-lg ${isMe ? 'bubble-me self-end ml-auto' : 'bubble-other self-start'}`;
+      div.textContent = m.content;
+      container.appendChild(div);
+    });
+    container.scrollTop = container.scrollHeight;
+  }
+
+  window.sendMessage = function() {
+    const input = document.getElementById('chat-input');
+    const content = input.value.trim();
+    if (!content || !activeChatWith || !currentUser) return;
+    const newMsg = {
+      id: Date.now().toString(),
+      from: currentUser.id,
+      to: activeChatWith,
+      content: content,
+      timestamp: new Date().toISOString()
+    };
+    messages.push(newMsg);
+    localStorage.setItem('tutorhub_messages', JSON.stringify(messages));
+    input.value = '';
+    renderChat(activeChatWith);
+    renderConversations();
+  };
+
+  // ---------- DARK MODE TOGGLE BUTTON SYNC ----------
+  // Update toggle ball on load
+  setTimeout(applyDarkMode, 100);
+
+  // ---------- NAVIGATE TO CONNECT FROM LANDING ----------
+  // Ensure connect link works
+  document.querySelectorAll('a[href="#connect"]').forEach(el => el.onclick = (e) => { e.preventDefault(); navigate('connect'); });
+
+  console.log('🚀 Tutor Hub – full platform ready.');
 </script>
 </body>
 </html>
