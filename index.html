@@ -48,7 +48,6 @@
             --glow-color: rgba(59, 130, 246, 0.20);
         }
 
-        /* ===== Global Reset & Base ===== */
         * {
             margin: 0;
             padding: 0;
@@ -63,7 +62,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== GLOBAL PARTICLE CANVAS ===== */
+        /* ===== GLOBAL PARTICLE CANVAS (dots & lines) ===== */
         #particle-canvas-global {
             position: fixed;
             top: 0;
@@ -75,7 +74,18 @@
             opacity: 1;
         }
 
-        /* ===== All content sits above particles ===== */
+        /* ===== BLUE CAPS BACKGROUND (Dashboard & everywhere) ===== */
+        #caps-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 1;
+        }
+
         header,
         main,
         footer,
@@ -86,7 +96,7 @@
             z-index: 1;
         }
 
-        /* ===== LIQUID GLASS CORE ===== */
+        /* ===== LIQUID GLASS ===== */
         .glass {
             background: var(--card-bg);
             backdrop-filter: blur(var(--glass-blur));
@@ -97,7 +107,6 @@
             position: relative;
             overflow: hidden;
         }
-        /* Liquid shine overlay */
         .glass::before {
             content: '';
             position: absolute;
@@ -136,59 +145,10 @@
                 background-position: 100% 0;
             }
         }
-
-        /* Liquid glow pulse on hover */
         .glass:hover {
             box-shadow: 0 8px 40px var(--glow-color), var(--shadow);
             border-color: rgba(59, 130, 246, 0.25);
             transform: translateY(-2px);
-        }
-        .glass:hover::after {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: conic-gradient(from var(--angle, 0deg),
-                    transparent 0%,
-                    rgba(59, 130, 246, 0.25) 20%,
-                    rgba(139, 92, 246, 0.25) 40%,
-                    transparent 60%,
-                    transparent 100%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            animation: spinGlow 4s linear infinite;
-        }
-        @property --angle {
-            syntax: '<angle>';
-            initial-value: 0deg;
-            inherits: false;
-        }
-        @keyframes spinGlow {
-            to {
-                --angle: 360deg;
-            }
-        }
-
-        /* ===== SECTION GRADIENT OVERLAY ===== */
-        .section-gradient {
-            position: relative;
-            overflow: hidden;
-        }
-        .section-gradient::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.06) 0%, transparent 60%),
-                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .section-gradient>* {
-            position: relative;
-            z-index: 1;
         }
 
         /* ===== NAVBAR ===== */
@@ -200,7 +160,6 @@
             transition: background 0.5s ease, border-color 0.5s ease;
         }
 
-        /* ===== NAV LINKS ===== */
         .nav-link {
             position: relative;
             padding-bottom: 4px;
@@ -223,15 +182,6 @@
         }
         .nav-link:hover {
             color: var(--accent);
-        }
-
-        /* ===== CARD LIFT ===== */
-        .card-lift {
-            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .card-lift:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.20);
         }
 
         /* ===== SIDEBAR ===== */
@@ -265,6 +215,466 @@
         }
         .sidebar-link:hover i {
             transform: scale(1.15);
+        }
+
+        /* ===== DASHBOARD HEADER ===== */
+        .dash-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            border-radius: 0 0 16px 16px;
+            margin-bottom: 1.5rem;
+        }
+        .dash-header .search-wrap {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 9999px;
+            padding: 0.3rem 0.3rem 0.3rem 1rem;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 400px;
+        }
+        .dash-header .search-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .dash-header .search-wrap input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            padding: 0.4rem 0;
+            font-size: 0.875rem;
+            width: 100%;
+        }
+        .dash-header .search-wrap input::placeholder {
+            color: var(--text);
+            opacity: 0.4;
+        }
+        .dash-header .search-wrap button {
+            background: var(--accent);
+            border: none;
+            color: white;
+            border-radius: 9999px;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .dash-header .search-wrap button:hover {
+            background: #2563eb;
+        }
+
+        .dash-header .profile-icon-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            cursor: pointer;
+        }
+        .dash-header .profile-icon-wrap .avatar-ring {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        .dash-header .profile-icon-wrap .avatar-ring:hover {
+            transform: scale(1.05);
+        }
+        .dash-header .profile-icon-wrap .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+        .dash-header .profile-icon-wrap .cap-icon {
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .dash-header .profile-icon-wrap .cap-icon:hover {
+            transform: scale(1.15) rotate(-8deg);
+        }
+
+        /* ===== PROFILE POPUP ===== */
+        .profile-popup {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 280px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
+            opacity: 0;
+            transform: translateY(-10px) scale(0.96);
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 100;
+        }
+        .profile-popup.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .profile-popup .popup-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        .profile-popup .popup-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+        .profile-popup .popup-email {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.6;
+        }
+        .profile-popup .popup-bio {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-top: 0.3rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 0.5rem;
+        }
+        .profile-popup .popup-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .profile-popup .popup-actions button {
+            flex: 1;
+            padding: 0.4rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .profile-popup .popup-actions .btn-view {
+            background: var(--accent);
+            color: white;
+        }
+        .profile-popup .popup-actions .btn-view:hover {
+            background: #2563eb;
+        }
+        .profile-popup .popup-actions .btn-logout {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+        .profile-popup .popup-actions .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        /* ===== ABOUT POPUP (Cap icon) ===== */
+        .about-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.40);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .about-popup-overlay.open {
+            display: flex;
+        }
+        .about-popup {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.30);
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .about-popup .about-icon {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .about-popup h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .about-popup p {
+            color: var(--text);
+            opacity: 0.7;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        .about-popup .close-about {
+            margin-top: 1.2rem;
+            padding: 0.5rem 2rem;
+            border: none;
+            border-radius: 9999px;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .about-popup .close-about:hover {
+            background: #2563eb;
+        }
+
+        /* ===== COMMUNITY FORUM ===== */
+        .forum-post .reply-area {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.23, 1, 0.32, 1), padding 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            padding: 0 0.5rem;
+        }
+        .forum-post .reply-area.open {
+            max-height: 300px;
+            padding: 0.5rem 0.5rem 0;
+        }
+        .forum-post .like-btn.liked {
+            color: #ef4444;
+        }
+
+        /* ===== COMMUNITY (one kid per line) ===== */
+        .community-student-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .community-student-item:last-child {
+            border-bottom: none;
+        }
+        .community-student-item:hover {
+            background: var(--hover-bg);
+        }
+        .community-student-item .cs-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .community-student-item .cs-info {
+            flex: 1;
+        }
+        .community-student-item .cs-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .community-student-item .cs-detail {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.6;
+        }
+        .community-student-item .cs-tag {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.7rem;
+            border-radius: 9999px;
+            background: var(--hover-bg);
+            color: var(--accent);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+        }
+
+        /* ===== MENTOR DETAIL POPUP ===== */
+        .mentor-detail-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.40);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .mentor-detail-popup-overlay.open {
+            display: flex;
+        }
+        .mentor-detail-popup {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.30);
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .mentor-detail-popup .mdp-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 0.5rem;
+        }
+        .mentor-detail-popup .mdp-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text);
+        }
+        .mentor-detail-popup .mdp-role {
+            text-align: center;
+            color: var(--accent);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .mentor-detail-popup .mdp-bio {
+            margin-top: 1rem;
+            color: var(--text);
+            opacity: 0.8;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .mentor-detail-popup .mdp-subjects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.8rem;
+            justify-content: center;
+        }
+        .mentor-detail-popup .mdp-subjects span {
+            padding: 0.2rem 0.8rem;
+            border-radius: 9999px;
+            background: var(--hover-bg);
+            color: var(--accent);
+            font-size: 0.75rem;
+            border: 1px solid rgba(59, 130, 246, 0.12);
+        }
+        .mentor-detail-popup .mdp-close {
+            display: block;
+            margin: 1.2rem auto 0;
+            padding: 0.5rem 2.5rem;
+            border: none;
+            border-radius: 9999px;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .mentor-detail-popup .mdp-close:hover {
+            background: #2563eb;
+        }
+
+        /* ===== LIVE PROFILE CARD ===== */
+        .live-profile-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: sticky;
+            top: 1rem;
+        }
+        .live-profile-card .lpc-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 0.5rem;
+            transition: all 0.4s ease;
+        }
+        .live-profile-card .lpc-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .live-profile-card .lpc-email {
+            font-size: 0.85rem;
+            color: var(--text);
+            opacity: 0.6;
+        }
+        .live-profile-card .lpc-bio {
+            font-size: 0.85rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-top: 0.3rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--card-border);
+        }
+        .live-profile-card .lpc-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.2rem 1rem;
+            border-radius: 9999px;
+            background: var(--hover-bg);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.12);
         }
 
         /* ===== TOGGLE SWITCH ===== */
@@ -351,7 +761,7 @@
             pointer-events: auto;
         }
 
-        /* ===== DASHBOARD PAGES TRANSITION ===== */
+        /* ===== DASHBOARD PAGES ===== */
         .dash-page {
             animation: fadeSlide 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
         }
@@ -412,7 +822,7 @@
             }
         }
 
-        /* ===== SETTINGS TABS ===== */
+        /* ===== SETTINGS TABS - FIXED ===== */
         .settings-tab-btn {
             transition: all 0.3s ease;
             border-radius: 10px;
@@ -454,12 +864,12 @@
             display: block;
         }
 
-        /* ===== STAT NUMBER ANIMATION ===== */
+        /* ===== STAT NUMBER ===== */
         .stat-number {
             display: inline-block;
         }
 
-        /* ===== MENTOR DETAIL EXPAND ===== */
+        /* ===== MENTOR DETAIL EXPAND (landing) ===== */
         .mentor-detail {
             max-height: 0;
             overflow: hidden;
@@ -494,9 +904,21 @@
                 font-size: 0.75rem;
                 padding: 0.4rem 0.8rem;
             }
+            .dash-header {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .dash-header .search-wrap {
+                max-width: 100%;
+                flex: 1 1 100%;
+            }
+            .profile-popup {
+                right: -60px;
+                width: 260px;
+            }
         }
 
-        /* ===== UTILITY: Animated blob ===== */
+        /* ===== ANIMATED BLOB ===== */
         .animate-blob {
             animation: blobFloat 10s ease-in-out infinite;
         }
@@ -519,27 +941,7 @@
             animation-delay: 4s;
         }
 
-        /* ===== Floating particles (decorative) ===== */
-        .float-particle {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
-            animation: floatParticle 12s ease-in-out infinite;
-        }
-        @keyframes floatParticle {
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translate(40px, -30px) scale(1.4);
-                opacity: 0.8;
-            }
-        }
-
-        /* ===== Scrollbar ===== */
+        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -566,17 +968,15 @@
         .dark #main-footer {
             background: #0b1120;
         }
-
-        /* ===== Progress bar glow ===== */
-        .progress-glow {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.20);
-        }
     </style>
 </head>
 <body>
 
-    <!-- ===== GLOBAL PARTICLE CANVAS ===== -->
+    <!-- ===== GLOBAL PARTICLE CANVAS (dots & lines) ===== -->
     <canvas id="particle-canvas-global"></canvas>
+
+    <!-- ===== BLUE CAPS BACKGROUND (Dashboard & everywhere) ===== -->
+    <canvas id="caps-canvas"></canvas>
 
     <!-- ===== NOTIFICATION BANNER ===== -->
     <div id="notification-banner">✅ Done</div>
@@ -626,7 +1026,7 @@
 
     <!-- ===== LOGIN MODAL ===== -->
     <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md hidden">
-        <div class="glass rounded-3xl shadow-2xl max-w-md w-full p-6 relative transition-colors border border-white/20">
+        <div class="glass rounded-3xl shadow-2xl max-w-md w-full p-6 relative transition-colors border-white/20">
             <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                 <i class="fas fa-times text-xl"></i>
             </button>
@@ -667,11 +1067,26 @@
         </div>
     </div>
 
+    <!-- ===== ABOUT POPUP (Cap icon) ===== -->
+    <div class="about-popup-overlay" id="about-popup">
+        <div class="about-popup">
+            <div class="about-icon">🎓</div>
+            <h2>Tutor Hub</h2>
+            <p>Founded by <strong>Umair Loya</strong> with a passion for making quality education accessible to every student in Montgomery County. We believe in the power of personalized learning and community support.</p>
+            <button class="close-about" onclick="closeAboutPopup()">Got it!</button>
+        </div>
+    </div>
+
+    <!-- ===== MENTOR DETAIL POPUP ===== -->
+    <div class="mentor-detail-popup-overlay" id="mentor-detail-popup">
+        <div class="mentor-detail-popup" id="mentor-detail-content"></div>
+    </div>
+
     <!-- ===== MAIN CONTENT ===== -->
     <main class="pt-16">
-        <!-- ===== LANDING ===== -->
+
+        <!-- ===== LANDING (compact) ===== -->
         <section id="section-landing" class="min-h-screen section-page section-gradient page-transition">
-            <!-- Hero -->
             <div class="relative min-h-screen flex items-center overflow-hidden pt-16" style="background: var(--bg);">
                 <div class="absolute top-20 left-10 w-72 h-72 bg-blue-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
                 <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -707,7 +1122,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Stats -->
             <section class="py-16" style="background: var(--bg);">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -719,8 +1133,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Features -->
             <section class="py-20" style="background: var(--bg);">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">Why Choose <span class="text-blue-600">Tutor Hub</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">We provide a premium learning experience that builds confidence and delivers results—completely free.</p></div>
@@ -734,50 +1146,9 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Process -->
-            <section class="py-20" style="background: var(--bg);">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">How It <span class="text-blue-600">Works</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Getting started is simple.</p></div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl backdrop-blur-sm"><i class="fas fa-clipboard-check text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Assessment</h3><p class="mt-2 text-gray-600 dark:text-gray-400">We evaluate your strengths.</p></div>
-                        <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl backdrop-blur-sm"><i class="fas fa-user-plus text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Match with a Tutor</h3><p class="mt-2 text-gray-600 dark:text-gray-400">We find the perfect tutor.</p></div>
-                        <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl backdrop-blur-sm"><i class="fas fa-book text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Start Learning</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Engage in interactive sessions.</p></div>
-                        <div class="process-step text-center"><div class="w-16 h-16 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 text-2xl backdrop-blur-sm"><i class="fas fa-chart-simple text-blue-600 dark:text-blue-400"></i></div><h3 class="text-xl font-semibold dark:text-white">Track Progress</h3><p class="mt-2 text-gray-600 dark:text-gray-400">Watch your grades improve.</p></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Testimonials -->
-            <section class="py-20" style="background: var(--bg);">
-                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">What Parents Say</h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Real stories from families.</p></div>
-                    <div class="relative glass rounded-2xl shadow-xl p-8 md:p-12 border-white/30">
-                        <div class="testimonial-slide">
-                            <div class="flex items-center gap-1 text-yellow-400 text-lg mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <blockquote id="testimonial-text" class="text-xl md:text-2xl font-medium dark:text-white">“My daughter's confidence in math has completely transformed.”</blockquote>
-                            <div class="mt-6 flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold backdrop-blur-sm">SJ</div><div><div class="font-semibold dark:text-white" id="testimonial-name">Sarah Johnson</div><div class="text-sm text-gray-500 dark:text-gray-400" id="testimonial-child">Parent of 8th Grader</div></div></div>
-                        </div>
-                        <div class="flex justify-center gap-2 mt-8">
-                            <button class="testimonial-dot w-3 h-3 rounded-full bg-blue-600" data-index="0"></button>
-                            <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300/60 dark:bg-gray-600/60" data-index="1"></button>
-                            <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300/60 dark:bg-gray-600/60" data-index="2"></button>
-                            <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300/60 dark:bg-gray-600/60" data-index="3"></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FAQ -->
-            <section class="py-20" style="background: var(--bg);">
-                <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-3xl md:text-4xl font-bold dark:text-white">Frequently Asked <span class="text-blue-600">Questions</span></h2><p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Everything you need to know.</p></div>
-                    <div class="space-y-4" id="faq-container"></div>
-                </div>
-            </section>
         </section>
 
-        <!-- ===== ABOUT ===== -->
+        <!-- ===== OTHER PAGES (about, motivations, team, devlog, portfolio, connect) ===== -->
         <section id="section-about" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">About Tutor Hub</h2>
@@ -789,7 +1160,6 @@
             </div>
         </section>
 
-        <!-- ===== MOTIVATIONS ===== -->
         <section id="section-motivations" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">Our Motivations</h2>
@@ -802,7 +1172,6 @@
             </div>
         </section>
 
-        <!-- ===== TEAM ===== -->
         <section id="section-team" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Meet the Team</h2>
@@ -827,7 +1196,7 @@
                     </div>
                     <div class="glass rounded-2xl p-6 text-center mentor-card cursor-pointer border-white/30 card-lift" onclick="toggleMentorDetail('charan')">
                         <div class="w-24 h-24 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-3xl font-bold text-blue-600 dark:text-blue-400 backdrop-blur-sm">C</div>
-                        <h3 class="text-xl font-semibold dark:text-white mt-4">Charan</h3>
+                        <h3 class="text-xl font-semibold dark:text-white mt-4">Charan Kamana</h3>
                         <p class="text-sm text-blue-600 dark:text-blue-400">Programming & CS Tutor</p>
                         <div class="mentor-detail" id="charan-detail">
                             <p class="text-gray-600 dark:text-gray-300 text-sm">Teaches Python, Java, and web development. Helps students build real-world projects. Full-stack developer with industry experience.</p>
@@ -838,7 +1207,6 @@
             </div>
         </section>
 
-        <!-- ===== DEVLOG ===== -->
         <section id="section-devlog" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-6">Devlog</h2>
@@ -850,7 +1218,6 @@
             </div>
         </section>
 
-        <!-- ===== PORTFOLIO ===== -->
         <section id="section-portfolio" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8 text-center">Our Portfolio</h2>
@@ -862,7 +1229,6 @@
             </div>
         </section>
 
-        <!-- ===== CONNECT ===== -->
         <section id="section-connect" class="min-h-screen section-page section-gradient hidden page-transition py-20" style="background: var(--bg);">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-8">Connect With Us</h2>
@@ -886,7 +1252,9 @@
             </div>
         </section>
 
+        <!-- ============================================================ -->
         <!-- ===== DASHBOARD ===== -->
+        <!-- ============================================================ -->
         <section id="section-dashboard" class="min-h-screen section-page hidden" style="background: var(--bg);">
             <div class="flex flex-col md:flex-row h-full">
                 <!-- Sidebar -->
@@ -903,6 +1271,7 @@
                         <a href="#" onclick="navigateDashboard('articles')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-newspaper w-5"></i> Articles</a>
                         <a href="#" onclick="navigateDashboard('messages')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-envelope w-5"></i> Messages</a>
                         <a href="#" onclick="navigateDashboard('locations')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-map-pin w-5"></i> Locations</a>
+                        <a href="#" onclick="navigateDashboard('forum')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-comments w-5"></i> Community Forum</a>
                         <a href="#" onclick="navigateDashboard('ai')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-robot w-5"></i> AI Assistant</a>
                         <a href="#" onclick="navigateDashboard('settings')" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg transition"><i class="fas fa-cog w-5"></i> Settings</a>
                     </nav>
@@ -912,8 +1281,33 @@
                 </aside>
 
                 <!-- Dashboard Content -->
-                <div id="dashboard-content" class="flex-1 p-6 overflow-y-auto">
-                    <!-- HOME -->
+                <div id="dashboard-content" class="flex-1 p-6 overflow-y-auto" style="position:relative; z-index:2;">
+
+                    <!-- ===== DASHBOARD HEADER ===== -->
+                    <div class="dash-header">
+                        <div class="search-wrap">
+                            <input type="text" id="dash-search-input" placeholder="Search tutors, articles, topics..." onkeydown="if(event.key==='Enter') handleSearch()" />
+                            <button onclick="handleSearch()"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="profile-icon-wrap">
+                            <span class="cap-icon" onclick="openAboutPopup()" title="About Tutor Hub">🎓</span>
+                            <div class="avatar-ring" onclick="toggleProfilePopup()" title="Your Profile">
+                                <div class="avatar-inner" id="dash-avatar-inner">U</div>
+                            </div>
+                            <div class="profile-popup" id="profile-popup">
+                                <div class="popup-avatar" id="popup-avatar">U</div>
+                                <div class="popup-name" id="popup-name">User</div>
+                                <div class="popup-email" id="popup-email">user@example.com</div>
+                                <div class="popup-bio" id="popup-bio">No bio yet.</div>
+                                <div class="popup-actions">
+                                    <button class="btn-view" onclick="navigateDashboard('profile'); toggleProfilePopup();">View Profile</button>
+                                    <button class="btn-logout" onclick="handleLogout(); toggleProfilePopup();">Logout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== DASH-HOME ===== -->
                     <div id="dash-home" class="dash-page">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">Dashboard</h2>
                         <p class="text-gray-600 dark:text-gray-400">Welcome back, <span id="dash-welcome-name" class="font-semibold">User</span>!</p>
@@ -928,44 +1322,49 @@
                         </div>
                     </div>
 
-                    <!-- PROFILE -->
+                    <!-- ===== DASH-PROFILE ===== -->
                     <div id="dash-profile" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">My Profile</h2>
-                        <div class="glass rounded-xl p-6 max-w-2xl border-white/30">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-20 h-20 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center text-4xl font-bold text-blue-600 dark:text-blue-400 backdrop-blur-sm" id="profile-avatar">U</div>
-                                <div><h3 class="text-xl font-semibold dark:text-white" id="profile-name">User</h3><p class="text-gray-500 dark:text-gray-400" id="profile-email">user@example.com</p></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="glass rounded-xl p-6 border-white/30">
+                                <div class="space-y-4">
+                                    <div><label class="block text-sm font-medium dark:text-gray-300">Display Name</label><input type="text" id="profile-display-name" class="mt-1 w-full px-4 py-2.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none backdrop-blur-sm" oninput="updateLiveProfile()" /></div>
+                                    <div><label class="block text-sm font-medium dark:text-gray-300">Email</label><input type="email" id="profile-email-input" class="mt-1 w-full px-4 py-2.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none backdrop-blur-sm" oninput="updateLiveProfile()" /></div>
+                                    <div><label class="block text-sm font-medium dark:text-gray-300">Bio</label><textarea id="profile-bio" rows="3" class="mt-1 w-full px-4 py-2.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none backdrop-blur-sm" placeholder="Tell us about yourself..." oninput="updateLiveProfile()"></textarea></div>
+                                    <button onclick="updateProfileFromProfile()" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">Update Profile</button>
+                                </div>
                             </div>
-                            <div class="space-y-4">
-                                <div><label class="block text-sm font-medium dark:text-gray-300">Display Name</label><input type="text" id="profile-display-name" class="mt-1 w-full px-4 py-2.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none backdrop-blur-sm" /></div>
-                                <div><label class="block text-sm font-medium dark:text-gray-300">Email</label><input type="email" id="profile-email-input" class="mt-1 w-full px-4 py-2.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none backdrop-blur-sm" /></div>
-                                <div><label class="block text-sm font-medium dark:text-gray-300">Bio</label><textarea id="profile-bio" rows="3" class="mt-1 w-full px-4 py-2.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none backdrop-blur-sm" placeholder="Tell us about yourself..."></textarea></div>
-                                <button onclick="updateProfileFromProfile()" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">Update Profile</button>
+                            <div class="live-profile-card" id="live-profile-card">
+                                <div class="lpc-avatar" id="lpc-avatar">U</div>
+                                <div class="lpc-name" id="lpc-name">User</div>
+                                <div class="lpc-email" id="lpc-email">user@example.com</div>
+                                <div class="lpc-bio" id="lpc-bio">No bio yet.</div>
+                                <div class="lpc-badge">🎓 Tutor Hub Member</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- COMMUNITY -->
+                    <!-- ===== DASH-COMMUNITY ===== -->
                     <div id="dash-community" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">Community</h2>
-                        <p class="text-gray-600 dark:text-gray-400 mb-4">Connect with fellow students and mentors.</p>
-                        <div id="community-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Meet fellow students and mentors in Montgomery County.</p>
+                        <div class="glass rounded-xl p-4 border-white/30" id="community-list-container"></div>
                     </div>
 
-                    <!-- MENTORS -->
+                    <!-- ===== DASH-MENTORS ===== -->
                     <div id="dash-mentors" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">My Mentors</h2>
-                        <p class="text-gray-600 dark:text-gray-400 mb-4">Connect with your dedicated mentors.</p>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Click "Learn More" for detailed bios.</p>
                         <div id="mentor-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
 
-                    <!-- ARTICLES -->
+                    <!-- ===== DASH-ARTICLES ===== -->
                     <div id="dash-articles" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">Articles</h2>
                         <div class="articles-grid" id="articles-grid"></div>
                     </div>
 
-                    <!-- MESSAGES -->
+                    <!-- ===== DASH-MESSAGES ===== -->
                     <div id="dash-messages" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">Messages</h2>
                         <div class="flex flex-col md:flex-row gap-4 h-[500px]">
@@ -984,7 +1383,7 @@
                         </div>
                     </div>
 
-                    <!-- LOCATIONS -->
+                    <!-- ===== DASH-LOCATIONS ===== -->
                     <div id="dash-locations" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">Locations</h2>
                         <div class="glass rounded-xl p-6 border-white/30">
@@ -993,7 +1392,20 @@
                         </div>
                     </div>
 
-                    <!-- AI ASSISTANT -->
+                    <!-- ===== DASH-FORUM ===== -->
+                    <div id="dash-forum" class="dash-page hidden">
+                        <h2 class="text-2xl font-bold dark:text-white mb-4">Community Forum</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Ask questions, share knowledge, and connect with the community.</p>
+                        <div class="glass rounded-xl p-4 border-white/30 mb-6">
+                            <div class="flex gap-3">
+                                <input type="text" id="forum-post-input" placeholder="What's on your mind? Ask a question..." class="flex-1 px-4 py-2.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none backdrop-blur-sm" />
+                                <button onclick="createForumPost()" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25"><i class="fas fa-paper-plane mr-1"></i> Post</button>
+                            </div>
+                        </div>
+                        <div id="forum-feed" class="space-y-4"></div>
+                    </div>
+
+                    <!-- ===== DASH-AI ===== -->
                     <div id="dash-ai" class="dash-page hidden">
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-2xl font-bold dark:text-white">AI Assistant</h2>
@@ -1004,41 +1416,33 @@
                         </div>
                     </div>
 
-                    <!-- ===== SETTINGS (with sub-tabs) ===== -->
+                    <!-- ===== DASH-SETTINGS (FIXED TABS) ===== -->
                     <div id="dash-settings" class="dash-page hidden">
                         <h2 class="text-2xl font-bold dark:text-white mb-4">Settings</h2>
-
-                        <!-- Settings Tabs -->
                         <div class="flex flex-wrap gap-1 mb-6 border-b border-gray-200/50 dark:border-gray-700/50 pb-2">
-                            <button class="settings-tab-btn active" data-tab="appearance"><i class="fas fa-palette mr-2"></i>Appearance</button>
-                            <button class="settings-tab-btn" data-tab="profile-settings"><i class="fas fa-user mr-2"></i>Profile</button>
-                            <button class="settings-tab-btn" data-tab="website"><i class="fas fa-globe mr-2"></i>Website</button>
-                            <button class="settings-tab-btn" data-tab="notifications"><i class="fas fa-bell mr-2"></i>Notifications</button>
-                            <button class="settings-tab-btn" data-tab="security"><i class="fas fa-shield-alt mr-2"></i>Security</button>
-                            <button class="settings-tab-btn" data-tab="privacy"><i class="fas fa-lock mr-2"></i>Privacy</button>
+                            <button class="settings-tab-btn active" onclick="switchSettingsTab(this, 'appearance')"><i class="fas fa-palette mr-2"></i>Appearance</button>
+                            <button class="settings-tab-btn" onclick="switchSettingsTab(this, 'profile-settings')"><i class="fas fa-user mr-2"></i>Profile</button>
+                            <button class="settings-tab-btn" onclick="switchSettingsTab(this, 'website')"><i class="fas fa-globe mr-2"></i>Website</button>
+                            <button class="settings-tab-btn" onclick="switchSettingsTab(this, 'notifications')"><i class="fas fa-bell mr-2"></i>Notifications</button>
+                            <button class="settings-tab-btn" onclick="switchSettingsTab(this, 'security')"><i class="fas fa-shield-alt mr-2"></i>Security</button>
+                            <button class="settings-tab-btn" onclick="switchSettingsTab(this, 'privacy')"><i class="fas fa-lock mr-2"></i>Privacy</button>
                         </div>
-
-                        <!-- Appearance Panel -->
                         <div id="settings-panel-appearance" class="settings-panel active">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-moon text-blue-600 mr-2"></i>Theme</h4><div class="flex items-center justify-between"><span class="text-sm dark:text-gray-300">Dark Mode</span><div class="toggle-switch" onclick="toggleDarkMode()"><div class="dot" id="dark-toggle-ball"></div></div></div></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-font text-blue-600 mr-2"></i>Font Size</h4><div class="flex items-center gap-3"><input type="range" min="12" max="24" value="16" class="w-full accent-blue-600" onchange="showNotification('Font size updated')" /><span class="text-sm text-gray-500 dark:text-gray-400" id="font-size-display">16px</span></div></div>
+                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-font text-blue-600 mr-2"></i>Font Size</h4><div class="flex items-center gap-3"><input type="range" min="12" max="24" value="16" class="w-full accent-blue-600" onchange="document.getElementById('font-size-display').textContent=this.value+'px'; document.documentElement.style.fontSize=this.value+'px'; showNotification('Font size updated')" /><span class="text-sm text-gray-500 dark:text-gray-400" id="font-size-display">16px</span></div></div>
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-fill-drip text-blue-600 mr-2"></i>Accent Color</h4><select class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm custom-select"><option value="blue">Blue (Default)</option><option value="purple">Purple</option><option value="green">Green</option><option value="red">Red</option></select></div>
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-eye text-blue-600 mr-2"></i>Reduced Motion</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Disable animations</label></div>
                             </div>
                         </div>
-
-                        <!-- Profile Settings Panel -->
                         <div id="settings-panel-profile-settings" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-user text-blue-600 mr-2"></i>Display Name</h4><input type="text" id="settings-name" placeholder="Your name" class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" /></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-envelope text-blue-600 mr-2"></i>Email</h4><input type="email" id="settings-email" placeholder="Email" class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" /></div>
+                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-user text-blue-600 mr-2"></i>Display Name</h4><input type="text" id="settings-name" placeholder="Your name" class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" oninput="updateLiveProfile()" /></div>
+                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-envelope text-blue-600 mr-2"></i>Email</h4><input type="email" id="settings-email" placeholder="Email" class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" oninput="updateLiveProfile()" /></div>
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-lock text-blue-600 mr-2"></i>Password</h4><input type="password" id="settings-password" placeholder="New Password" class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" /></div>
-                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-id-badge text-blue-600 mr-2"></i>Bio</h4><textarea id="settings-bio" rows="2" placeholder="Tell us about yourself" class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm"></textarea></div>
+                                <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-id-badge text-blue-600 mr-2"></i>Bio</h4><textarea id="settings-bio" rows="2" placeholder="Tell us about yourself" class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" oninput="updateLiveProfile()"></textarea></div>
                             </div>
                         </div>
-
-                        <!-- Website Panel -->
                         <div id="settings-panel-website" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-globe text-blue-600 mr-2"></i>Language</h4><select class="w-full px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm custom-select"><option>English</option><option>Spanish</option><option>French</option><option>German</option></select></div>
@@ -1047,8 +1451,6 @@
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-cookie-bite text-blue-600 mr-2"></i>Cookies</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Essential</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Analytics</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Marketing</label></div>
                             </div>
                         </div>
-
-                        <!-- Notifications Panel -->
                         <div id="settings-panel-notifications" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-envelope text-blue-600 mr-2"></i>Email Alerts</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Session reminders</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> New messages</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Newsletter</label></div>
@@ -1056,8 +1458,6 @@
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-sms text-blue-600 mr-2"></i>SMS Alerts</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Session reminders</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Urgent updates</label></div>
                             </div>
                         </div>
-
-                        <!-- Security Panel -->
                         <div id="settings-panel-security" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-shield-virus text-blue-600 mr-2"></i>Two-Factor Auth</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Enable 2FA</label><button class="mt-2 px-3 py-1.5 bg-gray-600 text-white rounded-xl text-sm hover:bg-gray-700 transition">Setup 2FA</button></div>
@@ -1065,8 +1465,6 @@
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-key text-blue-600 mr-2"></i>API Keys</h4><button class="px-3 py-1.5 bg-blue-600 text-white rounded-xl text-sm hover:bg-blue-700 transition">Generate API Key</button></div>
                             </div>
                         </div>
-
-                        <!-- Privacy Panel -->
                         <div id="settings-panel-privacy" class="settings-panel">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-eye text-blue-600 mr-2"></i>Visibility</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Show online status</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Allow messages from anyone</label><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" /> Show in community</label></div>
@@ -1074,8 +1472,6 @@
                                 <div class="glass rounded-xl p-4 border-white/30"><h4 class="font-semibold dark:text-white mb-2"><i class="fas fa-share-alt text-blue-600 mr-2"></i>Data Sharing</h4><label class="flex items-center text-sm"><input type="checkbox" class="custom-checkbox mr-2" checked /> Share anonymized data</label></div>
                             </div>
                         </div>
-
-                        <!-- Save All -->
                         <button onclick="updateProfile()" class="mt-6 px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">Save All Changes</button>
                     </div>
                 </div>
@@ -1097,9 +1493,9 @@
     </footer>
 
     <script>
-        // ============================================================
-        //  GLOBAL PARTICLE BACKGROUND (Network + Dots)
-        // ============================================================
+        // ================================================================
+        // GLOBAL PARTICLE BACKGROUND (dots & lines)
+        // ================================================================
         const canvas = document.getElementById('particle-canvas-global');
         const ctx = canvas.getContext('2d');
         let w, h, particles = [];
@@ -1112,16 +1508,16 @@
         resizeCanvas();
 
         function initParticles() {
-            const num = Math.min(100, Math.floor(w * h / 12000));
+            const num = Math.min(120, Math.floor(w * h / 10000));
             particles = [];
             for (let i = 0; i < num; i++) {
                 particles.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    radius: Math.random() * 2.5 + 1,
-                    opacity: Math.random() * 0.5 + 0.2
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.6,
+                    radius: Math.random() * 3 + 1.5,
+                    opacity: Math.random() * 0.6 + 0.3
                 });
             }
         }
@@ -1129,17 +1525,16 @@
 
         function drawParticles() {
             ctx.clearRect(0, 0, w, h);
-
-            // Draw connections
+            // Lines
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 180) {
-                        const alpha = 0.08 * (1 - dist / 180);
+                    if (dist < 200) {
+                        const alpha = 0.15 * (1 - dist / 200);
                         ctx.strokeStyle = `rgba(59,130,246,${alpha})`;
-                        ctx.lineWidth = 1.2;
+                        ctx.lineWidth = 1.5;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -1147,38 +1542,89 @@
                     }
                 }
             }
-
-            // Draw dots with glow
+            // Dots with glow
             particles.forEach(p => {
-                const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 4);
-                grad.addColorStop(0, `rgba(59,130,246,${p.opacity * 0.6})`);
+                const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 5);
+                grad.addColorStop(0, `rgba(59,130,246,${p.opacity * 0.8})`);
                 grad.addColorStop(1, `rgba(59,130,246,0)`);
                 ctx.fillStyle = grad;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius * 4, 0, 2 * Math.PI);
+                ctx.arc(p.x, p.y, p.radius * 5, 0, 2 * Math.PI);
                 ctx.fill();
 
-                ctx.fillStyle = `rgba(255,255,255,${p.opacity * 0.7})`;
+                ctx.fillStyle = `rgba(255,255,255,${p.opacity * 0.9})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
                 ctx.fill();
             });
-
-            // Move
             particles.forEach(p => {
                 p.x += p.vx;
                 p.y += p.vy;
                 if (p.x < 0 || p.x > w) p.vx *= -1;
                 if (p.y < 0 || p.y > h) p.vy *= -1;
             });
-
             requestAnimationFrame(drawParticles);
         }
         drawParticles();
 
-        // ============================================================
-        //  NOTIFICATION
-        // ============================================================
+        // ================================================================
+        // BLUE CAPS BACKGROUND (high visibility)
+        // ================================================================
+        const capsCanvas = document.getElementById('caps-canvas');
+        const capsCtx = capsCanvas.getContext('2d');
+        let capsW, capsH, caps = [];
+
+        function resizeCapsCanvas() {
+            capsW = capsCanvas.width = window.innerWidth;
+            capsH = capsCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCapsCanvas);
+        resizeCapsCanvas();
+
+        function initCaps() {
+            const num = Math.min(45, Math.floor(capsW * capsH / 18000));
+            caps = [];
+            for (let i = 0; i < num; i++) {
+                caps.push({
+                    x: Math.random() * capsW,
+                    y: Math.random() * capsH,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    size: Math.random() * 22 + 18,
+                    opacity: Math.random() * 0.25 + 0.12,
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 0.02
+                });
+            }
+        }
+        initCaps();
+
+        function drawCaps() {
+            capsCtx.clearRect(0, 0, capsW, capsH);
+            caps.forEach(c => {
+                capsCtx.save();
+                capsCtx.translate(c.x, c.y);
+                capsCtx.rotate(c.rotation);
+                capsCtx.globalAlpha = c.opacity;
+                capsCtx.font = `${c.size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+                capsCtx.textAlign = 'center';
+                capsCtx.textBaseline = 'middle';
+                capsCtx.fillStyle = '#3b82f6';
+                capsCtx.fillText('🎓', 0, 0);
+                capsCtx.restore();
+                c.x += c.vx;
+                c.y += c.vy;
+                c.rotation += c.rotSpeed;
+                if (c.x < -30 || c.x > capsW + 30) c.vx *= -1;
+                if (c.y < -30 || c.y > capsH + 30) c.vy *= -1;
+            });
+            requestAnimationFrame(drawCaps);
+        }
+        drawCaps();
+
+        // ================================================================
+        // NOTIFICATION
+        // ================================================================
         function showNotification(msg) {
             const banner = document.getElementById('notification-banner');
             banner.textContent = '✅ ' + msg;
@@ -1188,9 +1634,9 @@
         }
         window.showNotification = showNotification;
 
-        // ============================================================
-        //  DARK MODE
-        // ============================================================
+        // ================================================================
+        // DARK MODE
+        // ================================================================
         let darkMode = localStorage.getItem('tutorhub_dark') === 'true';
 
         function applyDarkMode() {
@@ -1217,23 +1663,24 @@
             showNotification('Dark mode ' + (darkMode ? 'enabled' : 'disabled'));
         };
 
-        // ============================================================
-        //  AUTH
-        // ============================================================
+        // ================================================================
+        // AUTH
+        // ================================================================
         let currentUser = null;
         let users = JSON.parse(localStorage.getItem('tutorhub_users')) || [];
         let messages = JSON.parse(localStorage.getItem('tutorhub_messages')) || [];
+        let forumPosts = JSON.parse(localStorage.getItem('tutorhub_forum_posts')) || [];
 
         if (!users.find(u => u.email === 'umair@tutorhub.com')) {
             users.push({ id: 'mentor1', name: 'Umair Loya', email: 'umair@tutorhub.com', password: 'umair123',
                 isMentor: true, subjects: ['Algebra 1', 'Geometry', 'Pre-Calculus'],
-            bio: 'Passionate math educator with 5+ years of experience.' });
+                bio: 'Passionate math educator with 5+ years of experience. Umair believes that every student can excel in math with the right guidance and encouragement. He specializes in breaking down complex concepts into simple, digestible steps.' });
             users.push({ id: 'mentor2', name: 'Zuhair Loya', email: 'zuhair@tutorhub.com', password: 'zuhair123',
                 isMentor: true, subjects: ['CAD', '3D Modeling', 'Design Thinking'],
-            bio: 'Expert in CAD and design, helping students create.' });
-            users.push({ id: 'mentor3', name: 'Charan', email: 'charan@tutorhub.com', password: 'charan123',
+                bio: 'Expert in CAD and design, helping students bring their ideas to life. Zuhair has worked on various engineering projects and loves teaching the next generation of designers. He is proficient in Fusion 360, SolidWorks, and AutoCAD.' });
+            users.push({ id: 'mentor3', name: 'Charan Kamana', email: 'charan@tutorhub.com', password: 'charan123',
                 isMentor: true, subjects: ['Python', 'Java', 'Web Development'],
-            bio: 'Full-stack developer and coding mentor.' });
+                bio: 'Full-stack developer and coding mentor with industry experience. Charan has worked at top tech companies and now dedicates his time to teaching students how to code. He focuses on project-based learning and real-world applications.' });
             localStorage.setItem('tutorhub_users', JSON.stringify(users));
         }
 
@@ -1241,6 +1688,9 @@
             'Charlotte', 'Henry', 'Amelia', 'Alexander', 'Harper', 'Michael', 'Evelyn', 'Daniel', 'Abigail', 'Matthew'
         ];
         const studentSubjects = ['Math', 'Science', 'English', 'History', 'Art', 'Music', 'PE', 'CS'];
+        const locations = ['Bethesda', 'Rockville', 'Gaithersburg', 'Silver Spring', 'Germantown', 'Potomac', 'Chevy Chase',
+            'Kensington', 'Olney', 'Derwood'
+        ];
         if (!users.some(u => u.isStudent)) {
             for (let i = 0; i < 20; i++) {
                 const name = studentNames[i % studentNames.length] + ' ' + (Math.floor(Math.random() * 100) + 1);
@@ -1252,10 +1702,60 @@
                     password: 'student123',
                     isMentor: false,
                     isStudent: true,
-                    subjects: [studentSubjects[Math.floor(Math.random() * studentSubjects.length)]]
+                    subjects: [studentSubjects[Math.floor(Math.random() * studentSubjects.length)]],
+                    location: locations[Math.floor(Math.random() * locations.length)],
+                    intro: 'Hi! I\'m a ' + (Math.floor(Math.random() * 4) + 6) + 'th grader from ' + locations[Math
+                    .floor(Math.random() * locations.length)] + '. I love ' + studentSubjects[Math.floor(Math
+                        .random() * studentSubjects.length)] + ' and I\'m here to learn and grow!'
                 });
             }
             localStorage.setItem('tutorhub_users', JSON.stringify(users));
+        }
+
+        if (forumPosts.length === 0) {
+            const sampleQuestions = [
+                'How do I get better at Algebra? I\'m struggling with linear equations.',
+                'What\'s the best way to prepare for the SAT math section?',
+                'Can someone explain the Pythagorean theorem to me in simple terms?',
+                'I need help with my CAD project. Any tips for 3D modeling?',
+                'What programming language should I learn first? Python or Java?',
+                'How do I stay motivated when studying for exams?',
+                'Any recommendations for good study resources for Geometry?',
+                'I\'m having trouble with fractions and percentages. Help!',
+                'What\'s the difference between pre-calc and calculus?',
+                'How can I improve my reading comprehension skills?'
+            ];
+            const studentUsers = users.filter(u => u.isStudent);
+            for (let i = 0; i < 10; i++) {
+                const author = studentUsers[i % studentUsers.length];
+                const likes = Math.floor(Math.random() * 15) + 1;
+                const replies = [];
+                const numReplies = Math.floor(Math.random() * 4) + 1;
+                for (let r = 0; r < numReplies; r++) {
+                    const replyAuthor = studentUsers[(i + r + 3) % studentUsers.length];
+                    replies.push({
+                        id: 'reply-' + i + '-' + r,
+                        author: replyAuthor.name,
+                        authorId: replyAuthor.id,
+                        content: 'Great question! I think ' + ['you should try practicing daily.', 'using online resources like Khan Academy helps.',
+                            'breaking it down into smaller steps works for me.', 'asking a tutor can really clarify things.',
+                            'I found that group study sessions are super helpful.'
+                        ][r % 5],
+                        timestamp: new Date(Date.now() - (r + 1) * 60000).toISOString()
+                    });
+                }
+                forumPosts.push({
+                    id: 'post-' + i,
+                    author: author.name,
+                    authorId: author.id,
+                    content: sampleQuestions[i % sampleQuestions.length],
+                    timestamp: new Date(Date.now() - (i + 1) * 120000).toISOString(),
+                    likes: likes,
+                    likedBy: [],
+                    replies: replies
+                });
+            }
+            localStorage.setItem('tutorhub_forum_posts', JSON.stringify(forumPosts));
         }
 
         // Login modal
@@ -1356,18 +1856,24 @@
             document.getElementById('settings-name').value = currentUser.name;
             document.getElementById('settings-email').value = currentUser.email;
             document.getElementById('settings-bio').value = currentUser.bio || '';
-            document.getElementById('profile-name').textContent = currentUser.name;
-            document.getElementById('profile-email').textContent = currentUser.email;
             document.getElementById('profile-display-name').value = currentUser.name;
             document.getElementById('profile-email-input').value = currentUser.email;
             document.getElementById('profile-bio').value = currentUser.bio || '';
-            document.getElementById('profile-avatar').textContent = currentUser.name.charAt(0);
+            const initial = currentUser.name.charAt(0);
+            document.getElementById('dash-avatar-inner').textContent = initial;
+            document.getElementById('popup-avatar').textContent = initial;
+            document.getElementById('popup-name').textContent = currentUser.name;
+            document.getElementById('popup-email').textContent = currentUser.email;
+            document.getElementById('popup-bio').textContent = currentUser.bio || 'No bio yet.';
+            document.getElementById('profile-avatar').textContent = initial;
             const mentorCount = users.filter(u => u.isMentor).length;
             document.getElementById('dash-mentor-count').textContent = mentorCount;
+            updateLiveProfile();
             renderCommunity();
             renderMentors();
             renderArticles();
             renderConversations();
+            renderForum();
         }
 
         function updateUIForLoggedOut() {
@@ -1388,9 +1894,9 @@
             else localStorage.removeItem('tutorhub_current');
         }
 
-        // ============================================================
-        //  NAVIGATION
-        // ============================================================
+        // ================================================================
+        // NAVIGATION
+        // ================================================================
         function navigate(page) {
             const sections = ['section-landing', 'section-about', 'section-motivations', 'section-team', 'section-devlog',
                 'section-portfolio', 'section-connect', 'section-dashboard'
@@ -1431,12 +1937,6 @@
             if (icon) { icon.classList.add('fa-bars');
                 icon.classList.remove('fa-times'); }
             window.scrollTo(0, 0);
-            const targetSection = document.querySelector(`#section-${page}`);
-            if (targetSection) {
-                targetSection.classList.remove('page-transition');
-                void targetSection.offsetWidth;
-                targetSection.classList.add('page-transition');
-            }
         }
         window.navigate = navigate;
 
@@ -1459,16 +1959,19 @@
             if (section === 'messages') renderConversations();
             if (section === 'articles') renderArticles();
             if (section === 'community') renderCommunity();
+            if (section === 'forum') renderForum();
+            if (section === 'profile') updateLiveProfile();
         }
         window.navigateDashboard = navigateDashboard;
 
-        // ============================================================
-        //  ARTICLES
-        // ============================================================
-        function renderArticles() {
-            const grid = document.getElementById('articles-grid');
-            grid.innerHTML = '';
-            const topics = [
+        // ================================================================
+        // SEARCH
+        // ================================================================
+        window.handleSearch = function() {
+            const query = document.getElementById('dash-search-input').value.trim();
+            if (!query) { showNotification('Please enter a search term.'); return; }
+            const results = [];
+            const articleTopics = [
                 'Algebra: Linear Equations', 'Algebra: Factoring', 'Algebra: Quadratics', 'Algebra: Systems',
                 'Geometry: Pythagorean', 'Geometry: Area & Volume', 'Geometry: Trigonometry', 'Geometry: Circles',
                 'Pre-Calc: Functions', 'Pre-Calc: Limits', 'Pre-Calc: Derivatives', 'Pre-Calc: Integrals',
@@ -1484,69 +1987,386 @@
                 'Test Prep: SAT Math', 'Test Prep: ACT Reading', 'Test Prep: AP Exam', 'Study Skills: Note-Taking',
                 'Study Skills: Time Mgmt', 'Study Skills: Test Anxiety', 'Study Skills: Active Recall'
             ];
-            topics.forEach(title => {
+            articleTopics.forEach(t => {
+                if (t.toLowerCase().includes(query.toLowerCase())) results.push('📄 ' + t);
+            });
+            users.filter(u => u.isMentor).forEach(m => {
+                if (m.name.toLowerCase().includes(query.toLowerCase()) || m.subjects.some(s => s.toLowerCase()
+                        .includes(query.toLowerCase()))) {
+                    results.push('👨‍🏫 ' + m.name + ' (' + m.subjects.join(', ') + ')');
+                }
+            });
+            users.filter(u => u.isStudent).slice(0, 10).forEach(s => {
+                if (s.name.toLowerCase().includes(query.toLowerCase()) || (s.intro && s.intro.toLowerCase()
+                        .includes(query.toLowerCase()))) {
+                    results.push('👤 ' + s.name + ' — ' + (s.intro || 'Student'));
+                }
+            });
+            if (results.length === 0) {
+                showNotification('No results found for "' + query + '"');
+            } else {
+                showNotification('Found ' + results.length + ' results for "' + query + '"');
+                alert('🔍 Results for "' + query + '":\n\n' + results.slice(0, 10).join('\n') + (results.length > 10 ?
+                    '\n\n...and ' + (results.length - 10) + ' more.' : ''));
+            }
+        };
+
+        // ================================================================
+        // PROFILE POPUP
+        // ================================================================
+        let profilePopupOpen = false;
+
+        window.toggleProfilePopup = function() {
+            const popup = document.getElementById('profile-popup');
+            profilePopupOpen = !profilePopupOpen;
+            if (profilePopupOpen) {
+                popup.classList.add('open');
+                if (currentUser) {
+                    document.getElementById('popup-avatar').textContent = currentUser.name.charAt(0);
+                    document.getElementById('popup-name').textContent = currentUser.name;
+                    document.getElementById('popup-email').textContent = currentUser.email;
+                    document.getElementById('popup-bio').textContent = currentUser.bio || 'No bio yet.';
+                }
+            } else {
+                popup.classList.remove('open');
+            }
+        };
+
+        document.addEventListener('click', function(e) {
+            const wrap = document.querySelector('.profile-icon-wrap');
+            if (wrap && !wrap.contains(e.target) && profilePopupOpen) {
+                document.getElementById('profile-popup').classList.remove('open');
+                profilePopupOpen = false;
+            }
+        });
+
+        // ================================================================
+        // ABOUT POPUP
+        // ================================================================
+        window.openAboutPopup = function() {
+            document.getElementById('about-popup').classList.add('open');
+        };
+        window.closeAboutPopup = function() {
+            document.getElementById('about-popup').classList.remove('open');
+        };
+        document.getElementById('about-popup').addEventListener('click', function(e) {
+            if (e.target === this) closeAboutPopup();
+        });
+
+        // ================================================================
+        // MENTOR DETAIL POPUP
+        // ================================================================
+        const mentorDetails = {
+            'mentor1': {
+                name: 'Umair Loya',
+                role: 'Founder & Lead Tutor',
+                avatar: 'U',
+                bio: 'Umair Loya is the founder of Tutor Hub with over 5 years of teaching experience. He is passionate about making math accessible and enjoyable for every student. Umair specializes in Algebra 1, Geometry, and Pre-Calculus, and he believes that a strong foundation in math opens doors to countless opportunities. His teaching style is patient, encouraging, and tailored to each student\'s unique learning pace.',
+                subjects: ['Algebra 1', 'Geometry', 'Pre-Calculus']
+            },
+            'mentor2': {
+                name: 'Zuhair Loya',
+                role: 'CAD & Design Specialist',
+                avatar: 'Z',
+                bio: 'Zuhair Loya is an expert in CAD, 3D modeling, and design thinking. With years of experience in engineering design, Zuhair helps students bring their creative ideas to life. He is proficient in Fusion 360, SolidWorks, and AutoCAD. Zuhair believes that design is a powerful tool for problem-solving and encourages students to think critically and creatively. His workshops are hands-on and project-based.',
+                subjects: ['CAD', '3D Modeling', 'Design Thinking']
+            },
+            'mentor3': {
+                name: 'Charan Kamana',
+                role: 'Programming & CS Tutor',
+                avatar: 'C',
+                bio: 'Charan Kamana is a full-stack developer with industry experience at top tech companies. He now dedicates his time to teaching students how to code. Charan specializes in Python, Java, and web development. He focuses on project-based learning, helping students build real-world applications. Charan is passionate about making coding accessible and fun, and he loves seeing his students develop problem-solving skills through programming.',
+                subjects: ['Python', 'Java', 'Web Development']
+            }
+        };
+
+        window.openMentorDetail = function(mentorId) {
+            const data = mentorDetails[mentorId];
+            if (!data) return;
+            const content = document.getElementById('mentor-detail-content');
+            content.innerHTML = `
+                <div class="mdp-avatar">${data.avatar}</div>
+                <div class="mdp-name">${data.name}</div>
+                <div class="mdp-role">${data.role}</div>
+                <div class="mdp-bio">${data.bio}</div>
+                <div class="mdp-subjects">
+                    ${data.subjects.map(s => `<span>${s}</span>`).join('')}
+                </div>
+                <button class="mdp-close" onclick="closeMentorDetail()">Close</button>
+            `;
+            document.getElementById('mentor-detail-popup').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeMentorDetail = function() {
+            document.getElementById('mentor-detail-popup').classList.remove('open');
+            document.body.style.overflow = '';
+        };
+        document.getElementById('mentor-detail-popup').addEventListener('click', function(e) {
+            if (e.target === this) closeMentorDetail();
+        });
+
+        // ================================================================
+        // ARTICLES
+        // ================================================================
+        function renderArticles() {
+            const grid = document.getElementById('articles-grid');
+            grid.innerHTML = '';
+            const articles = [
+                { title: 'Algebra: Linear Equations', desc: 'Learn how to solve for x with step-by-step techniques for linear equations.' },
+                { title: 'Algebra: Factoring', desc: 'Master factoring polynomials with easy-to-follow strategies and examples.' },
+                { title: 'Algebra: Quadratics', desc: 'Understand quadratic equations, the quadratic formula, and graphing parabolas.' },
+                { title: 'Algebra: Systems', desc: 'Solve systems of equations using substitution, elimination, and graphing.' },
+                { title: 'Geometry: Pythagorean', desc: 'Apply the Pythagorean theorem to find missing sides in right triangles.' },
+                { title: 'Geometry: Area & Volume', desc: 'Calculate area and volume for 2D and 3D shapes with clear formulas.' },
+                { title: 'Geometry: Trigonometry', desc: 'Introduction to sine, cosine, tangent, and their applications in geometry.' },
+                { title: 'Geometry: Circles', desc: 'Explore circle properties, circumference, area, and arc length.' },
+                { title: 'Pre-Calc: Functions', desc: 'Dive into functions, domain, range, and transformations.' },
+                { title: 'Pre-Calc: Limits', desc: 'Understand limits, continuity, and their role in calculus preparation.' },
+                { title: 'Pre-Calc: Derivatives', desc: 'Introduction to derivatives and their applications in real-world problems.' },
+                { title: 'Pre-Calc: Integrals', desc: 'Learn integration techniques and their connection to area under curves.' },
+                { title: 'Calculus: Chain Rule', desc: 'Master the chain rule for differentiating composite functions.' },
+                { title: 'Calculus: Optimization', desc: 'Apply calculus to solve optimization problems in business and science.' },
+                { title: 'Calculus: Related Rates', desc: 'Solve related rates problems with practical examples and step-by-step methods.' },
+                { title: 'Calculus: Series', desc: 'Understand infinite series, convergence, and Taylor series expansions.' },
+                { title: 'Statistics: Mean/Median', desc: 'Calculate and interpret mean, median, and mode in data sets.' },
+                { title: 'Statistics: Probability', desc: 'Learn basic probability rules, tree diagrams, and conditional probability.' },
+                { title: 'Statistics: Normal Dist', desc: 'Explore the normal distribution, z-scores, and standard deviation.' },
+                { title: 'Statistics: Hypothesis', desc: 'Introduction to hypothesis testing, p-values, and confidence intervals.' },
+                { title: 'Math: Word Problems', desc: 'Strategies for translating word problems into mathematical equations.' },
+                { title: 'Math: Fractions', desc: 'Master fraction operations, simplification, and comparisons.' },
+                { title: 'Math: Ratios', desc: 'Understand ratios, proportions, and their applications in everyday life.' },
+                { title: 'Math: Percentages', desc: 'Calculate percentages, percentage change, and real-world applications.' },
+                { title: 'Reading: Active Reading', desc: 'Techniques for active reading to improve comprehension and retention.' },
+                { title: 'Reading: Annotation', desc: 'Learn how to annotate texts to highlight key ideas and themes.' },
+                { title: 'Reading: Summary', desc: 'Write effective summaries that capture the main points of a text.' },
+                { title: 'Reading: Inferencing', desc: 'Make inferences to understand implicit meaning and subtext.' },
+                { title: 'Reading: Author\'s Purpose', desc: 'Identify the author\'s purpose and point of view in various texts.' },
+                { title: 'Reading: Tone/Mood', desc: 'Distinguish between tone and mood and how they affect the reader.' },
+                { title: 'Reading: Figurative Language', desc: 'Recognize and interpret figurative language like metaphors and similes.' },
+                { title: 'Reading: Poetry', desc: 'Analyze poetry structure, rhyme, meter, and deeper meaning.' },
+                { title: 'Reading: Argumentative', desc: 'Evaluate argumentative texts and identify claims, evidence, and reasoning.' },
+                { title: 'Reading: Informational', desc: 'Read and analyze informational texts for clarity and bias.' },
+                { title: 'Reading: Narrative', desc: 'Understand narrative structure, point of view, and character development.' },
+                { title: 'Reading: Character', desc: 'Analyze character traits, motivations, and growth in literature.' },
+                { title: 'Reading: Theme', desc: 'Identify and discuss major themes in novels, plays, and poems.' },
+                { title: 'Reading: Context Clues', desc: 'Use context clues to determine the meaning of unfamiliar words.' },
+                { title: 'Reading: Main Idea', desc: 'Find the main idea and supporting details in any text.' },
+                { title: 'Reading: Text Organization', desc: 'Understand how texts are organized and how structure affects meaning.' },
+                { title: 'Test Prep: SAT Math', desc: 'Targeted strategies for the SAT math section, including practice problems.' },
+                { title: 'Test Prep: ACT Reading', desc: 'Prepare for the ACT reading section with time-saving strategies.' },
+                { title: 'Test Prep: AP Exam', desc: 'Study tips and content review for AP exams in various subjects.' },
+                { title: 'Study Skills: Note-Taking', desc: 'Effective note-taking methods for lectures, reading, and research.' },
+                { title: 'Study Skills: Time Mgmt', desc: 'Manage your time effectively with planning and prioritization techniques.' },
+                { title: 'Study Skills: Test Anxiety', desc: 'Overcome test anxiety with relaxation and preparation strategies.' },
+                { title: 'Study Skills: Active Recall', desc: 'Use active recall to boost retention and study smarter.' }
+            ];
+            articles.forEach(a => {
                 const card = document.createElement('div');
                 card.className = 'glass rounded-xl p-4 article-card card-lift border-white/30';
-                const icon = title.includes('Reading') || title.includes('Test Prep') || title.includes(
+                const icon = a.title.includes('Reading') || a.title.includes('Test Prep') || a.title.includes(
                     'Study') ? 'fa-book' : 'fa-calculator';
-                card.innerHTML =
-                    `<i class="fas ${icon} text-blue-600 text-xl mb-2"></i><h4 class="font-semibold dark:text-white text-sm">${title}</h4><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Read more →</p>`;
+                card.innerHTML = `
+                    <i class="fas ${icon} text-blue-600 text-xl mb-2"></i>
+                    <h4 class="font-semibold dark:text-white text-sm">${a.title}</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${a.desc}</p>
+                    <p class="text-xs text-blue-600 mt-1">Read more →</p>
+                `;
                 grid.appendChild(card);
             });
         }
 
-        // ============================================================
-        //  COMMUNITY
-        // ============================================================
+        // ================================================================
+        // COMMUNITY
+        // ================================================================
         function renderCommunity() {
-            const container = document.getElementById('community-list');
+            const container = document.getElementById('community-list-container');
             container.innerHTML = '';
             const students = users.filter(u => u.isStudent || (!u.isMentor && !u.isStudent));
             students.slice(0, 20).forEach(u => {
-                const card = document.createElement('div');
-                card.className = 'glass rounded-xl p-3 text-center card-lift border-white/30';
+                const div = document.createElement('div');
+                div.className = 'community-student-item';
                 const initial = u.name.charAt(0);
-                card.innerHTML = `
-                <div class="w-12 h-12 rounded-full bg-blue-100/70 dark:bg-blue-900/40 flex items-center justify-center mx-auto text-lg font-bold text-blue-600 dark:text-blue-400 backdrop-blur-sm">${initial}</div>
-                <h4 class="font-semibold dark:text-white text-sm mt-2">${u.name}</h4>
-                <p class="text-xs text-gray-500 dark:text-gray-400">${u.subjects ? u.subjects[0] : 'Student'}</p>
-                <button onclick="startChat('${u.id}')" class="mt-2 px-3 py-1.5 bg-blue-600 text-white rounded-xl text-xs hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">Message</button>
-              `;
-                container.appendChild(card);
+                const loc = u.location || 'Montgomery County';
+                const intro = u.intro || 'Student at Tutor Hub';
+                div.innerHTML = `
+                    <div class="cs-avatar">${initial}</div>
+                    <div class="cs-info">
+                        <div class="cs-name">${u.name}</div>
+                        <div class="cs-detail">${intro} • 📍 ${loc}</div>
+                    </div>
+                    <span class="cs-tag">${u.subjects ? u.subjects[0] : 'Student'}</span>
+                `;
+                container.appendChild(div);
             });
         }
 
-        // ============================================================
-        //  MENTORS
-        // ============================================================
+        // ================================================================
+        // MENTORS
+        // ================================================================
         function renderMentors() {
             const container = document.getElementById('mentor-list');
             container.innerHTML = '';
             const mentors = users.filter(u => u.isMentor);
+            const mentorIdMap = {
+                'Umair Loya': 'mentor1',
+                'Zuhair Loya': 'mentor2',
+                'Charan Kamana': 'mentor3'
+            };
             mentors.forEach(u => {
                 const card = document.createElement('div');
-                card.className = 'glass rounded-xl p-4 flex items-center justify-between card-lift border-white/30';
+                card.className = 'glass rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 card-lift border-white/30';
+                const mentorKey = mentorIdMap[u.name] || 'mentor1';
                 card.innerHTML = `
-                <div><span class="font-semibold dark:text-white">${u.name}</span>
-                <p class="text-sm text-gray-500 dark:text-gray-400">${u.subjects ? u.subjects.join(', ') : 'Mentor'}</p>
-                <p class="text-xs text-gray-400 dark:text-gray-500">${u.bio || ''}</p></div>
-                <button onclick="startChat('${u.id}')" class="px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm shadow-lg shadow-blue-600/25">Message</button>
-              `;
+                    <div>
+                        <span class="font-semibold dark:text-white">${u.name}</span>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${u.subjects ? u.subjects.join(', ') : 'Mentor'}</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500">${u.bio ? u.bio.substring(0, 80) + '...' : ''}</p>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="openMentorDetail('${mentorKey}')" class="px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm shadow-lg shadow-blue-600/25">Learn More</button>
+                        <button onclick="startChat('${u.id}')" class="px-3 py-1.5 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition text-sm">Message</button>
+                    </div>
+                `;
                 container.appendChild(card);
             });
         }
 
-        // ============================================================
-        //  MENTOR DETAIL EXPAND
-        // ============================================================
-        function toggleMentorDetail(id) {
-            const detail = document.getElementById(id + '-detail');
-            if (detail) detail.classList.toggle('open');
+        // ================================================================
+        // FORUM
+        // ================================================================
+        function renderForum() {
+            const feed = document.getElementById('forum-feed');
+            feed.innerHTML = '';
+            const sortedPosts = [...forumPosts].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sortedPosts.forEach(post => {
+                const user = users.find(u => u.id === post.authorId) || { name: post.author };
+                const initial = user.name.charAt(0);
+                const timeAgo = timeSince(new Date(post.timestamp));
+                const isLiked = post.likedBy && post.likedBy.includes(currentUser ? currentUser.id : '');
+
+                const div = document.createElement('div');
+                div.className = 'glass rounded-xl p-4 forum-post border-white/30';
+                div.dataset.postId = post.id;
+
+                let repliesHtml = '';
+                if (post.replies && post.replies.length > 0) {
+                    post.replies.forEach(r => {
+                        repliesHtml += `
+                            <div class="reply-item"><strong>${r.author}</strong>: ${r.content}</div>
+                        `;
+                    });
+                }
+
+                div.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-avatar">${initial}</div>
+                        <span class="post-author">${user.name}</span>
+                        <span class="post-time">${timeAgo}</span>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="post-actions">
+                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
+                            <i class="fas fa-heart"></i> <span class="like-count">${post.likes || 0}</span>
+                        </button>
+                        <button onclick="toggleReplyArea('${post.id}')">
+                            <i class="fas fa-reply"></i> Reply (${post.replies ? post.replies.length : 0})
+                        </button>
+                    </div>
+                    <div class="reply-area" id="reply-area-${post.id}">
+                        <div class="flex gap-2 mt-2">
+                            <input type="text" id="reply-input-${post.id}" placeholder="Write a reply..." class="flex-1 px-3 py-1.5 border border-gray-300/60 dark:border-gray-600/60 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm backdrop-blur-sm" />
+                            <button onclick="addReply('${post.id}')" class="px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm">Reply</button>
+                        </div>
+                        <div class="mt-2 space-y-1">
+                            ${repliesHtml}
+                        </div>
+                    </div>
+                `;
+                feed.appendChild(div);
+            });
         }
 
-        // ============================================================
-        //  MESSAGING
-        // ============================================================
+        window.createForumPost = function() {
+            const input = document.getElementById('forum-post-input');
+            const content = input.value.trim();
+            if (!content) { showNotification('Please write something.'); return; }
+            if (!currentUser) { showNotification('Please log in to post.'); return; }
+            const newPost = {
+                id: 'post-' + Date.now(),
+                author: currentUser.name,
+                authorId: currentUser.id,
+                content: content,
+                timestamp: new Date().toISOString(),
+                likes: 0,
+                likedBy: [],
+                replies: []
+            };
+            forumPosts.push(newPost);
+            localStorage.setItem('tutorhub_forum_posts', JSON.stringify(forumPosts));
+            input.value = '';
+            renderForum();
+            showNotification('Post created!');
+        };
+
+        window.toggleLike = function(postId) {
+            if (!currentUser) { showNotification('Please log in to like.'); return; }
+            const post = forumPosts.find(p => p.id === postId);
+            if (!post) return;
+            if (!post.likedBy) post.likedBy = [];
+            const idx = post.likedBy.indexOf(currentUser.id);
+            if (idx > -1) {
+                post.likedBy.splice(idx, 1);
+                post.likes = Math.max(0, post.likes - 1);
+            } else {
+                post.likedBy.push(currentUser.id);
+                post.likes = (post.likes || 0) + 1;
+            }
+            localStorage.setItem('tutorhub_forum_posts', JSON.stringify(forumPosts));
+            renderForum();
+        };
+
+        window.toggleReplyArea = function(postId) {
+            const area = document.getElementById('reply-area-' + postId);
+            if (area) area.classList.toggle('open');
+        };
+
+        window.addReply = function(postId) {
+            if (!currentUser) { showNotification('Please log in to reply.'); return; }
+            const input = document.getElementById('reply-input-' + postId);
+            const content = input.value.trim();
+            if (!content) { showNotification('Please write a reply.'); return; }
+            const post = forumPosts.find(p => p.id === postId);
+            if (!post) return;
+            if (!post.replies) post.replies = [];
+            post.replies.push({
+                id: 'reply-' + Date.now(),
+                author: currentUser.name,
+                authorId: currentUser.id,
+                content: content,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('tutorhub_forum_posts', JSON.stringify(forumPosts));
+            input.value = '';
+            renderForum();
+            showNotification('Reply added!');
+        };
+
+        function timeSince(date) {
+            const now = new Date();
+            const diff = now - date;
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return mins + 'm ago';
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return hrs + 'h ago';
+            const days = Math.floor(hrs / 24);
+            return days + 'd ago';
+        }
+
+        // ================================================================
+        // MESSAGING
+        // ================================================================
         let activeChatWith = null;
 
         function startChat(userId) {
@@ -1589,7 +2409,7 @@
         function renderChat(userId) {
             const user = users.find(u => u.id === userId);
             if (!user) return;
-            document.getElementById('chat-header').textContent = `Chat with ${user.name}`;
+            document.getElementById('chat-header').textContent = 'Chat with ' + user.name;
             const container = document.getElementById('chat-messages');
             container.innerHTML = '';
             const chatMessages = messages.filter(m => (m.from === currentUser.id && m.to === userId) || (m.from ===
@@ -1625,30 +2445,37 @@
             showNotification('Message sent');
         };
 
-        // ============================================================
-        //  SETTINGS TABS
-        // ============================================================
-        document.querySelectorAll('.settings-tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const tab = this.dataset.tab;
-                document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
-                const panel = document.getElementById('settings-panel-' + tab);
-                if (panel) panel.classList.add('active');
-            });
-        });
+        // ================================================================
+        // LIVE PROFILE CARD
+        // ================================================================
+        window.updateLiveProfile = function() {
+            const name = document.getElementById('profile-display-name').value || currentUser?.name || 'User';
+            const email = document.getElementById('profile-email-input').value || currentUser?.email || 'user@example.com';
+            const bio = document.getElementById('profile-bio').value || currentUser?.bio || 'No bio yet.';
+            const initial = name.charAt(0);
 
-        // ============================================================
-        //  PROFILE UPDATE
-        // ============================================================
+            document.getElementById('lpc-avatar').textContent = initial;
+            document.getElementById('lpc-name').textContent = name;
+            document.getElementById('lpc-email').textContent = email;
+            document.getElementById('lpc-bio').textContent = bio;
+
+            const settingsName = document.getElementById('settings-name');
+            const settingsEmail = document.getElementById('settings-email');
+            const settingsBio = document.getElementById('settings-bio');
+            if (settingsName && !settingsName.value) settingsName.value = name;
+            if (settingsEmail && !settingsEmail.value) settingsEmail.value = email;
+            if (settingsBio && !settingsBio.value) settingsBio.value = bio;
+        };
+
+        // ================================================================
+        // PROFILE UPDATE
+        // ================================================================
         window.updateProfile = function() {
             if (!currentUser) return;
-            const newName = document.getElementById('settings-name').value.trim();
-            const newEmail = document.getElementById('settings-email').value.trim();
+            const newName = document.getElementById('settings-name').value.trim() || currentUser.name;
+            const newEmail = document.getElementById('settings-email').value.trim() || currentUser.email;
             const newPassword = document.getElementById('settings-password').value.trim();
-            const newBio = document.getElementById('settings-bio').value.trim();
-            if (!newName || !newEmail) { alert('Name and email cannot be empty.'); return; }
+            const newBio = document.getElementById('settings-bio').value.trim() || currentUser.bio || '';
             const userIndex = users.findIndex(u => u.id === currentUser.id);
             if (userIndex === -1) return;
             users[userIndex].name = newName;
@@ -1663,9 +2490,10 @@
         };
 
         window.updateProfileFromProfile = function() {
-            const name = document.getElementById('profile-display-name').value.trim();
-            const email = document.getElementById('profile-email-input').value.trim();
-            const bio = document.getElementById('profile-bio').value.trim();
+            const name = document.getElementById('profile-display-name').value.trim() || currentUser?.name || 'User';
+            const email = document.getElementById('profile-email-input').value.trim() || currentUser?.email ||
+            'user@example.com';
+            const bio = document.getElementById('profile-bio').value.trim() || '';
             if (!name || !email) { alert('Name and email required.'); return; }
             const userIndex = users.findIndex(u => u.id === currentUser.id);
             if (userIndex === -1) return;
@@ -1679,9 +2507,20 @@
             showNotification('Profile updated from Profile tab');
         };
 
-        // ============================================================
-        //  AI FULLSCREEN
-        // ============================================================
+        // ================================================================
+        // SETTINGS TABS (FIXED)
+        // ================================================================
+        window.switchSettingsTab = function(btn, tab) {
+            document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+            const panel = document.getElementById('settings-panel-' + tab);
+            if (panel) panel.classList.add('active');
+        };
+
+        // ================================================================
+        // AI FULLSCREEN
+        // ================================================================
         let aiFullscreen = false;
 
         function toggleAIFullscreen() {
@@ -1697,9 +2536,9 @@
             }
         }
 
-        // ============================================================
-        //  MOBILE MENU
-        // ============================================================
+        // ================================================================
+        // MOBILE MENU
+        // ================================================================
         document.getElementById('menu-btn').addEventListener('click', function() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
@@ -1708,9 +2547,9 @@
             icon.classList.toggle('fa-times');
         });
 
-        // ============================================================
-        //  STAT COUNTER ANIMATION (GSAP)
-        // ============================================================
+        // ================================================================
+        // STAT COUNTER
+        // ================================================================
         function animateStats() {
             document.querySelectorAll('.stat-number').forEach(el => {
                 const target = parseInt(el.dataset.target);
@@ -1727,18 +2566,55 @@
             });
         }
 
-        // ============================================================
-        //  TESTIMONIAL ROTATOR
-        // ============================================================
+        // ================================================================
+        // GSAP SCROLL
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof gsap !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.utils.toArray('.stat-item').forEach((item, i) => {
+                    gsap.from(item, {
+                        scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none none' },
+                        opacity: 0,
+                        y: 40,
+                        duration: 0.8,
+                        delay: i * 0.1,
+                        ease: 'power2.out'
+                    });
+                });
+                gsap.utils.toArray('.feature-card').forEach((card, i) => {
+                    gsap.from(card, {
+                        scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none none' },
+                        opacity: 0,
+                        y: 30,
+                        duration: 0.7,
+                        delay: i * 0.08,
+                        ease: 'power2.out'
+                    });
+                });
+                ScrollTrigger.create({
+                    trigger: '.stat-item',
+                    start: 'top 80%',
+                    once: true,
+                    onEnter: () => animateStats()
+                });
+            } else {
+                setTimeout(animateStats, 1000);
+            }
+        });
+
+        // ================================================================
+        // TESTIMONIAL ROTATOR
+        // ================================================================
         const testimonials = [
             { text: '“My daughter\'s confidence in math has completely transformed.”', name: 'Sarah Johnson',
-                child: 'Parent of 8th Grader', initial: 'SJ' },
+                child: 'Parent of 8th Grader' },
             { text: '“The tutors are patient, knowledgeable, and truly care about my son\'s success.”',
-                name: 'Michael Chen', child: 'Parent of 10th Grader', initial: 'MC' },
+                name: 'Michael Chen', child: 'Parent of 10th Grader' },
             { text: '“I\'ve never seen my child so excited to learn. Tutor Hub is a game-changer.”',
-                name: 'Emily Rodriguez', child: 'Parent of 7th Grader', initial: 'ER' },
+                name: 'Emily Rodriguez', child: 'Parent of 7th Grader' },
             { text: '“Free, high-quality tutoring made a huge difference in our family.”', name: 'David Kim',
-                child: 'Parent of 9th Grader', initial: 'DK' }
+                child: 'Parent of 9th Grader' }
         ];
         let testimonialIndex = 0;
 
@@ -1760,160 +2636,20 @@
                 updateTestimonial(testimonialIndex);
             });
         });
-
         setInterval(() => {
             testimonialIndex = (testimonialIndex + 1) % testimonials.length;
             updateTestimonial(testimonialIndex);
         }, 6000);
 
-        // ============================================================
-        //  FAQ (static)
-        // ============================================================
-        const faqs = [
-            { q: 'Is Tutor Hub really free?', a: 'Yes! All our tutoring services are completely free for Montgomery County students.' },
-            { q: 'What subjects do you offer?', a: 'We offer STEM subjects including Algebra, Geometry, Pre-Calculus, Calculus, Statistics, as well as CAD, Programming, and Reading Comprehension.' },
-            { q: 'How do I sign up?', a: 'Click the "Sign Up Free" button in the top right, create an account, and you\'ll be matched with a tutor.' },
-            { q: 'Where are sessions held?', a: 'Sessions are held online via video call, and we also offer in-person tutoring at local libraries in Montgomery County.' }
-        ];
-        const faqContainer = document.getElementById('faq-container');
-        faqs.forEach(f => {
-            const div = document.createElement('div');
-            div.className = 'glass rounded-xl p-4 card-lift border-white/30 cursor-pointer';
-            div.innerHTML = `
-              <div class="flex items-center justify-between" onclick="this.parentElement.querySelector('.faq-answer').classList.toggle('hidden')">
-                <h4 class="font-semibold dark:text-white">${f.q}</h4>
-                <i class="fas fa-chevron-down text-blue-600 transition-transform"></i>
-              </div>
-              <div class="faq-answer hidden mt-2 text-gray-600 dark:text-gray-300 text-sm">${f.a}</div>
-            `;
-            faqContainer.appendChild(div);
-        });
+        // ================================================================
+        // MENTOR DETAIL EXPAND (landing)
+        // ================================================================
+        function toggleMentorDetail(id) {
+            const detail = document.getElementById(id + '-detail');
+            if (detail) detail.classList.toggle('open');
+        }
 
-        // ============================================================
-        //  FONT SIZE DISPLAY
-        // ============================================================
-        document.querySelector('input[type="range"]')?.addEventListener('input', function() {
-            document.getElementById('font-size-display').textContent = this.value + 'px';
-            document.documentElement.style.fontSize = this.value + 'px';
-        });
-
-        // ============================================================
-        //  GSAP SCROLL ANIMATIONS (Enhanced)
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            gsap.registerPlugin(ScrollTrigger);
-
-            // Animate stats on scroll
-            gsap.utils.toArray('.stat-item').forEach((item, i) => {
-                gsap.from(item, {
-                    scrollTrigger: {
-                        trigger: item,
-                        start: 'top 85%',
-                        toggleActions: 'play none none none'
-                    },
-                    opacity: 0,
-                    y: 40,
-                    duration: 0.8,
-                    delay: i * 0.1,
-                    ease: 'power2.out'
-                });
-            });
-
-            // Animate feature cards
-            gsap.utils.toArray('.feature-card').forEach((card, i) => {
-                gsap.from(card, {
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 88%',
-                        toggleActions: 'play none none none'
-                    },
-                    opacity: 0,
-                    y: 30,
-                    duration: 0.7,
-                    delay: i * 0.08,
-                    ease: 'power2.out'
-                });
-            });
-
-            // Animate process steps
-            gsap.utils.toArray('.process-step').forEach((step, i) => {
-                gsap.from(step, {
-                    scrollTrigger: {
-                        trigger: step,
-                        start: 'top 88%',
-                        toggleActions: 'play none none none'
-                    },
-                    opacity: 0,
-                    scale: 0.9,
-                    duration: 0.6,
-                    delay: i * 0.1,
-                    ease: 'back.out(1.7)'
-                });
-            });
-
-            // Animate mentor cards
-            gsap.utils.toArray('.mentor-card').forEach((card, i) => {
-                gsap.from(card, {
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 85%',
-                        toggleActions: 'play none none none'
-                    },
-                    opacity: 0,
-                    y: 40,
-                    duration: 0.7,
-                    delay: i * 0.12,
-                    ease: 'power2.out'
-                });
-            });
-
-            // Animate stats numbers after they appear
-            ScrollTrigger.create({
-                trigger: '.stat-item',
-                start: 'top 80%',
-                once: true,
-                onEnter: () => animateStats()
-            });
-
-            // Animate glass elements on hover (GSAP micro-interaction)
-            document.querySelectorAll('.glass').forEach(el => {
-                el.addEventListener('mouseenter', function() {
-                    gsap.to(this, { duration: 0.3, boxShadow: '0 12px 48px rgba(59,130,246,0.15)',
-                        ease: 'power2.out' });
-                });
-                el.addEventListener('mouseleave', function() {
-                    gsap.to(this, { duration: 0.3, boxShadow: 'var(--shadow)', ease: 'power2.out' });
-                });
-            });
-
-            // Navbar shrink on scroll
-            ScrollTrigger.create({
-                trigger: 'body',
-                start: 'top -10px',
-                onUpdate: (self) => {
-                    const navbar = document.getElementById('navbar');
-                    if (self.progress > 0.05) {
-                        navbar.classList.add('py-1');
-                        navbar.classList.remove('py-3');
-                    } else {
-                        navbar.classList.add('py-3');
-                        navbar.classList.remove('py-1');
-                    }
-                }
-            });
-
-            console.log('🚀 Tutor Hub – Fully enhanced with liquid glass & particle network!');
-        });
-
-        // ============================================================
-        //  FALLBACK: If GSAP not loaded, still run stats
-        // ============================================================
-        setTimeout(() => {
-            if (typeof gsap === 'undefined') {
-                animateStats();
-            }
-        }, 1000);
+        console.log('🚀 Tutor Hub – Fully enhanced with visible backgrounds, fixed settings tabs, and all requested features!');
     </script>
-
 </body>
 </html>
